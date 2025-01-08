@@ -14,10 +14,4 @@ return [
         '3'             => 'Mail Setting',
     ],
 
-
-
-
-
-
-
 ];

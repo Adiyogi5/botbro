@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FireController;
 use App\Http\Controllers\Common\CommonController;
+use App\Http\Controllers\FrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +17,18 @@ use App\Http\Controllers\Common\CommonController;
 |
 */
 
-Route::view('/', 'welcome')->name('home');
 // Route::patch('fcm-token', [FireController::class, 'updateToken'])->name('fcmToken');
+Route::controller(FrontController::class)->name('front.')->group(function () {
+    Route::get('/', 'index')->name('home');
+    Route::get('/home', 'index')->name('home');
+
+    Route::get('/contact-us', 'contactUs')->name('contact-us');
+    Route::post('/contact-us', 'contactUsSave')->name('contact-us');
+
+    Route::get('{cms}', 'showCms')->name('show-cms')->whereIn('cms', ['about-us', 'terms-condition', 'privacy-policy']);
+    Route::get('/faqs', 'faqs')->name('faqs');
+});
+
 
 Route::get('/push-notificaiton', [FireController::class, 'index'])->name('push-notificaiton');
 Route::post('/store-token', [FireController::class, 'storeToken'])->name('store.token');
