@@ -12,6 +12,7 @@ return [
         '1'             => 'General Settings',
         '2'             => 'Social Links Setting',
         '3'             => 'Mail Setting',
+        '8'             => 'Google Recaptcha',
     ],
 
 ];

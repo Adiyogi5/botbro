@@ -83,6 +83,18 @@
                                     @enderror
                                 </div>
                                 <div class="col-12">
+                                    <div class="form-floating">
+                                        @if (!empty($site_settings['recaptcha_site_key']))
+                                            <div class="g-recaptcha"
+                                                data-sitekey="{{ $site_settings['recaptcha_site_key'] }}">
+                                            </div>
+                                        @endif
+                                        @error('g-recaptcha-response')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-12">
                                     <button class="btn btn-primary w-100 py-3" type="submit">Send Message</button>
                                 </div>
                             </div>
@@ -117,10 +129,10 @@
         </div>
     </div>
     <!-- Newsletter End -->
-
 @endsection
 
 @section('js')
+<script src='https://www.google.com/recaptcha/api.js'></script>
     <script>
         $(function() {
             $("#contactUs").validate({

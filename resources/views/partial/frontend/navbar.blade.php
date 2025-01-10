@@ -29,11 +29,10 @@
                  <div class="nav-item dropdown">
                      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                      <div class="dropdown-menu bg-light mt-2">
-                         <a href="feature.html" class="dropdown-item">Features</a>
-                         <a href="team.html" class="dropdown-item">Our Team</a>
-                         <a href="faq.html" class="dropdown-item">FAQs</a>
-                         <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                         <a href="404.html" class="dropdown-item">404 Page</a>
+                         <a href="{{ route('front.features') }}" class="dropdown-item">Features</a>
+                         <a href="{{ route('front.teams') }}" class="dropdown-item">Our Team</a>
+                         <a href="{{ route('front.faqs') }}" class="dropdown-item">FAQs</a>
+                         <a href="{{ route('front.testimonials') }}" class="dropdown-item">Testimonial</a>
                      </div>
                  </div>
                  <a href="{{ route('front.contact-us') }}" class="nav-item nav-link {{ request()->route()->getName() === 'front.contact' ? 'active' : '' }}">Contact</a>
@@ -45,3 +44,23 @@
  </div>
 </div>
 <!-- Navbar End -->
+
+ <!-- Full Screen Search Start -->
+ <div class="modal fade" id="searchModal" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content" style="background: rgba(20, 24, 62, 0.7);">
+            <div class="modal-header border-0">
+                <button type="button" class="btn btn-square bg-white btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex align-items-center justify-content-center">
+                <div class="input-group" style="max-width: 600px;">
+                    <input type="text" class="form-control bg-transparent border-light p-3"
+                        placeholder="Type search keyword">
+                    <button class="btn btn-light px-4"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Full Screen Search End -->

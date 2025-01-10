@@ -26,7 +26,11 @@ Route::controller(FrontController::class)->name('front.')->group(function () {
     Route::post('/contact-us', 'contactUsSave')->name('contact-us');
 
     Route::get('{cms}', 'showCms')->name('show-cms')->whereIn('cms', ['about-us', 'terms-condition', 'privacy-policy']);
+
+    Route::get('/features', 'features')->name('features');
+    Route::get('/teams', 'teams')->name('teams');
     Route::get('/faqs', 'faqs')->name('faqs');
+    Route::get('/testimonials', 'testimonials')->name('testimonials');
 });
 
 
