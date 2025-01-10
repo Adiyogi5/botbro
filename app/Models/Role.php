@@ -2,22 +2,19 @@
 
 namespace App\Models;
 
-use App\Traits\CustomScopes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Role extends Model
 {
-    use  HasFactory, SoftDeletes, CustomScopes;
+    use HasFactory, SoftDeletes;
+
+   // protected $table = 'role'; 
+    
     protected $fillable = [
-        'slug',
-        'name',
-        'status',
+        'name', 'status',
     ];
 
-    public function permission()
-    {
-        return $this->hasMany(RolePermission::class)->with('permission_name');
-    }
+    protected $dates = ['deleted_at']; 
 }

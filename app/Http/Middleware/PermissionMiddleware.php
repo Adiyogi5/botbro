@@ -9,10 +9,15 @@ class PermissionMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        $user = auth('web')->user()->load('permission');
-        $data = @$user->permission->collect();
+        $user = auth()->user()->load(['permission']);
+        $data = $user->permission->toArray();
+        
+        $input = $request->all();
+        if ($data) {
+            $input['permission'] = $data;
+            $request->replace($input);
+        }
 
-        $request->merge(['permission' => $data]);
         return $next($request);
     }
 }

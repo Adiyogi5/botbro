@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use App\Traits\CustomScopes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class City extends Model
 {
-    use HasFactory, SoftDeletes, CustomScopes;
+   use HasFactory ,SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'state_id',
-        'status',
-    ];
+   protected $fillable = [
+        'name','country_id','state_id','status',
+     ];
+
+     protected $dates = ['deleted_at']; 
+
 }

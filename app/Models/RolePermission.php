@@ -2,34 +2,16 @@
 
 namespace App\Models;
 
-use App\Traits\CustomScopes;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class RolePermission extends Model
 {
-    use HasFactory, CustomScopes;
-
-    public $timestamps = false;
+    use HasFactory;
 
     protected $fillable = [
-        'role_id',
-        'module_id',
-        'can_view',
-        'can_add',
-        'can_edit',
-        'can_delete',
-        'allow_all',
+        'role_id','module_id','can_add','can_edit','can_view','can_delete',
     ];
 
-    public function toggle($type = '')
-    {
-        $this->update([$type => DB::raw('NOT ' . $type)]);
-    }
-
-    public function permission_name()
-    {
-        return $this->belongsTo(PermissionModule::class, 'module_id');
-    }
+    public $timestamps = false;
 }

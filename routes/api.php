@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -10,30 +10,47 @@ use Illuminate\Support\Facades\Artisan;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
 |
 */
 
-Route::get('/', function () {
-    return response()->json([
-        'message'   => "Adiyogi eTally :: Api Working Fine."
-    ]);
+// ................Artisan ................
+Route::get('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    return '<h1>Cache facade value cleared</h1>';
 });
 
-Route::get('clear-all', function () {
-    Artisan::call('cache:clear');
+Route::get('/config-clear', function () {
     Artisan::call('config:clear');
+    return '<h1>Cache facade value cleared</h1>';
+});
+
+Route::get('/clear-all', function () {
+    Artisan::call('cache:clear');
     Artisan::call('route:clear');
     Artisan::call('view:clear');
     Artisan::call('storage:link');
     return '<h1>Clear All</h1>';
 });
 
+Route::get('/schedule-run', function() {
+    $exitCode = Artisan::call('schedule:run');
+    return '<h1>schedule-run</h1>';
+}); 
 
-Route::any('{path}', function () {
-    return response()->json([
-        'status'    => false,
-        'message'   => 'Api not found..!!'
-    ], 404);
-})->where('path', '.*');
+
+/*Route::get('/paystatus', function () {
+    Artisan::call('purchase:payment_status');   
+    return '<h1>update paystatus</h1>';
+});
+
+Route::get('/badgereward', function () {
+    Artisan::call('update:badgereward');   
+    return '<h1>update badgereward</h1>';
+});
+
+Route::get('/walletpayment', function () {
+    Artisan::call('update:walletpayment');   
+    return '<h1>update walletpayment</h1>';
+});*/

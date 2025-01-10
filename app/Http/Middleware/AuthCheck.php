@@ -18,16 +18,8 @@ class AuthCheck
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-
             if ($request->session()->has('locked') && request()->is('*lock') == false && request()->is('*logout') == false) {
-                $redirectTo = null;
-                if (auth('web')->check()) {
-                    $redirectTo = '/lock';
-                }
-
-                if ($redirectTo != null) {
-                    return redirect($redirectTo);
-                }
+                return redirect('/lock');
             }
             return $next($request);
         }

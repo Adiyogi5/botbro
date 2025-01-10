@@ -2,19 +2,17 @@
 
 namespace App\Models;
 
-use App\Traits\CustomScopes;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Cms extends Model
 {
-    use HasFactory, SoftDeletes, CustomScopes;
+     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'description',
-        'status',
-        'image'
-    ];
+     protected $fillable = [
+        'name','slug','cms_title','meta_title','meta_keyword', 'meta_description','cms_contant','image','status',
+     ];
+
 }

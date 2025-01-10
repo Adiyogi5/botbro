@@ -1,82 +1,169 @@
-<?php
+<?php 
+use Illuminate\Support\Facades\Route; 
+use Illuminate\Support\Facades\Auth;
 
-use App\Routes\Profile;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CmsController;
-use App\Http\Controllers\CityController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\RolesController;
-use App\Http\Controllers\StateController;
-use App\Http\Controllers\UsersController;
-use App\Http\Controllers\SettingController;
+/* ------------------ Common Routes START ---------------------------- */
+Auth::routes([ 'verify' => true ]);
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes For Admin
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-// Admin & Sub-Admin Routes
-Route::middleware(['auth', 'permission', 'authCheck', 'verified'])->group(function () {
-    Profile::routes();
-    Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
-
-    // ----------------------- Role Routes ----------------------------------------------------
-    Route::controller(RolesController::class)->name('roles')->group(function () {
-        Route::get('roles', 'index')->middleware('isAllow:102,can_view');
-        Route::post('roles', 'save')->middleware('isAllow:102,can_add');
-        Route::put('roles', 'update')->middleware('isAllow:102,can_edit');
-        Route::delete('roles', 'delete')->middleware('isAllow:102,can_delete');
-        Route::get('roles/permission/{id}', 'permission')->name('.permission.view')->middleware('isAllow:102,can_edit');
-        Route::put('roles/permission', 'permission_update')->name('.permission.update')->middleware('isAllow:102,can_edit');
+ 
+Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){  
+    Route::get('/permission_denied', 'DashboardController@permission_denied');
+    /*** Admin Auth Route(s)***/
+    Route::namespace('Auth')->group(function(){
+        //Login Routes
+        Route::get('/','LoginController@showLoginForm')->name('login');
+        Route::get('/login','LoginController@showLoginForm')->name('login');
+        Route::post('/login','LoginController@login')->name('login');
+        Route::post('/logout','LoginController@logout')->name('logout');
+        
+        //Forgot Password Routes
+        Route::get('/password/reset','ForgotPasswordController@showLinkRequestForm')->name('password.request');
+        Route::post('/password/mobile','ForgotPasswordController@sendResetLinkEmail')->name('password.mobile');
+        
+        //Reset Password Routes
+        Route::get('/password/reset/{token}','ResetPasswordController@showResetForm')->name('password.reset');
+        Route::post('/password/reset','ResetPasswordController@reset')->name('password.update');
     });
 
-    // ----------------------- Admin and Sub Admin Routes ----------------------------------------------------
-    Route::controller(UsersController::class)->group(function () {
-        Route::get('users', 'index')->name('users')->middleware('isAllow:103,can_view');
-        Route::get('users/add', 'add')->name('users.add')->middleware('isAllow:103,can_add');
-        Route::post('users/add', 'save')->name('users.add')->middleware('isAllow:103,can_add');
-        Route::get('users/{slug}', 'edit')->name('users.edit')->middleware('isAllow:103,can_edit');
-        Route::post('users/{slug}', 'update')->name('users.edit')->middleware('isAllow:103,can_edit');
-        Route::delete('users', 'delete')->name('users')->middleware('isAllow:103,can_delete');
-        Route::get('users/permission/{id}', 'permission')->name('users.permission.view')->middleware('isAllow:103,can_edit');
-        Route::put('users/permission', 'permission_update')->name('users.permission.update')->middleware('isAllow:103,can_edit');
-    });
+    Route::middleware(['auth:admin', 'permission', 'authCheck'])->group(function () {
+        //Put all of your admin routes here...
+        Route::get('/dashboard','DashboardController@index')->name('dashboard')->middleware('isAllow:101,can_view');
 
-    // ----------------------- States Routes ----------------------------------------------------
-    Route::controller(StateController::class)->name('states')->group(function () {
-        Route::get('states', 'index')->middleware('isAllow:105,can_view');
-        Route::post('states', 'save')->middleware('isAllow:105,can_add');
-        Route::put('states', 'update')->middleware('isAllow:105,can_edit');
-        Route::delete('states', 'delete')->middleware('isAllow:105,can_delete');
-    });
+        /// Profile & change password
+        Route::get('/change-password', 'ProfileController@changePassword');
+        Route::post('/change-password', 'ProfileController@updatePassword');
 
-    // ----------------------- City Routes ----------------------------------------------------
-    Route::controller(CityController::class)->name('cities')->group(function () {
-        Route::get('cities', 'index')->middleware('isAllow:106,can_view');
-        Route::post('cities', 'save')->middleware('isAllow:106,can_add');
-        Route::put('cities', 'update')->middleware('isAllow:106,can_edit');
-        Route::delete('cities', 'delete')->middleware('isAllow:106,can_delete');
-    });
+        Route::get('/profile', 'ProfileController@profile');
+        Route::post('/profile', 'ProfileController@updateprofile');
 
-    // ----------------------- CMS Routes ----------------------------------------------------
-    Route::controller(CmsController::class)->group(function () {
-        Route::get('cms', 'index')->name('cms')->middleware('isAllow:104,can_view');
-        Route::get('cms/add', 'add')->name('cms.add')->middleware('isAllow:104,can_add');
-        Route::post('cms/add', 'save')->name('cms.add')->middleware('isAllow:104,can_add');
-        Route::get('cms/{id}', 'edit')->name('cms.edit')->middleware('isAllow:104,can_edit');
-        Route::post('cms', 'slug')->name('cms.slug')->middleware('isAllow:104,can_edit');
-        Route::post('cms/{id}', 'update')->name('cms.edit')->middleware('isAllow:104,can_edit');
-        Route::delete('cms', 'delete')->name('cms')->middleware('isAllow:104,can_delete');
-    });
+        /// General Settings Routes
+        Route::get('/general_settings','GeneralSettingsController@index')->name('general_settings');
+        Route::post('/general_settings/update','GeneralSettingsController@update')->name('general_settings.update');
+        
+        /// Role Routes
+        Route::resource('/role', 'RolesController');
+        Route::post('/role/status','RolesController@change_status')->name('role.status');
 
-    Route::any('setting/{id}', [SettingController::class, 'setting'])->name('setting')->middleware('isAllow:101,can_view');
-    Route::get('database-backup', [SettingController::class, 'database_backup'])->name('database_backup')->middleware('isAllow:101,can_view');
-    Route::get('server-control', [SettingController::class, 'serverControl'])->name('server-control')->middleware('isAllow:101,can_view');
-    Route::post('server-control', [SettingController::class, 'serverControlSave'])->name('server-control')->middleware('isAllow:101,can_view');
+        /// Role-Permissions Routes
+        Route::resource('/role_permission', 'RolePermissionController');
+        Route::post('/role_permission/status', 'RolePermissionController@update_role_permission')->name('role_permission.status');
+
+        /// User-Permissions Routes
+        Route::resource('/user_permission', 'UserPermissionController');
+        Route::post('/user_permission/status', 'UserPermissionController@update_user_permission')->name('user_permission.status');
+
+        /// Banner Routes
+        Route::resource('/banner', 'BannerController');
+        Route::post('/banner/status','BannerController@change_status')->name('banner.status'); 
+        
+        /// Banner Routes
+        Route::resource('/offer', 'OfferController');
+        Route::post('/offer/status','OfferController@change_status')->name('offer.status'); 
+
+        /// Subadmin Routes
+        Route::resource('/subadmin', 'SubadminController');
+        Route::post('/subadmin/status','SubadminController@change_status')->name('subadmin.status');
+
+        /// Cms Routes
+        Route::resource('/cms', 'CmsController');
+        Route::post('/cms/status','CmsController@change_status')->name('cms.status');
+
+        /// Home Cms Routes
+        Route::resource('/homecms', 'HomeCmsController');
+        Route::post('/homecms/status','HomeCmsController@change_status')->name('homecms.status');
+
+        /// Country Routes
+        Route::resource('/countries', 'CountryController');
+        Route::post('/countries/status','CountryController@change_status')->name('countries.status');
+
+        /// State Routes
+        Route::resource('/states', 'StateController');
+        Route::post('/states/status','StateController@change_status')->name('states.status');
+        Route::post('/getstate','StateController@get_state')->name('states.ajax');
+
+         /// State Routes
+        Route::resource('/cities', 'CityController');
+        Route::post('/cities/status','CityController@change_status')->name('cities.status');
+        Route::post('/getcity','CityController@get_city')->name('cities.ajax');
+
+         /// Blog Category Routes
+         Route::resource('/faq_types', 'FaqTypeController');
+         Route::post('/faq_types/status', 'FaqTypeController@change_status')->name('faq_types.status');
+
+        /// Faq Routes
+        Route::resource('/faqs', 'FaqController');
+        Route::post('/faqs/status','FaqController@change_status')->name('faqs.status');
+
+        /// Testimonial Routes
+        Route::resource('/testimonials', 'TestimonialController');
+        Route::post('/testimonials/status','TestimonialController@change_status')->name('testimonials.status');
+
+        /// Blog Category Routes
+        Route::resource('/blog_categories', 'BlogCategoryController');
+        Route::post('/blog_categories/status', 'BlogCategoryController@change_status')->name('blog_categories.status');
+
+        // Blog Routes
+        Route::resource('/blog', 'BlogController');
+        Route::post('/blog/status', 'BlogController@change_status')->name('blog.status');
+
+        ///Category Routes
+        Route::resource('/categories', 'CategoryController');
+        Route::post('/categories/status', 'CategoryController@change_status')->name('CategoryController.status');
+
+        ///Product Routes
+        Route::resource('/products', 'ProductController');
+        Route::post('/products/status', 'ProductController@change_status')->name('products.status');
+        Route::post('/products/sub_categories', 'ProductController@get_sub_categories')->name('products.sub_categories');
+
+        /// Badge Master Routes
+        Route::resource('/badge_masters', 'BadgeMasterController');
+        Route::post('/badge_masters/status', 'BadgeMasterController@change_status')->name('badge_masters.status');
+        
+        /// Reward Master Routes
+        Route::resource('/reward_masters', 'RewardMasterController');
+        Route::post('/reward_masters/status', 'RewardMasterController@change_status')->name('reward_masters.status');
+
+        /// Customer Address Routes
+        Route::resource('/customer/{user_id}/address', 'UserAddressController');
+        Route::post('/customer/{user_id}/address/status','UserAddressController@change_status')->name('address.status'); 
+
+        /// Customer Routes
+        Route::resource('/customer', 'UserController');
+        Route::post('/customer/status','UserController@change_status')->name('customer.status'); 
+        Route::get('/customer/{user_id}/details','UserController@details')->name('customer.details'); 
+        Route::get('/customer/{user_id}/user_badges','UserController@user_badges')->name('customer.user_badges'); 
+        Route::get('/customer/{user_id}/user_refer','UserController@user_refer')->name('customer.user_refer'); 
+        Route::get('/customer/{user_id}/user_orders','UserController@user_orders')->name('customer.user_orders'); 
+        Route::get('/customer/{user_id}/user_wallet','UserController@user_wallet')->name('customer.user_wallet'); 
+        Route::get('/customer/{user_id}/user_withdraw','UserController@user_withdraw')->name('customer.user_withdraw'); 
+        Route::get('/customer/withdraw_reject/{user_id}','UserController@withdraw_reject')->name('customer.withdraw_reject'); 
+        Route::get('/customer/withdraw_approve/{user_id}','UserController@withdraw_approve')->name('customer.withdraw_approve'); 
+        Route::get('/customer/{user_id}/user_address','UserController@user_address')->name('customer.user_address'); 
+        Route::get('/customer/{user_id}/user_rewards','UserController@user_rewards')->name('customer.user_rewards'); 
+        Route::get('/customer/{user_id}/user_profit_sharing','UserController@user_profit_sharing')->name('customer.user_profit_sharing'); 
+
+        /// Contact Inquires Routes
+        Route::resource('/contact_inquires', 'ContactInquiryController');
+
+        /// Profit Sharing Routes
+        Route::resource('/profit_shares', 'ProfitShareController');
+        Route::post('/profit_shares/users','ProfitShareController@get_users')->name('profit_shares.users');
+
+        /// Admin Notification Routes
+        Route::resource('/admin_notifications', 'AdminNotificationController');
+        
+        // Orders Route
+        Route::resource('/orders', 'OrderController');
+        Route::post('/orders/status/{id}', 'OrderController@updOrderStatus')->name('orders.status');
+        Route::get('/orders/invoice/{id}', 'OrderController@invoice')->name('orders.invoice');
+
+        Route::get('/returns', 'ReturnController@index');
+        Route::get('/returns/{id}', 'ReturnController@show');
+        Route::post('/returns/status/{id}', 'ReturnController@updReturnStatus')->name('returns.status');
+
+        /// Rewards Routes
+        Route::resource('/rewards', 'RewardController');
+        Route::get('/rewards/reject/{id}','RewardController@reject')->name('rewards.reject'); 
+        Route::get('/rewards/approve/{id}','RewardController@approve')->name('rewards.approve');
+    });
 });
