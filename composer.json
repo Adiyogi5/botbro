@@ -8,7 +8,7 @@
         "php": "^8.0",
         "barryvdh/laravel-dompdf": "^2.0",
         "ckeditor/ckeditor": "<=4.22.1",
-        "fruitcake/laravel-cors": "^2.0",
+        "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^9",
         "laravel/sanctum": "^2.11",

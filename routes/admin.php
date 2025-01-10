@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 /* ------------------ Common Routes START ---------------------------- */
 Auth::routes([ 'verify' => true ]);
 
- 
+
 Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){  
     Route::get('/permission_denied', 'DashboardController@permission_denied');
     /*** Admin Auth Route(s)***/
