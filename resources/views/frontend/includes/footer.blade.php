@@ -26,7 +26,7 @@
                         </li> --}}
                         <li class="my-2">
                             <a class="footer-title text-decoration-none text-white"
-                                href="{{ route('frontend.contactus') }}">Contact</a>
+                                href="{{ route('frontend.contactus') }}">Contact Us</a>
                         </li>
                     </ul>
                 </div>
@@ -47,10 +47,10 @@
                             <a class="footer-title text-decoration-none text-white"
                                 href="{{ route('frontend.return') }}">Cancellation and Refund Policy</a>
                         </li>
-                        <li class="my-2">
+                        {{-- <li class="my-2">
                             <a class="footer-title text-decoration-none text-white"
                                 href="{{ route('frontend.shipandcancel') }}">Shipping and Delivery</a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
 
@@ -59,29 +59,29 @@
                     <p class="h5 mb-4 footer-heading">Social</p>
                     <span class="mt-4">
                         @if (!empty($site_settings['twitter_link']))
-                            <a href="{{ $site_settings['twitter_link'] }}" class="btn btn-icon rounded me-lg-2 me-1">
+                            <a href="{{ $site_settings['twitter_link'] }}" class="btn btn-icon rounded-5 me-lg-2 me-1">
                                 <i class="fa-brands fa-x-twitter faa-footer"></i>
                             </a>
                         @endif
                         @if (!empty($site_settings['facebook_link']))
-                            <a href="{{ $site_settings['facebook_link'] }}" class="btn btn-icon rounded me-lg-2 me-1">
+                            <a href="{{ $site_settings['facebook_link'] }}" class="btn btn-icon rounded-5 me-lg-2 me-1">
                                 <i class="fa-brands fa-facebook-f faa-footer"></i>
                             </a>
                         @endif
                         @if (!empty($site_settings['linkedin_link']))
-                            <a href="{{ $site_settings['linkedin_link'] }}" class="btn btn-icon rounded me-lg-2 me-1">
+                            <a href="{{ $site_settings['linkedin_link'] }}" class="btn btn-icon rounded-5 me-lg-2 me-1">
                                 <i class="fa-brands fa-linkedin-in faa-footer"></i>
                             </a>
                         @endif
 						
 						@if (!empty($site_settings['youtube_link']))
-                            <a href="{{ $site_settings['youtube_link'] }}" class="btn btn-icon rounded me-lg-2 me-1">
+                            <a href="{{ $site_settings['youtube_link'] }}" class="btn btn-icon rounded-5 me-lg-2 me-1">
                                 <i class="fa-brands fa-youtube faa-footer"></i>
                             </a>
                         @endif
 						
 						@if (!empty($site_settings['instagram_link']))
-                            <a href="{{ $site_settings['instagram_link'] }}" class="btn btn-icon rounded me-lg-2 me-1">
+                            <a href="{{ $site_settings['instagram_link'] }}" class="btn btn-icon rounded-5 me-lg-2 me-1">
                                 <i class="fa-brands fa-instagram faa-footer"></i>
                             </a>
                         @endif
@@ -107,7 +107,7 @@
     </footer>
 
     <!-- Copyright -->
-    <div class="container text-center justify-content-center py-lg-3 py-2 px-2 bg-light copyright d-md-flex d-grid">
+    <div class="container text-center justify-content-center py-2 px-2 bg-light copyright d-md-flex d-grid">
         <span> {{ $site_settings['copyright'] }} </span> 
     </div>
     <!-- Copyright -->

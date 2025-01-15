@@ -4,7 +4,8 @@ namespace App\Http\Middleware;
 
 use App\Models\AdminNotification;
 use App\Models\Cart;
-use App\Models\GeneralSetting; 
+use App\Models\GeneralSetting;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -39,7 +40,12 @@ class SettingMiddleware
 
         $cart_count = Cart::where('customer_id',$user_id)->count('id');
 
-        View::share(['site_settings' => $settings, 'header_info' => $data,'cart_count'=>$cart_count]); 
+        $user_approved = null;
+        if ($user) {
+            $user_approved = User::where('id', $user->id)->first();
+        }
+
+        View::share(['site_settings' => $settings, 'header_info' => $data,'cart_count'=>$cart_count, 'user_approved'=>$user_approved]); 
 
         return $next($request);
     }

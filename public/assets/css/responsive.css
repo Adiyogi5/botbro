@@ -112,7 +112,8 @@
   }
   /* ################# Testimonial ################# */
   .box-area {
-    padding: 18px;
+    padding: 10px;
+    min-height: 200px;
   }
   .testimonial-title {
     font-size: 22px;
@@ -121,9 +122,8 @@
     height: 20px;
   }
   .front-image {
-    height: 100px;
-    top: -100%;
-    width: auto;
+    height: 90px;
+    width: 90px;
   }
   .testimonial-img {
     position: relative;
@@ -464,7 +464,7 @@
     width: 40%;
   }
   .bread-heading {
-    font-size: 30px;
+    font-size: 24px;
   }
   /* ################# Footer ################## */
   .footer-logo {
@@ -567,15 +567,14 @@
   }
   /* ################### Testimonial #################### */
   .box-area {
-    padding: 12px;
+    padding: 10px;
   }
   .testimonial-heading {
     font-size: 32px;
   }
   .front-image {
-    height: 80px;
-    top: -80%;
-    width: auto;
+    height: 70px;
+    width: 70px;
   }
   .testimonial-img {
     position: relative;
@@ -1034,7 +1033,7 @@
     width: 40%;
   }
   .bread-heading {
-    font-size: 30px;
+    font-size: 24px;
   }
   /* ################# Footer ################## */
   .footer-logo {
@@ -1139,12 +1138,11 @@
   }
   /* ################### Testimonial #################### */
   .box-area {
-    padding: 12px;
+    padding: 10px;
   }
   .front-image {
-    height: 80px;
-    top: -80%;
-    width: auto;
+    height: 70px;
+    width: 70px;
   }
   .testimonial-img {
     position: relative;
@@ -1566,7 +1564,7 @@
     height: 45px;
   }
   .bread-heading {
-    font-size: 30px;
+    font-size: 24px;
   }
   .bread-subheading {
     font-size: 14px;
@@ -1683,7 +1681,8 @@
   }
   /* ################### Testimonial #################### */
   .box-area {
-    padding: 12px;
+    padding: 10px;
+    min-height: auto;
   }
   .testimonial-heading {
     font-size: 30px;
@@ -1691,8 +1690,7 @@
   }
   .front-image {
     height: 90px;
-    top: -80%;
-    width: auto;
+    width: 90px;
   }
   .testimonial-img {
     position: relative;
@@ -2264,7 +2262,7 @@
     height: 40px;
   }
   .bread-heading {
-    font-size: 26px;
+    font-size: 24px;
   }
   .bread-subheading {
     font-size: 14px;
@@ -2392,7 +2390,8 @@
   }
   /* ################### Testimonial #################### */
   .box-area {
-    padding: 10px;
+    padding: 8px;
+    min-height: auto;
   }
 
   .testimonial-heading {
@@ -2402,8 +2401,7 @@
 
   .front-image {
     height: 75px;
-    top: -65%;
-    width: auto;
+    width: 75px;
   }
 
   .testimonial-img {

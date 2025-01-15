@@ -53,22 +53,22 @@
                                         <input type="tel" class="form-control rounded-0" value="{{ old('mobile') }}"
                                             aria-describedby="button-addon2" id="mobile" name="mobile"
                                             placeholder="Enter Your Mobile Number">
-                                        <a class="btn btn-custom-form ms-2"
-                                            id="send_otp" onclick="sendOTP()">OTP</a>
+                                        {{-- <a class="btn btn-custom-form ms-2"
+                                            id="send_otp" onclick="sendOTP()">OTP</a> --}}
                                     </div>
                                     <label for="mobile" class="error"></label>
                                     @error('mobile')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="col-md-6 col-12">
+                                {{-- <div class="col-md-6 col-12">
                                     <label for="otp" class="form-label">Enter Otp</label>
                                     <input type="text" class="form-control rounded-0" id="otp" name="otp"
                                         autocomplete="off" value="{{ old('otp') }}">
                                     @error('otp')
                                         <label id="otp-error" for="otp" class="error">{{ $errors->first('otp') }}</label>
                                     @enderror
-                                </div>
+                                </div> --}}
 
                                 <!-- <div class="col-md-6 col-12">
                                     <label for="alternate_mobile" class="form-label">Alternate Mobile Number</label>
@@ -203,7 +203,7 @@
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script src="{{ ASSETS }}js/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
-    <script>
+    {{-- <script>
         function startTimer(duration, display) {
             let text_resend = "{{ 'Resend' }}";
             var timer = duration,
@@ -259,7 +259,7 @@
                 }
             });
         }
-    </script>
+    </script> --}}
     <script type="text/javascript">
         $(document).ready(function() {
             $("#registerformvalidate").validate({
@@ -275,10 +275,10 @@
                         maxlength: 10,
                         digits: true,
                     },
-                    otp: {
-                        required: true,
-                        digits: true,
-                    },
+                     // otp: {
+                    //    required: true,
+                   //     digits: true,
+                   // },
                     password: "required",
                     confirm_password: {
                         required: true,
@@ -296,10 +296,10 @@
                         minlength: "Mobile Should Be 10 Digits",
                         maxlength: "Mobile Should Be 10 Digits",
                     },
-                    otp: {
-                        required: "Please Enter OTP",
-                        digits: "Please Enter Valid Digit",
-                    },
+                    //otp: {
+                    //    required: "Please Enter OTP",
+                    //    digits: "Please Enter Valid Digit",
+                    //},
                     password: "Please Enter Password",
                     confirm_password: {
                         required: "Please Enter Confirm Password",

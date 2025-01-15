@@ -19,7 +19,7 @@ Route::prefix('/')->name('frontend.')->namespace('Frontend')->group(function () 
     Route::get('/send-otp', 'JoinUsController@sendOTP')->name('send-otp');
     Route::post('/check-referral-code', 'JoinUsController@checkReferralCode')->name('checkReferralCode');
 
-    Route::get('/why-join-upayliving', 'WhyUpayController@index')->name('whyupay');
+    Route::get('/why-join-robotrade', 'WhyUpayController@index')->name('whyrobotrade');
     ///Route::get('/faqs', 'FaqController@index')->name('faqs');
 
     Route::get('/about-us', 'AboutUsController@index')->name('aboutus');
@@ -56,6 +56,7 @@ Route::prefix('/')->name('frontend.')->namespace('Frontend')->group(function () 
 
     Route::middleware(['auth:web', 'authCheck'])->group(function () {
         Route::get('/dashboard', 'Dashboard\DashboardController@index')->name('dashboard');
+        Route::post('/qrcode-payment', 'Dashboard\DashboardController@qrcodepayment')->name('qrcodepayment');
 
         Route::get('/products/{slug?}', 'Dashboard\ProductController@index')->name('products');
         Route::get('/product-details/{slug}', 'Dashboard\ProductController@productdetail')->name('productdetails');

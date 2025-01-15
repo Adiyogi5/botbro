@@ -5,13 +5,14 @@
                 <img src="{{ asset($site_settings['logo']) }}" class="img-fluid header-logo" alt="" />
             </a>
             <ul class="d-flex my-auto ms-auto" style="list-style:none;">
-                @if (Auth::guard('web')->check())
+                @if (Auth::guard('web')->check() && $user_approved->is_approved == 1)
                     <li class="nav-item mx-md-3 mx-2 my-auto d-lg-none d-block">
                         <a href="{{ url('cart') }}" class="nav-link position-relative">
                             {{-- <i class="fa-solid fa-bag-shopping faa-bag"></i> --}}
                             <img src="{{ asset('public/images/cart.png') }}" class="faa-bag" alt="">
                             <span id="chatNotif"
-                                class="position-absolute cart_counter top-0 start-100 translate-bottom badge rounded-pill bg-danger">{{ $cart_count ? $cart_count : '0' }} </span></a>
+                                class="position-absolute cart_counter top-0 start-100 translate-bottom badge rounded-pill bg-danger">{{ $cart_count ? $cart_count : '0' }}
+                            </span></a>
                         </a>
                     </li>
                 @endif
@@ -29,11 +30,11 @@
                                         href="{{ route('frontend.profile') }}"><i
                                             class="fa-solid fa-user me-2"></i>Profile</a></li>
                                 <li class=""><a class="nav-link nav-subtitle border-bottom ps-3"
-                                        href="{{ route('frontend.products') }}"><i
-                                            class="fa-solid fa-globe me-2"></i>Products</a></li>
+                                        href="{{ route('frontend.confirm_password') }}"><i
+                                            class="fa-solid fa-lock fa-profile me-2"></i>Change Password</a></li>
                                 <li class="d-flex">
                                     <form id="" method="post" action="{{ route('frontend.logout') }}"
-                                        class="dropdown-item border-bottom mb-0">
+                                        class="dropdown-item mb-0">
                                         @csrf
                                         <button type="submit" href=""
                                             class="nav-link nav-subtitle ps-0 bg-transparent">
@@ -77,9 +78,9 @@
                                 data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Join Us
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <li><a class="nav-link nav-subtitle border-bottom ps-2 {{ request()->routeIs('frontend.whyupay') ? 'active' : '' }}"
-                                        href="{{ route('frontend.whyupay') }}">Why Join UPayLiving</a></li>
-                                
+                                <li><a class="nav-link nav-subtitle border-bottom ps-2 {{ request()->routeIs('frontend.whyrobotrade') ? 'active' : '' }}"
+                                        href="{{ route('frontend.whyrobotrade') }}">Why Join Robo trade</a></li>
+
                                 @if (Auth::check() == null)
                                     <li><a class="nav-link nav-subtitle ps-2 {{ request()->routeIs('frontend.joinus') ? 'active' : '' }}"
                                             href="{{ route('frontend.joinus') }}">Join</a></li>
@@ -94,8 +95,8 @@
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <li><a class="nav-link nav-subtitle border-bottom ps-2 {{ request()->routeIs('frontend.aboutus') ? 'active' : '' }}"
-                                        href="{{ route('frontend.aboutus') }}">About UPayLiving</a></li>
-                                <li><a class="nav-link nav-subtitle border-bottom ps-2 {{ request()->routeIs('frontend.ourleadership') ? 'active' : '' }}"
+                                        href="{{ route('frontend.aboutus') }}">About Robo trade</a></li>
+                                <li><a class="nav-link nav-subtitle ps-2 {{ request()->routeIs('frontend.ourleadership') ? 'active' : '' }}"
                                         href="{{ route('frontend.ourleadership') }}">Our Leadership</a></li>
                             </ul>
                         </li>
@@ -107,12 +108,13 @@
 
                         <li class="nav-item mx-lg-3 mx-3">
                             <a href="{{ route('frontend.contactus') }}"
-                                class="nav-link nav-title {{ request()->routeIs('frontend.contactus') ? 'active' : '' }}">Contact</a>
+                                class="nav-link nav-title {{ request()->routeIs('frontend.contactus') ? 'active' : '' }}">Contact Us</a>
                         </li>
                         @if (Auth::check() == null)
-                        <li class="nav-item mx-lg-1 mx-3 text-nowrap ">
-                            <a href="{{ route('frontend.joinus') }}" class="btn btn-sm btn-custom-warning btn-upayliving px-xl-3 px-2 mt-2">Start Bussiness</a>
-                        </li>
+                            <li class="nav-item mx-lg-1 mx-3 text-nowrap ">
+                                <a href="{{ route('frontend.joinus') }}"
+                                    class="nav-link btn btn-upayliving px-xl-3 px-2 mt-1">Investment</a>
+                            </li>
                         @endif
 
                         @if (Auth::guard('web')->check())
@@ -129,11 +131,12 @@
                                                 href="{{ route('frontend.profile') }}"><i
                                                     class="fa-solid fa-user me-2"></i>Profile</a></li>
                                         <li class=""><a class="nav-link nav-subtitle border-bottom ps-3"
-                                        href="{{ route('frontend.products') }}"><i
-                                            class="fa-solid fa-globe me-2"></i>Products</a></li>                                                     
+                                                href="{{ route('frontend.confirm_password') }}"><i
+                                                    class="fa-solid fa-lock fa-profile me-2"></i>Change Password</a></li>
                                         <li class="d-flex">
                                             <form id="" method="post"
-                                                action="{{ route('frontend.logout') }}" class="dropdown-item border-bottom mb-0">
+                                                action="{{ route('frontend.logout') }}"
+                                                class="dropdown-item mb-0">
                                                 @csrf
                                                 <button type="submit" href=""
                                                     class="nav-link nav-subtitle ps-0 bg-transparent">
@@ -150,14 +153,15 @@
                                         class="fa-solid fa-right-from-bracket"></i> Login</a>
                             </li>
                         @endif
-                        @if (Auth::guard('web')->check())
+                        {{-- @if (Auth::guard('web')->check() && $user_approved->is_approved == 1)
                             <li class="nav-item mx-lg-3 mx-3 mt-2 mt-md-0 d-lg-block d-none">
-                                <a href="{{ url('cart') }}" class="nav-link position-relative"> 
+                                <a href="{{ url('cart') }}" class="nav-link position-relative">
                                     <img src="{{ asset('public/images/cart.png') }}" class="faa-bag" alt="">
                                     <span id="chatNotif"
-                                        class="position-absolute cart_counter top-0 start-100 translate-bottom badge rounded-pill bg-danger">{{ $cart_count ? $cart_count : '0' }} </span></a>
+                                        class="position-absolute cart_counter top-0 start-100 translate-bottom badge rounded-pill bg-danger">{{ $cart_count ? $cart_count : '0' }}
+                                    </span></a>
                             </li>
-                        @endif
+                        @endif --}}
                     </ul>
                 </div>
             </div>

@@ -10,7 +10,7 @@ class WhyUpayController extends Controller
 {
     public function index(Request $request)
     {
-        $whyupay_cms = Cms::where('cms.slug', 'why-join-upayliving')
+        $whyupay_cms = Cms::where('cms.slug', 'why-join-robo-trade')
         ->where('status', '1')->first();
         $title = $whyupay_cms->name;
         

@@ -386,7 +386,7 @@
                 @if (userCan(126))
                 <li class="nav-item">
                     <a href="{{ route('admin.profit_shares.index') }}" class="nav-link {{ @$active15 }}">
-                        <i class="fas fa-comments nav-icon"></i>
+                        <i class="fas fa-sack-dollar nav-icon"></i>
                         <p>Profit Sharing </p>
                     </a>
                 </li>
@@ -431,12 +431,21 @@
                 @if (userCan(125))
                 <li class="nav-item">
                     <a href="{{ route('admin.admin_notifications.index') }}" class="nav-link {{ @$active14 }}">
-                        <i class="fas fa-comments nav-icon"></i>
+                        <i class="fas fa-bell nav-icon"></i>
                         <p>Admin Notifications </p>
                     </a>
                 </li>
                 @endif
 
+                @if (userCan(127))
+                <li class="nav-item">
+                    <a href="{{ url('admin/contact_inquires') }}" class="nav-link {{ @$active16 }}">
+                        <i class="fas fa-envelope nav-icon"></i>
+                        <p>Contact Inquiry </p>
+                    </a>
+                </li>
+                @endif
+                
                 @if (userCan([117, 118, 119]))
                 <li class="nav-item {{ @$active7 }} {{ @$active7 ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ @$active7 }}">
@@ -472,14 +481,6 @@
                 </li>
                 @endif
 
-                @if (userCan(127))
-                <li class="nav-item">
-                    <a href="{{ url('admin/contact_inquires') }}" class="nav-link {{ @$active16 }}">
-                        <i class="fas fa-envelope nav-icon"></i>
-                        <p>Contact Inquiry </p>
-                    </a>
-                </li>
-                @endif
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

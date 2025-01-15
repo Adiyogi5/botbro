@@ -64,12 +64,12 @@
 /** Css for icheck box end **/
 
 .faviconsmallimg {
-  width: 30px;
+  height: auto;
+  width: 36px;
 }
 .logosmallimg {
   width: 150px;
 }
-
 .margin10 {
   margin: 10px;
   width: 98%;
@@ -210,8 +210,12 @@ input[type="checkbox"].tgl-ios + label::after {
   width: 120px;
 }
 .logosmallimg {
-  height: 70px;
-  width: 80px;
+  height: auto;
+  width: 200px;
+}
+.quotesfooter_logosmallimg{
+  height: auto;
+  width: 200px;
 }
 .loder {
   width: 200px;
@@ -308,4 +312,9 @@ input[type="checkbox"].tgl-ios + label::after {
 .account {
   color: #9f394d;
   margin-bottom: 5px;
+}
+
+.qr_codesmallimg{
+  height: 250px;
+  width: auto;
 }

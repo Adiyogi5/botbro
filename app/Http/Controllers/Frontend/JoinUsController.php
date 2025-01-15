@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use DB;
 use App\Rules\ReCaptcha;
+use Illuminate\Support\Facades\Auth;
 
 class JoinUsController extends Controller
 {
@@ -140,7 +141,10 @@ class JoinUsController extends Controller
             $SendSMS = sendSms(['+91' . $request->mobile], "Dear User your account at Upayliving has been successfully created! You can login from your registered mobile no. Regards, Upayliving ( https://upayliving.com/login)", $this->general_settings);
 
             $request->session()->flash('success', 'Thank you for register with upayliving, Login with the register details');
-            return redirect()->route('frontend.login');
+            // $request->session()->flash('success', 'Thank you for register with upayliving, Login with the register details');
+            // return redirect()->route('frontend.login');
+            Auth::guard('web')->loginUsingId($user->id, true);
+            return to_route('frontend.dashboard')->withSuccess("Successfully Registered!!");
         } catch (\Exception $e) {
             DB::rollback();
             $errorMessage = 'Failed to Register: ' . $e->getMessage();

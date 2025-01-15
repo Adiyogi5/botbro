@@ -4,8 +4,8 @@
   font-weight: 300;
   font-style: normal;
   src: local("Century Gothic"), local("CenturyGothic"),
-    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanRegular.woff")
-      format("woff");
+    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanRegular.ttf")
+      format("ttf");
 }
 
 @font-face {
@@ -13,8 +13,8 @@
   font-weight: 400;
   font-style: normal;
   src: local("Century Gothic"), local("CenturyGothic"),
-    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanRegular.woff")
-      format("woff");
+    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanRegular.ttf")
+      format("ttf");
 }
 
 /* @font-face {
@@ -22,8 +22,8 @@
   font-weight: 500;
   font-style: normal;
   src: local("Century Gothic"), local("CenturyGothic"),
-    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanRegular.woff")
-      format("woff");
+    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanRegular.ttf")
+      format("ttf");
 } */
 
 @font-face {
@@ -31,8 +31,8 @@
   font-weight: 600;
   font-style: normal;
   src: local("Century Gothic"), local("CenturyGothic"),
-    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanSemiBold.woff")
-      format("woff");
+    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanSemiBold.ttf")
+      format("ttf");
 }
 
 @font-face {
@@ -40,8 +40,8 @@
   font-weight: 700;
   font-style: normal;
   src: local("Century Gothic"), local("CenturyGothic"),
-    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanBold.woff")
-      format("woff");
+    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanBold.ttf")
+      format("ttf");
 }
 
 @font-face {
@@ -49,8 +49,8 @@
   font-weight: 800;
   font-style: normal;
   src: local("Century Gothic"), local("CenturyGothic"),
-    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanExtraBold.woff")
-      format("woff");
+    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanExtraBold.ttf")
+      format("ttf");
 }
 
 @font-face {
@@ -58,8 +58,8 @@
   font-weight: 900;
   font-style: normal;
   src: local("Century Gothic"), local("CenturyGothic"),
-    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanBlack.woff")
-      format("woff");
+    url("../fonts/century-gothic-paneuropean/CenturyGothicPaneuropeanBlack.ttf")
+      format("ttf");
 }
 
 .getreffer{
@@ -81,28 +81,44 @@ body {
   font-family: "Century Gothic", sans-serif;
 }
 
+.qr-code-img{
+  height: 260px;
+  width: auto;
+  margin: auto;
+  border-radius: 16px;
+}
+
 /* ######################## NavBar ######################### */
 .nav-bg-color {
   background-color: #591411;
 }
 
 .header-logo {
-  height: 70px;
+  height: 66px;
   width: fit-content;
 }
 .nav-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
 }
 .nav-subtitle {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 5px;
+  padding: 2px;
   text-wrap: nowrap;
 }
 .btn-custom-navbar {
   color: white !important;
-  background: #af3e54 !important;
+  background: #1d62cf !important;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  padding: 4px 16px !important;
+  border-radius: 6px;
+}
+.btn-upayliving{
+  color: white !important;
+  background: #ffc107 !important;
   font-size: 16px;
   font-weight: 500;
   box-shadow: 0px 4px 4px 0px #00000040;
@@ -137,6 +153,8 @@ body {
 .dropdown:hover .dropdown-menu {
   display: block;
   margin-top: 0;
+  right: 0 !important;
+  left: auto !important;
 }
 .user-name {
   color: #f73f61;
@@ -152,7 +170,7 @@ body {
 }
 .bread-heading {
   color: #ffffff;
-  font-size: 44px;
+  font-size: 32px;
   font-weight: 600;
   margin-bottom: 0px;
 }
@@ -164,7 +182,7 @@ body {
   text-decoration: none;
 }
 .btn-banner {
-  color: #ff5573 !important;
+  color: #1d62cf !important;
   font-size: 18px !important;
 }
 .btn-banner:hover {
@@ -177,9 +195,10 @@ body {
 .footer-logo {
   height: 70px;
   width: fit-content;
+  filter: invert(1) brightness(2);
 }
 .bg-footer {
-  background-color: #af3e54;
+  background-color: #123975;
 }
 .footer-heading {
   color: white;
@@ -198,7 +217,7 @@ body {
 }
 .btn-icon {
   background-color: white !important;
-  color: #9f394d;
+  color: #184b9d;
   height: 32px;
   width: 32px;
   padding: 0 !important;
@@ -244,7 +263,7 @@ body {
   font-weight: 500;
 }
 .btn-custom-warning {
-  --bs-btn-color: #af3e54;
+  --bs-btn-color: #1d62cf;
   --bs-btn-bg: #ffc107;
   --bs-btn-border-color: #ffc107;
   --bs-btn-hover-color: #ffc720;
@@ -269,7 +288,7 @@ body {
   background-color: #f2f2f2;
 }
 .upayliving-heading {
-  color: #9f394d;
+  color: #184b9d;
   font-size: 38px;
   font-weight: 600;
 }
@@ -278,6 +297,7 @@ body {
   font-size: 16px;
   line-height: 30px;
   font-weight: 400;
+  margin-bottom: 0px;
   text-align: justify;
 }
 .why-upayliving-img {
@@ -286,7 +306,7 @@ body {
 
 /* ############################# Join UpayLiving ############################## */
 .bg-join-upayliving {
-  background-color: #af3e54;
+  background-color: #1d62cf;
 }
 .join-upayliving-heading {
   color: #ffffff;
@@ -360,8 +380,8 @@ body {
   text-align: justify;
 }
 .btn-upaycard:hover {
-  background-color: #af3e54;
-  border: 1px solid #af3e54;
+  background-color: #1d62cf;
+  border: 1px solid #1d62cf;
 }
 .why-upay-inner-img {
   aspect-ratio: 1.5/1;
@@ -369,8 +389,8 @@ body {
 
 /* ########################### Testimonial ########################## */
 .bg-testimonial {
-  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)),
-    url("../../images/testimonial-bg.png");
+  /* background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)),
+    url("../../images/testimonial-bg.png"); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -379,21 +399,20 @@ body {
   box-shadow: 8px 8px 4px 0px #0000001a;
 }
 .box-area {
-  padding: 20px;
+  padding: 12px;
   background: #fff;
   color: #000;
-  box-shadow: 0px 0px 4px 0px #00000040;
-  border-radius: 16px;
+  box-shadow: 0px 0px 4px 0px #184b9d;
+  border-radius: 14px;
+  min-height: 210px;
 }
 .front-image {
-  border: 1px solid #af3e54;
+  border: 1px solid #1d62cf;
   background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 85% 60% 70% 70% / 110% 30% 115% 25%;
-  height: 120px;
-  top: -120%;
-  position: absolute;
-  width: -webkit-fill-available;
-  width: -moz-available;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+  position: relative;
   z-index: 10;
   overflow: hidden;
 }
@@ -410,7 +429,7 @@ body {
 .testimonial-heading {
   font-weight: 700;
   font-size: 42px;
-  color: #404040;
+  color: #184b9d;
 }
 .testimonial-title {
   font-weight: 700;
@@ -428,7 +447,7 @@ body {
 }
 .testimonial-des {
   font-weight: 400;
-  font-size: 16px;
+  font-size: 15px;
   color: #7c7b7b;
   text-align: justify;
   margin-bottom: 0px;
@@ -476,13 +495,13 @@ body {
 .plus {
   font-size: 24px;
   font-weight: 800;
-  background-color: #9f394d;
+  background-color: #184b9d;
   padding: 0px 10px;
 }
 .js-ag-faq_title {
   font-size: 20px;
   padding: 15px 30px;
-  background: linear-gradient(to right, #fa647f, #9f394d);
+  background: linear-gradient(to right, #1d62cf , #184b9d);
   cursor: pointer;
   color: #fff;
 }
@@ -512,7 +531,7 @@ body {
 }
 .btn-custom-form {
   color: white !important;
-  background: #af3e54 !important;
+  background: #1d62cf !important;
   font-size: 16px;
   font-weight: 500;
   box-shadow: 0px 4px 4px 0px #00000040;
@@ -521,7 +540,7 @@ body {
 }
 .btn-password {
   color: white !important;
-  background: #af3e54 !important;
+  background: #1d62cf !important;
 }
 .modal-link {
   font-weight: 600;
@@ -532,7 +551,7 @@ body {
 /* #################### About Us Page ################### */
 .aboutus-heading {
   font-size: 14px;
-  color: #9f394d;
+  color: #184b9d;
   text-transform: uppercase;
 }
 .aboutus-title {
@@ -572,7 +591,7 @@ body {
 .blog-title {
   font-size: 20px;
   font-weight: 600;
-  color: #9f394d;
+  color: #184b9d;
   margin-bottom: 5px;
 }
 .blog-content {
@@ -597,15 +616,15 @@ body {
 .blog-cat-title {
   font-size: 20px;
   font-weight: 600;
-  color: #9f394d;
+  color: #184b9d;
   padding-bottom: 8px;
   margin-bottom: 8px;
-  border-bottom: 1px solid #9f394d;
+  border-bottom: 1px solid #184b9d;
 }
 .blog-title-md {
   font-size: 18px;
   font-weight: 600;
-  color: #9f394d;
+  color: #184b9d;
   margin-bottom: 0px;
 }
 .blog-text-md {
@@ -616,7 +635,7 @@ body {
 }
 .text-project {
   font-size: 12px;
-  color: #9f394d;
+  color: #184b9d;
   font-weight: 600;
 }
 
@@ -628,7 +647,7 @@ body {
 .blogdetails-title {
   font-size: 24px;
   font-weight: 600;
-  color: #9f394d;
+  color: #184b9d;
   margin-bottom: 10px;
 }
 
@@ -653,7 +672,7 @@ body {
   font-size: 20px;
   font-weight: 400;
   color: #ffffff !important;
-  background-color: #af3e54;
+  background-color: #1d62cf;
   box-shadow: 0px 0px 2.5px 0px #00000040;
   padding: 0px 10px;
   text-decoration: none !important;
@@ -663,7 +682,7 @@ body {
 .blog-page-link {
   font-size: 20px;
   font-weight: 400;
-  color: #af3e54 !important;
+  color: #1d62cf !important;
   background-color: #ffffff;
   box-shadow: 0px 0px 2.5px 0px #00000040;
   padding: 0px 10px;
@@ -674,12 +693,12 @@ body {
 .blog-page-link:hover
 {
   color: #ffffff !important;
-  background-color: #af3e54;
+  background-color: #1d62cf;
 }
 
 /* #################### Contact Us Page ################### */
 .bg-contact-icon {
-  color: #fa647f;
+  color: #1d62cf ;
   background-color: #ffffff;
 }
 
@@ -689,7 +708,7 @@ body {
 }
 
 .bg-contactus {
-  background: linear-gradient(to right, #fa647f, #9f394d);
+  background: linear-gradient(to right, #1d62cf , #184b9d);
 }
 
 /* ####################################################################################################### */
@@ -697,7 +716,8 @@ body {
 /* ############### SIDE BAR ################# */
 .profile-img {
   height: 50px;
-  border: 2px solid #f73f61;
+  background-color: white;
+  border: 2px solid #18458d;
   border-radius: 50%;
 }
 
@@ -758,7 +778,7 @@ body {
 
 /* #################### Dashboard ##################  */
 .bg-lime {
-  background-color: #fa647f !important;
+  background-color: #1d62cf  !important;
   color: white !important;
   font-weight: 600;
 }
@@ -776,7 +796,7 @@ body {
 }
 
 .dash-number {
-  color: #fa647f;
+  color: #1d62cf ;
   font-size: 36px;
   font-weight: 500;
   margin-bottom: 1% !important;
@@ -809,7 +829,7 @@ body {
 
 .bg-dash-out {
   margin-right: 10%;
-  background-color: #fa647f;
+  background-color: #1d62cf ;
   border-top-right-radius: 100px;
   border-bottom-right-radius: 100px;
 }
@@ -848,7 +868,7 @@ body {
 
 /* ############## Products Page ################ */
 .product-title {
-  color: #9f394d;
+  color: #184b9d;
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 5px !important;
@@ -869,9 +889,9 @@ body {
 .sidebar-blog-title {
   font-weight: 500;
   font-size: 28px;
-  color: #9f394d;
+  color: #184b9d;
   padding-bottom: 7px;
-  border-bottom: 2px solid #9f394d;
+  border-bottom: 2px solid #184b9d;
 }
 
 .sidebar-blog-category {
@@ -889,7 +909,7 @@ body {
 }
 
 .cat-active {
-  color: #9f394d !important;
+  color: #184b9d !important;
   font-weight: 600 !important;
 }
 
@@ -902,7 +922,7 @@ body {
 .product-name {
   font-weight: 600;
   font-size: 30px;
-  color: #9f394d;
+  color: #184b9d;
   text-transform: capitalize;
 }
 
@@ -984,7 +1004,7 @@ body {
 .slick-prev:before {
   font-size: 28px !important;
   color: white !important;
-  background-color: #9f394d;
+  background-color: #184b9d;
   border-radius: 50%;
   opacity: 1 !important;
 }
@@ -1004,7 +1024,7 @@ body {
 }
 
 .myorder-id {
-  color: #9f394d !important;
+  color: #184b9d !important;
   font-size: 16px;
   font-weight: 600;
   text-align: left;
@@ -1184,7 +1204,7 @@ body {
 
 /* ############## Wallet Order Balance ################ */
 .bg-i-wallet {
-  background-color: #9f394d;
+  background-color: #184b9d;
 }
 
 .card-wallet-brd {
@@ -1205,7 +1225,7 @@ body {
 .faa-wallet-i {
   font-size: 44px !important;
   font-weight: 600;
-  color: #9f394d !important;
+  color: #184b9d !important;
 }
 
 .orderbal-name {
@@ -1236,7 +1256,7 @@ body {
 }
 
 .btn-wallet-main {
-  color: #9f394d !important;
+  color: #184b9d !important;
   font-size: 18px;
   font-weight: 700;
 }
@@ -1252,8 +1272,8 @@ body {
 .btn-order-ship {
   transition: all 0.5s ease;
   color: white !important;
-  background-color: #af3e54 !important;
-  border: 2px solid #af3e54 !important;
+  background-color: #1d62cf !important;
+  border: 2px solid #1d62cf !important;
   font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
@@ -1262,9 +1282,9 @@ body {
 }
 
 .btn-order-ship:hover {
-  color: #af3e54 !important;
+  color: #1d62cf !important;
   background-color: white !important;
-  border: 2px solid #af3e54 !important;
+  border: 2px solid #1d62cf !important;
   font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
@@ -1274,9 +1294,9 @@ body {
 
 .btn-order-forgot {
   transition: all 0.5s ease;
-  color: #af3e54 !important;
+  color: #1d62cf !important;
   background-color: white !important;
-  border: 2px solid #af3e54 !important;
+  border: 2px solid #1d62cf !important;
   font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
@@ -1286,8 +1306,8 @@ body {
 
 .btn-order-forgot:hover {
   color: white !important;
-  background-color: #af3e54 !important;
-  border: 2px solid #af3e54 !important;
+  background-color: #1d62cf !important;
+  border: 2px solid #1d62cf !important;
   font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
@@ -1296,13 +1316,13 @@ body {
 }
 
 .card-order-ship {
-  border: 2px solid #af3e54;
+  border: 2px solid #1d62cf;
   border-radius: 0px;
   box-shadow: 0px 0px 8px 0px #00000040;
 }
 
 .faa-ship {
-  color: #af3e54 !important;
+  color: #1d62cf !important;
   background-color: white !important;
   font-size: 22px !important;
   font-weight: 600 !important;
@@ -1382,7 +1402,7 @@ body {
 
 /* ############### MODAL ONE ###############  */
 .card-modal-ship-active {
-  border: 2px solid #af3e54;
+  border: 2px solid #1d62cf;
   border-radius: 0px;
   box-shadow: 0px 0px 8px 0px #00000040;
 }
@@ -1409,7 +1429,7 @@ body {
 }
 
 .faa-modal {
-  color: #af3e54;
+  color: #1d62cf;
   background-color: white;
   font-size: 22px;
   font-weight: 600;
@@ -1427,7 +1447,7 @@ body {
 }
 
 .faa-dott {
-  color: #af3e54;
+  color: #1d62cf;
   background-color: #eeeeee;
   border-radius: 50%;
   height: 40px;
@@ -1439,7 +1459,7 @@ body {
 
 .btn-modal-active {
   color: white;
-  background-color: #af3e54;
+  background-color: #1d62cf;
   font-size: 16px;
   font-weight: 500;
   border-radius: 8px;
@@ -1459,7 +1479,7 @@ body {
 }
 .btn-modal-active:hover {
   color: white;
-  background-color: #af3e54;
+  background-color: #1d62cf;
   font-size: 16px;
   font-weight: 500;
   border-radius: 8px;
@@ -1610,19 +1630,19 @@ p.pro-order-discount {
 }
 
 .quant-order-btn {
-  border: 2px solid #af3e54;
+  border: 2px solid #1d62cf;
   border-radius: 8px;
   padding: 4px 6px;
 }
 
 .quant-order-btn:hover {
-  border: 2.5px solid #af3e54;
+  border: 2.5px solid #1d62cf;
   border-radius: 8px;
 }
 
 .bg-order-pm {
   color: white !important;
-  background-color: #af3e54 !important;
+  background-color: #1d62cf !important;
   border: none;
   border-radius: 50%;
   height: 20px;
@@ -1731,7 +1751,7 @@ p.pro-order-discount {
 
 .btn-order-place {
   color: white;
-  background-color: #af3e54;
+  background-color: #1d62cf;
   font-size: 20px;
   font-weight: 500;
   border-radius: 12px;

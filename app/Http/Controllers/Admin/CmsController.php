@@ -28,7 +28,7 @@ class CmsController extends Controller
     {
 
         if ($request->ajax()) {
-            $records = Cms::select('id', 'name', 'cms_title', 'meta_title', 'status')->get();
+            $records = Cms::select('id', 'name', 'cms_title', 'meta_title', 'status')->where('deleted_at', NULL)->get();
 
             return Datatables::of($records)
                 ->addColumn('status', function ($row) {

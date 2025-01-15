@@ -44,7 +44,7 @@ class TestimonialController extends Controller
                 <button data-id="' . $row->id . '" class="btn btn-sm btn-danger delete_record"><i class="fa fa-trash"></i> Delete</button>';
                 })
                 ->editColumn('image', function ($row) {
-                    return '<img src="' . imageexist($row->image) . '" class="image logosmallimg">';
+                    return '<img src="' . imageexist($row->image) . '" class="image" style="height:60px;width:60px">';
                 })
                 ->removeColumn('id')
                 ->rawColumns(['status', 'image', 'action'])->make(true);

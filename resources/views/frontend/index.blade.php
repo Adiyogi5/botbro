@@ -34,13 +34,13 @@
     {{-- ######################## Why Upayliving ############################# --}}
     @if (!empty($homecms[0]))
     <section id="Why-Upayliving" class="bg-why-upayliving">
-        <div class="container py-3">
+        <div class="container py-lg-4 py-3">
             <div class="row">
-                <div class="col-md-5 col-12">
+                <div class="col-md-5 col-12 d-flex item-align-self">
                     <img class="img-responsive why-upayliving-img w-100" src="{{ imageexist($homecms[0]['image']) }}"
                         alt="">
                 </div>
-                <div class="col-md-7 col-12 mt-xl-5 mt-3">
+                <div class="col-md-7 col-12">
                     <h1 class="upayliving-heading">
                         {{ $homecms[0]['cms_title'] }}
                     </h1>
@@ -59,9 +59,9 @@
     {{-- ######################## Join Upayliving ############################# --}}
     @if (!empty($homecms[1]))
     <section id="Why-Upayliving" class="bg-join-upayliving">
-        <div class="container py-3">
+        <div class="container py-lg-4 py-3">
             <div class="row">
-                <div class="col-md-7 col-12 mt-xl-5 mt-3 order-md-1 order-2">
+                <div class="col-md-7 col-12 order-md-1 order-2">
                     <h1 class="join-upayliving-heading">
                         {{ $homecms[1]['cms_title'] }}
                     </h1>
@@ -70,7 +70,7 @@
                     </p>
                     <a href="{{ $homecms[1]['url'] }}" class="btn btn-lg btn-custom-warning btn-upayliving">Join Now</a>
                 </div>
-                <div class="col-md-5 col-12 order-md-2 order-1">
+                <div class="col-md-5 col-12 d-flex item-align-self order-md-2 order-1">
                     <img class="img-responsive why-upayliving-img w-100"
                         src="{{ imageexist($homecms[1]['image']) }}" alt="">
                 </div>
@@ -115,7 +115,7 @@
                             {{ mb_Strimwidth($homecms[2]['cms_contant'], 0, 350, '...') }}
                         </p>
                         <div class="position-absolute top-100 start-50 translate-middle">
-                            <a href="{{ $homecms[2]['url'] }}" class="btn btn-lg btn-warning text-white btn-upaycard">Learn More</a>
+                            <a href="{{ $homecms[2]['url'] }}" class="btn btn-md btn-warning text-white btn-upaycard">Learn More</a>
                         </div>
                     </div>
                 </div>
@@ -130,7 +130,7 @@
                             {{ mb_Strimwidth($homecms[3]['cms_contant'], 0, 350, '...') }}
                         </p>
                         <div class="position-absolute top-100 start-50 translate-middle">
-                            <a href="{{ $homecms[3]['url'] }}" class="btn btn-lg btn-warning text-white btn-upaycard">Learn More</a>
+                            <a href="{{ $homecms[3]['url'] }}" class="btn btn-md btn-warning text-white btn-upaycard">Learn More</a>
                         </div>
                     </div>
                 </div>
@@ -177,25 +177,27 @@
                     <div class="testimonial_slider_area text-start owl-carousel">
                         @foreach ($testimonials as $testimonial)
                         <div class="h-100 mt-5 mb-4 testimonial-card box-area row mx-md-1 mx-3">
-                            <div class="img-area col-xl-3 col-lg-4 col-md-4 col-4 d-flex">
-                                <div class="front-image">
+                            <div class="img-area col-lg-3 col-4 d-flex ms-lg-4 ms-md-3 ms-2">
+                                <div class="front-image ms-auto">
                                 <img src="{{ imageexist($testimonial['image']) }}" alt=""
                                     class="testimonial-img bg-transparent">
                                 </div>
                             </div>
-                            <div class="col-xl-9 col-lg-8 col-md-8 col-8">
+                            <div class="col d-flex item-align-self ms-0">
+                                <div class="my-auto">
                                 <h5 class="testimonial-title">{{ $testimonial['name'] }}</h5>
                                 <p class="testimonial-content">
                                     {{ $testimonial['designation'] }}
                                 </p>
                             </div>
-                            <div class="col-12 mt-3 d-flex">
+                            </div>
+                            <div class="col-12 d-flex">
                                 <span>
                                     <img src="{{ asset('public/images/quote.png') }}" alt=""
                                         class="testimonial-quote-img bg-transparent pe-lg-3 pe-2">
                                 </span>
                                 <span>
-                                    <p class="testimonial-des py-0 py-xl-1">
+                                    <p class="testimonial-des py-0">
                                         {{ $testimonial['message'] }}
                                     </p>
                                 </span>
