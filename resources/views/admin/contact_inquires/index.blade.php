@@ -51,6 +51,7 @@
 @endsection
 
 @section('footer_scripts')
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <script type="text/javascript">
         var tableObj;
         $(document).ready(function() {
@@ -74,7 +75,14 @@
                         data: 'email'
                     },
                     {
-                        data: 'created_at'
+                        data: 'created_at',
+                        orderable: true,
+                        render: function(data, type, row) {
+                            if (type === 'display' || type === 'filter') {
+                                return moment(data).format('DD-MM-YYYY');
+                            }
+                            return data;
+                        }
                     },
                     {
                         data: 'action',

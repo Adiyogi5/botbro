@@ -22,9 +22,6 @@ class ContactInquiryController extends Controller
             $data = ContactInquiry::get();
 
             return Datatables::of($data)
-            ->editColumn('created_at', function($row) { 
-                return date('d-m-Y', strtotime($row['created_at']));
-            })
             ->addColumn('action', function($row) {
                 return $action_btn = '<button onClick="callModal('.$row->id.')" class="btn btn-sm btn-secondary" title="View"><i class="fas fa-eye"></i></button>&nbsp;
                 <button data-id="'.$row->id.'" class="btn btn-sm btn-danger delete_record"  title="Delete"><i class="fa fa-trash"></i></button>';

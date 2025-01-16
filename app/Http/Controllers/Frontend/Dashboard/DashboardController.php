@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $title = 'Dashboard';
         $user = auth('web')->user();
 
-        $user_membership = MembershipDetail::where('user_id', $user->id)->first();
+        $user_membership = MembershipDetail::where('user_id', $user->id)->where('deleted_at', NULL)->first();
 
         DB::statement("SET SQL_MODE = ''");
         $my_balance = User::select('users.*','badge_masters.name as badge_level')->Where('users.id', $user->id)->whereNull('users.deleted_at')
@@ -61,7 +61,7 @@ class DashboardController extends Controller
         $validate = $request->validate([
             'reference_id' => 'required',
             'transaction_id' => 'required',
-            'date' => 'required',
+            // 'payment_date' => 'required',
         ]);
 
         try {
@@ -70,7 +70,7 @@ class DashboardController extends Controller
             $data->membership_fee = $request->membership_fee;
             $data->reference_id = $request->reference_id;
             $data->transaction_id = $request->transaction_id;
-            $data->date = $request->date;
+            $data->payment_date = now()->toDateString();
             $data->save();
 
             $request->session()->flash('success', 'Thanks For Join Our Membership.. Please wait for Approval !');

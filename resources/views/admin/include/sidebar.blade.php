@@ -319,7 +319,7 @@
                 @endif
 
                 @if (userCan([114, 115]))
-                <li class="nav-item {{ @$active4 }} {{ @$active4 ? 'menu-open' : '' }}">
+                {{-- <li class="nav-item {{ @$active4 }} {{ @$active4 ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ @$active4 }}">
                         <i class="nav-icon fas fa-globe"></i>
                         <p> Products <i class="fas fa-angle-left right"></i>
@@ -343,7 +343,7 @@
                         </li>
                         @endif
                     </ul>
-                </li>
+                </li> --}}
                 @endif
 
                 @if (userCan([116]))
@@ -393,7 +393,7 @@
                 @endif
 
                 @if (userCan([123, 124]))
-                <li class="nav-item {{ @$active5 }} {{ @$active5 ? 'menu-open' : '' }}">
+                {{-- <li class="nav-item {{ @$active5 }} {{ @$active5 ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ @$active5 }}">
                         <i class="fa-solid fa-blog nav-icon"></i>
                         <p>Blogs <i class="fas fa-angle-left right"></i> </p>
@@ -416,7 +416,7 @@
                         </li>
                         @endif
                     </ul>
-                </li>
+                </li> --}}
                 @endif
 
                 @if (userCan(122))

@@ -12,6 +12,7 @@ class WhyUpayController extends Controller
     {
         $whyupay_cms = Cms::where('cms.slug', 'why-join-robo-trade')
         ->where('status', '1')->first();
+        
         $title = $whyupay_cms->name;
         
         return view('frontend.whyupay', compact('title','whyupay_cms'));

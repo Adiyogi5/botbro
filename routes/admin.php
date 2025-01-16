@@ -142,6 +142,9 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
         Route::get('/customer/{user_id}/user_rewards','UserController@user_rewards')->name('customer.user_rewards'); 
         Route::get('/customer/{user_id}/user_profit_sharing','UserController@user_profit_sharing')->name('customer.user_profit_sharing'); 
 
+        Route::post('/approve-membership', 'UserController@approveMembership')->name('approve.membership');
+        Route::post('/reject-membership', 'UserController@rejectMembership')->name('reject.membership');
+
         /// Contact Inquires Routes
         Route::resource('/contact_inquires', 'ContactInquiryController');
 

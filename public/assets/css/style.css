@@ -87,12 +87,39 @@ body {
   margin: auto;
   border-radius: 16px;
 }
+.membership-heading-badge{
+  text-decoration: underline;
+  background-color: #1d62cf;
+  color: white;
+  padding: 6px 0px;
+  border-radius: 6px;
+}
+.membership-fee-badge{
+  background-color: #0d2754;
+  color: white;
+  padding: 2px 12px;
+  border-radius: 12px;
+}
+.payment-status-unpaid-badge{
+  background-color: #c00000;
+  color: white;
+  padding: 2px 12px;
+  border-radius: 12px;
+}
+.payment-status-paid-badge{
+  background-color: #46c000;
+  color: white;
+  padding: 2px 12px;
+  border-radius: 12px;
+}
 
 /* ######################## NavBar ######################### */
 .nav-bg-color {
   background-color: #591411;
 }
-
+.navbar{
+  border-bottom: 1px solid #1c5ec742;
+}
 .header-logo {
   height: 66px;
   width: fit-content;
@@ -783,11 +810,14 @@ body {
   font-weight: 600;
 }
 .card-dash {
-  border: 2px solid #4a4f4833;
+  border: 2px solid #1d62cf52;
   border-radius: 0px;
 }
+.border-end {
+  border-right: 2px solid #1d62cf52 !important;
+}
 .pro-img-order {
-  filter: brightness(56%) hue-rotate(230deg);
+  /* filter: brightness(56%) hue-rotate(230deg); */
 }
 .dash-category {
   color: #3e3939;
@@ -817,10 +847,14 @@ body {
   right: -25px;
   top: 20px;
 }
-
+.dash-timer {
+  color: #1d62cf;
+  font-size: 18px;
+  font-weight: 500;
+}
 .bg-dash-in {
-  background-color: #e95d76;
-  border-color: #e95d76;
+  background-color: #052f70;
+  border-color: #052f70;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 0px !important;
@@ -846,6 +880,91 @@ body {
   font-size: 40px;
   font-weight: 500;
   margin-bottom: 0% !important;
+}
+
+.dash-timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.timer-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1d1f26;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.timer-element {
+  margin: 0 10px;
+  text-align: center;
+  display: flex;
+  color: #fff;
+  gap: 4px;
+  align-items: center;
+  font-size: 2rem;
+  position: relative;
+  font-weight: bold;
+  padding: 4px 12px;
+  border-radius: 8px;
+  background-color: #222831;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.timer-element span {
+  font-size: 24px;
+  display: block;
+  font-weight: 700;
+}
+
+.timer-element p {
+  font-size: 0.9rem;
+  margin-top: 2px;
+  font-weight: normal;
+  margin-bottom: 2px;
+}
+
+.timer-element:nth-child(even) {
+  background-color: #1d62cf;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.timer-element:nth-child(odd) {
+  background-color: #393e46;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Pulse Effect on Timer */
+@keyframes fadeIn {
+  0% {
+      opacity: 0;
+      transform: scale(0.9);
+  }
+  50% {
+      opacity: 1;
+      transform: scale(1.05);
+  }
+  100% {
+      opacity: 1;
+      transform: scale(1);
+  }
+}
+
+.timer-box::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: linear-gradient(45deg, #1d62cf, #1d62cf);
+  z-index: -1;
+  border-radius: 12px;
+  animation: gradientShift 5s infinite;
 }
 
 /* ################ Confirm Password ################ */

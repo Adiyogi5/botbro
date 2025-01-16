@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\ContactInquiry;
 use Illuminate\Http\Request;
+use App\Rules\ReCaptcha;
 
 class ContactUsController extends Controller
 {
@@ -24,9 +25,7 @@ class ContactUsController extends Controller
             'mobile' => 'required|numeric|min:10',
             'subject' => 'required',
             'message' => 'required',
-            'captcha' => 'required|captcha',
-        ], [
-            'captcha' => 'The captcha value entered is incorrect.',
+            'g-recaptcha-response' => ['required', new ReCaptcha]
         ]);
 
         try {

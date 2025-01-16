@@ -29,6 +29,7 @@ class GeneralSetting extends Model
             '4'=>"extensions", 
            // '6'=>"payment", 
            7 => "bankdetail",
+           8 => "investment",
         ),
         'name'=>array(
             '1'=>"General Setting", 
@@ -37,6 +38,7 @@ class GeneralSetting extends Model
             '4'=>"Extensions",
            // '6'=>"Payment", 
            7 => "Bank Detail",
+           8 => "Investment",
         ) );
     }
 

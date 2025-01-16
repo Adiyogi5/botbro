@@ -15,7 +15,7 @@
 
                     <h3 class="mb-3 text-center mx-auto">Contact Us</h3>
                     
-                    @if ($message = Session::get('success'))
+                    {{-- @if ($message = Session::get('success'))
                         <div id="success-message" class="alert alert-success alert-block margin10 flash-message">
                             <strong>{{ $message }}</strong>
                         </div>
@@ -24,7 +24,7 @@
                         <div id="error-message" class="alert alert-danger alert-block margin10 flash-message">
                             <strong>{{ $message }}</strong>
                         </div>
-                    @endif
+                    @endif --}}
 
                     <form method="post" action="{{ route('frontend.submitcontact') }}" id="contactformvalidate"
                         enctype="multipart/form-data">
@@ -63,6 +63,15 @@
                                 <label class="error" id="personError">{{ $errors->first('message') }}</label>
                             </div>
                             <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <strong>ReCaptcha:</strong>
+                                    <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
+                                    @if ($errors->has('g-recaptcha-response'))
+                                        <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                                    @endif
+                                </div>   
+                            </div>
+                            {{-- <div class="col-md-6 col-12">
                                 <label for="captcha" class="mb-2 contact-text">Captcha <i> *</i></label>
                                 <div class="captcha mb-2">
                                     <span>{!! captcha_img('flat') !!}</span>
@@ -75,7 +84,7 @@
                                         name="captcha">
                                 </div>
                                 <label class="error" id="personError">{{ $errors->first('captcha') }}</label>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="col-12 mt-md-3 mt-2">
                             <input type="submit" value="Submit" name="submit" class="btn btn-order-ship submitbtn" />
@@ -116,6 +125,7 @@
 
 
 @section('js')
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     <script src="{{ ASSETS }}js/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
     <script type="text/javascript">

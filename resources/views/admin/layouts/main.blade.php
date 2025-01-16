@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ config('app.name', 'UPayLiving') }}</title>
 <link rel="icon" type="image/x-icon" href="{{ asset($site_settings['favicon']) }}" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- Styles -->
 <link href="{{CSS}}app.css" rel="stylesheet">
