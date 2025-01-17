@@ -12,7 +12,7 @@ class Investment extends Model
     use HasFactory,SoftDeletes;
 
     protected $fillable = [
-        'invest_no','invest_amount','user_id', 'date', 'customer_name', 'customer_email', 'customer_mobile','address_1','address_2','city','state','country','postcode','payment_type','payment_status','screenshot'
+        'invest_no','invest_amount','user_id', 'date', 'customer_name', 'customer_email', 'customer_mobile','payment_type','payment_status','screenshot','is_approved'
     ];
 
     protected $dates = ['deleted_at'];

@@ -2,9 +2,11 @@
 namespace App\Http\Controllers\Frontend\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\GeneralSetting;
 use App\Models\Investment;
 use App\Models\Order;
 use App\Models\Returns;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -19,10 +21,9 @@ class MyInvestmentController extends Controller
         $user = auth('web')->user();
 
         DB::statement("SET SQL_MODE = ''");
-        $my_order = Order::select('orders.*', 'order_status.name as status_text', 'order_status.color as status_class', 'payment_status')
-            ->join('order_status', 'order_status.id', '=', 'orders.order_status_id')
-            ->Where('orders.user_id', $user->id)
-            ->whereNull('orders.deleted_at')
+        $my_order = Investment::select('investments.*')
+            ->Where('investments.user_id', $user->id)
+            ->whereNull('investments.deleted_at')
             ->orderBy('id', 'DESC')
             ->paginate(10);
 
@@ -31,27 +32,45 @@ class MyInvestmentController extends Controller
 
     public function investmoney(Request $request)
     {
-        $invest_amount = $request->site_settings['invest_amount'];
+        $user = auth('web')->user();
 
+        // Load site settings
+        $app_data = GeneralSetting::all();
+        foreach ($app_data as $row) {
+            $site_settings[$row['setting_name']] = $row['filed_value'];
+        }
+        $invest_amount = $site_settings['invest_amount'];
+
+        // Validate input
         $request->validate([
             'invest_amount'  => 'required|numeric|min:' . $invest_amount,
             'payment_type'   => 'required|in:0,1',
             'transaction_id' => 'nullable|required_if:payment_type,1',
             'date'           => 'required|date',
-            'screenshot' => 'required|mimes:jpg,jpeg,png|max:2048', 
+            'screenshot'     => 'required|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         try {
-            $data                 = new Investment();
-            $data->user_id        = auth()->id();
-            $data->invest_amount  = $request->invest_amount;
-            $data->payment_type   = $request->payment_type;
-            $data->transaction_id = $request->payment_type == 1 ? $request->transaction_id : null;
-            $data->date           = $request->date;
+            // Generate unique invest_no
+            $invest_no = $this->generateUniqueInvestNo();
+
+            // Create new investment record
+            $data                  = new Investment();
+            $data->invest_no       = $invest_no;
+            $data->user_id         = $user->id;
+            $data->customer_name   = $user->name;
+            $data->customer_email  = $user->email;
+            $data->customer_mobile = $user->mobile;
+            $data->invest_amount   = $request->invest_amount;
+            $data->payment_type    = $request->payment_type;
+            $data->transaction_id  = $request->payment_type == 1 ? $request->transaction_id : null;
+            $data->date            = $request->date;
+
+            // Handle screenshot upload
             if ($file = $request->file('screenshot')) {
-                $path = 'investment';
-                $destinationPath    = 'public\\' . $path;
-                $uploadImage        = time() . '_' . rand(99999, 1000000) . '.' . $file->getClientOriginalExtension();
+                $path            = 'investment';
+                $destinationPath = 'public\\' . $path;
+                $uploadImage     = time() . '_' . rand(99999, 1000000) . '.' . $file->getClientOriginalExtension();
                 Storage::disk('local')->put($destinationPath . '/' . $uploadImage, file_get_contents($file));
                 $data->screenshot = $path . '/' . $uploadImage;
             }
@@ -64,23 +83,55 @@ class MyInvestmentController extends Controller
         }
     }
 
+    /**
+     * Generate a unique invest_no.
+     *
+     * @return string
+     */
+    private function generateUniqueInvestNo()
+    {
+        do {
+            $number    = str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT); // Generate a number like 00001
+            $invest_no = 'IN-' . $number;
+        } while (Investment::where('invest_no', $invest_no)->exists());
+
+        return $invest_no;
+    }
+
     public function get_filter_data(Request $request)
     {
         $user = auth('web')->user();
 
-        $my_order = Order::select('orders.*', 'order_status.name as status_text', 'order_status.color as status_class')
-            ->join('order_status', 'order_status.id', '=', 'orders.order_status_id')
-            ->where('orders.user_id', $user->id);
+        $my_order = Investment::select('investments.*')
+            ->whereNull('investments.deleted_at')
+            ->where('investments.user_id', $user->id);
 
-        // Add search filter
-        if ($request->orderno_search) {
-            $my_order->where('orders.order_no', 'LIKE', '%' . $request->orderno_search . '%');
+        if ($request->investno_search) {
+            $my_order->where('investments.invest_no', 'LIKE', '%' . $request->investno_search . '%');
         }
 
         $my_order = $my_order->orderBy('id', 'DESC')
             ->get()->toArray();
 
         return response()->json(['data' => $my_order]);
+    }
+
+    public function investmentDetails(Request $request, $id=''){
+        $title = 'Order Detail';
+
+        $user = auth('web')->user();
+
+        DB::statement("SET SQL_MODE = ''");
+        $investment_data = Investment::select('investments.*')
+            ->Where('investments.user_id', $user->id)
+            ->whereNull('investments.deleted_at')
+            ->first();
+            
+        if (empty($investment_data)) {
+            return redirect('investment')->with('error', "Investment not found");
+        }
+        
+        return view('frontend.dashboard.investmentdetails', compact('title', 'investment_data'));
     }
 
     public function my_return(Request $request)

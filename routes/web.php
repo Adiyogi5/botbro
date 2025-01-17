@@ -109,6 +109,8 @@ Route::prefix('/')->name('frontend.')->namespace('Frontend')->group(function () 
 
         Route::get('/investment', 'Dashboard\MyInvestmentController@index')->name('investment');
         Route::post('/invest-money', 'Dashboard\MyInvestmentController@investmoney')->name('investmoney');
+        Route::get('/get_filter_data', 'Dashboard\MyInvestmentController@get_filter_data')->name('get_filter_data');
+        Route::get('/investment-details/{id}', 'Dashboard\MyInvestmentController@investmentDetails')->name('investmentdetails');
     }); 
 
 });
