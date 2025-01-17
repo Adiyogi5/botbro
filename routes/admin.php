@@ -168,5 +168,9 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
         Route::resource('/rewards', 'RewardController');
         Route::get('/rewards/reject/{id}','RewardController@reject')->name('rewards.reject'); 
         Route::get('/rewards/approve/{id}','RewardController@approve')->name('rewards.approve');
+
+        /// Gift Routes
+        Route::resource('/gift', 'GiftController');
+        Route::post('/gift/status','GiftController@change_status')->name('gifts.status');
     });
 });
