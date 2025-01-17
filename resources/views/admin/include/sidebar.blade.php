@@ -30,7 +30,7 @@
         $active1 = 'active';
         }
 
-        $sidemenu = ['subadmin', 'banner', 'offer', 'role', 'badge_masters', 'reward_masters'];
+        $sidemenu = ['subadmin', 'banner', 'offer', 'role', 'badge_masters', 'reward_masters','gifts'];
         foreach ($sidemenu as $menukey => $menuvalue) {
         if (in_array($menuvalue, $fullpage)) {
         $active2 = 'active';
@@ -52,6 +52,9 @@
         }
         if (in_array('reward_masters', $fullpage)) {
         $a122 = 'active';
+        }
+        if (in_array('gifts', $fullpage)) {
+        $a123 = 'active';
         }
         }
 
@@ -182,7 +185,7 @@
                 </li>
                 @endif
 
-                @if (userCan([103, 104, 105, 106, 107, 108]))
+                @if (userCan([103, 104, 105, 106, 107, 108, 109]))
                 <li class="nav-item {{ @$active2 }} {{ @$active2 ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ @$active2 }}">
                         <i class="nav-icon fas fa-cog"></i>
@@ -235,6 +238,14 @@
                             <a href="{{ route('admin.reward_masters.index') }}" class="nav-link {{ @$a122 }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Reward Masters</p>
+                            </a>
+                        </li>
+                        @endif
+                        @if (userCan(109))
+                        <li class="nav-item">
+                            <a href="{{ route('admin.gift.index') }}" class="nav-link {{ @$a123 }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Gifts</p>
                             </a>
                         </li>
                         @endif
