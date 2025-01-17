@@ -346,7 +346,7 @@
                 </li> --}}
                 @endif
 
-                @if (userCan([116]))
+                {{-- @if (userCan([116]))
                 <li class="nav-item {{ @$active11 }} {{ @$active11 ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ @$active11 }}">
                         <i class="fa-solid fa-list nav-icon"></i>
@@ -363,16 +363,16 @@
                         @endif
                     </ul>
                 </li>
-                @endif
+                @endif --}}
 
-                @if (userCan(120))
+                {{-- @if (userCan(120))
                 <li class="nav-item <?=$active12?> <?=($active12)?" menu-open":""?>">
                     <a href="{{url('admin/returns')}}" class="nav-link <?=$active12?>">
                         <i class="nav-icon fa fa-undo"></i>
                         <p> Returns </p>
                     </a>
                 </li>
-                @endif
+                @endif --}}
 
                 @if (userCan(121))
                 <li class="nav-item <?=$active13?> <?=($active13)?" menu-open":""?>">

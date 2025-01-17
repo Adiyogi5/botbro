@@ -220,7 +220,7 @@ body {
 
 /* ########################### Footer ########################### */
 .footer-logo {
-  height: 70px;
+  height: 52px;
   width: fit-content;
   filter: invert(1) brightness(2);
 }

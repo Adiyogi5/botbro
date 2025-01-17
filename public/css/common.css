@@ -78,7 +78,7 @@
   color: #ffffff;
 }
 a {
-  color: #007bff;
+  color: #00336a;
   text-decoration: none !important;
   background-color: transparent;
 }
@@ -237,7 +237,7 @@ input[type="checkbox"].tgl-ios + label::after {
   display: flex;
 }
 .company__info {
-  background: linear-gradient(to right, #fa647f, #fb9986);
+  background: linear-gradient(to right, #072658, #1d62cf);
   border-top-left-radius: 12px;
   border-bottom-left-radius: 12px;
   display: flex;
@@ -249,7 +249,7 @@ input[type="checkbox"].tgl-ios + label::after {
   display: none;
 }
 .row > h2 {
-  color: #9f394d;
+  color: #1c5dc6;
 }
 .login_form {
   background-color: #fff;
@@ -272,7 +272,7 @@ input[type="checkbox"].tgl-ios + label::after {
   transition: all 0.5s ease;
 }
 .login-form-input:focus {
-  border-bottom-color: #9f394d;
+  border-bottom-color: #1c5dc6;
   box-shadow: 0 0 5px rgba(0, 80, 80, 0.4);
   border-radius: 4px;
 }
@@ -280,37 +280,37 @@ input[type="checkbox"].tgl-ios + label::after {
   transition: all 0.5s ease;
   border-radius: 8px;
   padding: 3px 22px;
-  background-color: #9f394d;
+  background-color: #1c5dc6;
   color: #fff;
   font-weight: 600;
-  border: 1px solid #9f394d;
+  border: 1px solid #1c5dc6;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }
 .btn-login:hover,
 .btn-login:focus {
   background-color: #fff;
-  color: #9f394d;
-  border: 1px solid #9f394d;
+  color: #1c5dc6;
+  border: 1px solid #1c5dc6;
 }
 .btn-login-back {
   transition: all 0.5s ease;
   border-radius: 8px;
   padding: 3px 22px;
-  color: #9f394d;
+  color: #1c5dc6;
   font-weight: 600;
   background-color: #fff;
-  border: 1px solid #9f394d;
+  border: 1px solid #1c5dc6;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }
 .btn-login-back:hover,
 .btn-login-back:focus {
-  background-color: #9f394d;
+  background-color: #1c5dc6;
   color: #fff;
 }
 .account {
-  color: #9f394d;
+  color: #1c5dc6;
   margin-bottom: 5px;
 }
 

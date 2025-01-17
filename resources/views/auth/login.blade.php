@@ -18,7 +18,7 @@
                         <div class="container">
                             <div class="">
                                 <div class="card-header text-center">
-                                    <a href="javascript:void(0);" class="h1"><b>Customer</b>{{ __('Login') }}</a>
+                                    <a href="javascript:void(0);" class="h1"><b class="text-primary">Customer </b>{{ __('Login') }}</a>
                                 </div>
                                 <div class="row">
                                     <p class="login-box-msg">Sign in to start your session</p>

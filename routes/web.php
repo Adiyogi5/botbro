@@ -107,6 +107,8 @@ Route::prefix('/')->name('frontend.')->namespace('Frontend')->group(function () 
        
         Route::post('/withdrow', 'Dashboard\WithdrowController@withdrow')->name('withdrow');
 
+        Route::get('/investment', 'Dashboard\MyInvestmentController@index')->name('investment');
+        Route::post('/invest-money', 'Dashboard\MyInvestmentController@investmoney')->name('investmoney');
     }); 
 
 });

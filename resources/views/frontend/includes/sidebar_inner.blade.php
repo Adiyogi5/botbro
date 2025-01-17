@@ -46,22 +46,30 @@
                             Products</a>
                     </li> --}}
 
-                    <li
+                    {{-- <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.my_order') ? 'text-white bg-lime' : '' }}">
                         <a class="nav-link sidebar-link {{ request()->routeIs('frontend.my_order') ? 'text-white bg-lime' : '' }}"
                             aria-current="page"
                             style="{{ request()->routeIs('frontend.my_order') ? 'color:white !important;' : '' }}"
                             href="{{ route('frontend.my_order') }}"><i
                                 class="fa-solid fa-cart-shopping faa-profile"></i> My Order</a>
-                    </li>
+                    </li> --}}
 
-                    <li
+                    {{-- <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.my_return') ? 'text-white bg-lime' : '' }}">
                         <a class="nav-link sidebar-link {{ request()->routeIs('frontend.my_return') ? 'text-white bg-lime' : '' }}"
                             aria-current="page"
                             style="{{ request()->routeIs('frontend.my_return') ? 'color:white !important;' : '' }}"
                             href="{{ route('frontend.my_return') }}"><i class="fa-solid fa-undo faa-profile"></i>
                             Returns/Replace Request</a>
+                    </li> --}}
+                    <li
+                        class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.investment') ? 'text-white bg-lime' : '' }}">
+                        <a class="nav-link sidebar-link {{ request()->routeIs('frontend.investment') ? 'text-white bg-lime' : '' }}"
+                            aria-current="page"
+                            style="{{ request()->routeIs('frontend.investment') ? 'color:white !important;' : '' }}"
+                            href="{{ route('frontend.investment') }}"><i
+                                class="fa-solid fa-money-bill-transfer faa-profile"></i> My Investment</a>
                     </li>
 
                     <li
@@ -82,14 +90,14 @@
                                 class="fa-solid fa-location-dot faa-profile"></i> My Address</a>
                     </li>
 
-                    <li
+                    {{-- <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.badge_history') ? 'text-white bg-lime' : '' }}">
                         <a class="nav-link sidebar-link {{ request()->routeIs('frontend.badge_history') ? 'text-white bg-lime' : '' }}"
                             aria-current="page"
                             style="{{ request()->routeIs('frontend.badge_history') ? 'color:white !important;' : '' }}"
                             href="{{ route('frontend.badge_history') }}"><i class="fa-solid fa-award faa-profile"></i>
                             Badge History</a>
-                    </li>
+                    </li> --}}
 
                     <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.reward_history') ? 'text-white bg-lime' : '' }}">

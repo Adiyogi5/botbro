@@ -91,7 +91,6 @@ class UserController extends Controller
                                     <small class="btn btn-sm btn-warning rounded mx-auto px-3">Rejected</small>
                                 </div>';
                     }
-                
                     // Case 2: Not approved but membership exists
                     if ($row->is_approved == 0) {
                         $approveButton = '<button data-id="' . $row->id . '" class="btn btn-sm btn-success approve-membership" title="Approve Membership"><i class="fa-solid fa-check"></i></button>';
@@ -103,14 +102,12 @@ class UserController extends Controller
                                     ' . $rejectButton . '
                                 </div>';
                     }
-                
                     // Case 3: Approved
                     if ($row->is_approved == 1) {
                         return '<div class="d-flex align-items-center">
                                     <small class="btn btn-sm btn-success rounded mx-auto px-3">Approved</small>
                                 </div>';
                     }
-                
                     // Default: Rejected (fallback case)
                     return '<div class="d-flex align-items-center">
                                 <small class="btn btn-sm btn-warning rounded mx-auto px-3">Rejected</small>
