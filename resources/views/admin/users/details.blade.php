@@ -19,14 +19,14 @@
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="true">Profile</button>
-                            </li>
+                            {{-- </li>
                             <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Badge Level</button>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-refers-tab" data-bs-toggle="pill" data-bs-target="#pills-refers" type="button" role="tab" aria-controls="pills-refers" aria-selected="false">Refers</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-orders-tab" data-bs-toggle="pill" data-bs-target="#pills-orders" type="button" role="tab" aria-controls="pills-orders" aria-selected="false">Orders</button>
+                            <button class="nav-link" id="pills-investments-tab" data-bs-toggle="pill" data-bs-target="#pills-investments" type="button" role="tab" aria-controls="pills-investments" aria-selected="false">Investments</button>
                             </li>
                             <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-wallet-tab" data-bs-toggle="pill" data-bs-target="#pills-wallet" type="button" role="tab" aria-controls="pills-wallet" aria-selected="false">Wallet</button>
@@ -37,12 +37,12 @@
                             <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-address-tab" data-bs-toggle="pill" data-bs-target="#pills-address" type="button" role="tab" aria-controls="pills-address" aria-selected="false">Address</button>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-rewards-tab" data-bs-toggle="pill" data-bs-target="#pills-rewards" type="button" role="tab" aria-controls="pills-rewards" aria-selected="false">Rewards</button>
                             </li>
                             <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-profit_sharing-tab" data-bs-toggle="pill" data-bs-target="#pills-profit_sharing" type="button" role="tab" aria-controls="pills-profit_sharing" aria-selected="false">Profit Sharing</button>
-                            </li>
+                            </li> --}}
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
@@ -97,15 +97,15 @@
                                 </table>
                             </div>
 
-                            <div class="tab-pane fade" id="pills-orders" role="tabpanel" aria-labelledby="pills-orders-tab">
-                                <table class="table table-bordered table-striped datatable_orders" style="width:100% !important">
+                            <div class="tab-pane fade" id="pills-investments" role="tabpanel" aria-labelledby="pills-investments-tab">
+                                <table class="table table-bordered table-striped datatable_investments" style="width:100% !important">
                                     <thead>
                                         <tr>
-                                            <th>Order No.</th>
+                                            <th>Invest No.</th>
                                             <th>Customer Name</th>
-                                            <th>Order Amount</th>
-                                            <th>Order Status</th>
-                                            <th>Order Date</th>
+                                            <th>Invest Amount</th>
+                                            <th>Payment Status</th>
+                                            <th>Payment Date</th>
                                             
                                         </tr>
                                     </thead>
@@ -141,6 +141,7 @@
                                     </thead>
                                 </table>
                             </div>
+
                             <div class="tab-pane fade" id="pills-address" role="tabpanel" aria-labelledby="pills-address-tab">
                                 <table class="table table-bordered table-striped datatable_address" style="width:100% !important">
                                     <thead>
@@ -157,6 +158,7 @@
                                     </thead>
                                 </table>
                             </div>
+
                             <div class="tab-pane fade" id="pills-rewards" role="tabpanel" aria-labelledby="pills-rewards-tab">
                                 <table class="table table-bordered table-striped datatable_rewards" style="width:100% !important">
                                     <thead>
@@ -171,6 +173,7 @@
                                     </thead>
                                 </table>
                             </div>
+
                             <div class="tab-pane fade" id="pills-profit_sharing" role="tabpanel" aria-labelledby="pills-profit_sharing-tab">
                                 <table class="table table-bordered table-striped datatable_profit_sharing" style="width:100% !important">
                                     <thead>
@@ -276,21 +279,21 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        tableObj = $('.datatable_orders').DataTable({
+        tableObj = $('.datatable_investments').DataTable({
             processing: true,
             serverSide: false,
             cache: true,
             bLengthChange: false,
             type: 'GET',
-            ajax: "{{ url('admin/customer/'.$id.'/user_orders') }}",
+            ajax: "{{ url('admin/customer/'.$id.'/user_investments') }}",
             order: [
                 [4, "desc"]
             ],
             columns: [
-                {data: 'order_no'},
+                {data: 'invest_no'},
                 {data: 'customer_name'},
-                {data: 'total'},
-                {data: 'order_status_id'},
+                {data: 'invest_amount'},
+                {data: 'payment_status'},
                 {data: 'date'},
                 
             ],

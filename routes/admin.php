@@ -133,7 +133,7 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
         Route::get('/customer/{user_id}/details','UserController@details')->name('customer.details'); 
         Route::get('/customer/{user_id}/user_badges','UserController@user_badges')->name('customer.user_badges'); 
         Route::get('/customer/{user_id}/user_refer','UserController@user_refer')->name('customer.user_refer'); 
-        Route::get('/customer/{user_id}/user_orders','UserController@user_orders')->name('customer.user_orders'); 
+        Route::get('/customer/{user_id}/user_investments','UserController@user_investments')->name('customer.user_investments'); 
         Route::get('/customer/{user_id}/user_wallet','UserController@user_wallet')->name('customer.user_wallet'); 
         Route::get('/customer/{user_id}/user_withdraw','UserController@user_withdraw')->name('customer.user_withdraw'); 
         Route::get('/customer/withdraw_reject/{user_id}','UserController@withdraw_reject')->name('customer.withdraw_reject'); 
@@ -144,6 +144,16 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
 
         Route::post('/approve-membership', 'UserController@approveMembership')->name('approve.membership');
         Route::post('/reject-membership', 'UserController@rejectMembership')->name('reject.membership');
+
+
+        // investments Route
+        Route::resource('/investments', 'InvestmentController');
+        Route::post('/investments/status/{id}', 'InvestmentController@updinvestmentStatus')->name('investments.status');
+        Route::get('/investments/invoice/{id}', 'InvestmentController@invoice')->name('investments.invoice');
+
+        Route::post('/approve-investment', 'InvestmentController@approveInvestment')->name('approve.investment');
+        Route::post('/reject-investment', 'InvestmentController@rejectInvestment')->name('reject.investment');
+
 
         /// Contact Inquires Routes
         Route::resource('/contact_inquires', 'ContactInquiryController');
@@ -159,6 +169,8 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
         Route::resource('/orders', 'OrderController');
         Route::post('/orders/status/{id}', 'OrderController@updOrderStatus')->name('orders.status');
         Route::get('/orders/invoice/{id}', 'OrderController@invoice')->name('orders.invoice');
+
+
 
         Route::get('/returns', 'ReturnController@index');
         Route::get('/returns/{id}', 'ReturnController@show');

@@ -93,20 +93,22 @@
                                                 <p class="card-text mb-0"><strong>Date:</strong>
                                                     {{ \Carbon\Carbon::parse($order->date)->format('d M, Y') }}</p>
                                                 <p class="card-text mb-1"><strong>Payment Type:</strong>
-                                                    {{ $order->payment_type == 1 ? 'Online' : 'Offline' }}</p>
+                                                    {{ $order->payment_type == 1 ? 'ONLINE' : 'OFFLINE' }}</p>
                                                 <p class="card-text mb-1"><strong>Payment Status:</strong>
                                                     @if ($order->payment_status == 1)
-                                                        <span class="p-1 rounded-1 bg-success">Paid</span>
+                                                        <span class="p-1 rounded-1 bg-success">PAID</span>
                                                     @else
-                                                        <span class="p-1 rounded-1 bg-danger">Pending</span>
+                                                        <span class="p-1 rounded-1 bg-warning">PENDING</span>
                                                     @endif
                                                 </p>
                                                 <p class="card-text mb-0"><strong>Approval Status:</strong>
-                                                    @if ($order->is_approved == 1)
-                                                        <span class="p-1 rounded-1 bg-success">Approved</span>
+                                                    @if (is_null($order->is_approved))
+                                                        <span class="p-1 rounded-1 bg-warning">PENDING</span>
+                                                    @elseif ($order->is_approved == 1)
+                                                        <span class="p-1 rounded-1 bg-success">APPROVED</span>
                                                     @else
-                                                        <span class="p-1 rounded-1 bg-danger">Not Approved</span>
-                                                    @endif
+                                                        <span class="p-1 rounded-1 bg-danger">REJECTED</span>
+                                                    @endif                                                
                                                 </p>
                                             </div>
                                         </div>

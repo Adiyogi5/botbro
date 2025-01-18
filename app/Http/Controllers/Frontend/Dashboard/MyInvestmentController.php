@@ -124,6 +124,7 @@ class MyInvestmentController extends Controller
         DB::statement("SET SQL_MODE = ''");
         $investment_data = Investment::select('investments.*')
             ->Where('investments.user_id', $user->id)
+            ->where('investments.id', $request->id)
             ->whereNull('investments.deleted_at')
             ->first();
             

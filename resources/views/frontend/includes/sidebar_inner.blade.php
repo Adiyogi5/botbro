@@ -72,14 +72,14 @@
                                 class="fa-solid fa-money-bill-transfer faa-profile"></i> My Investment</a>
                     </li>
 
-                    <li
+                    {{-- <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.my_wallet') ? 'text-white bg-lime' : '' }}">
                         <a class="nav-link sidebar-link {{ request()->routeIs('frontend.my_wallet') ? 'text-white bg-lime' : '' }}"
                             aria-current="page"
                             style="{{ request()->routeIs('frontend.my_wallet') ? 'color:white !important;' : '' }}"
                             href="{{ route('frontend.my_wallet') }}"><i class="fa-solid fa-wallet faa-profile"></i> My
                             Wallet</a>
-                    </li>
+                    </li> --}}
 
                     <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.my_address') ? 'text-white bg-lime' : '' }}">
@@ -99,14 +99,14 @@
                             Badge History</a>
                     </li> --}}
 
-                    <li
+                    {{-- <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.reward_history') ? 'text-white bg-lime' : '' }}">
                         <a class="nav-link sidebar-link {{ request()->routeIs('frontend.reward_history') ? 'text-white bg-lime' : '' }}"
                             aria-current="page"
                             style="{{ request()->routeIs('frontend.reward_history') ? 'color:white !important;' : '' }}"
                             href="{{ route('frontend.reward_history') }}"><i
                                 class="fa-solid fa-trophy faa-profile"></i> Reward History</a>
-                    </li>
+                    </li> --}}
 
                     <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.reffer_history') ? 'text-white bg-lime' : '' }}">
@@ -117,7 +117,7 @@
                                 class="fa-solid fa-network-wired faa-profile"></i> Reffer History</a>
                     </li>
 
-                    <li
+                    {{-- <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.profit_history') ? 'text-white bg-lime' : '' }}">
                         <a class="nav-link sidebar-link {{ request()->routeIs('frontend.profit_history') ? 'text-white bg-lime' : '' }}"
                             aria-current="page"
@@ -133,7 +133,7 @@
                             style="{{ request()->routeIs('frontend.withdrow_request') ? 'color:white !important;' : '' }}"
                             href="{{ route('frontend.withdrow_request') }}"><i
                                 class="fa-solid fa-money-bill-transfer faa-profile"></i> Withdrow Request</a>
-                    </li>
+                    </li> --}}
                 @endif
             </ul>
         </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\BadgeMaster;
 use App\Models\GeneralSetting;
+use App\Models\Investment;
 use App\Models\MembershipDetail;
 use App\Models\Order;
 use App\Models\User;
@@ -85,19 +86,19 @@ class UserController extends Controller
                         ->whereNull('deleted_at')
                         ->first();
                                 
-                    // Case 1: No membership and not approved
-                    if (is_null($membershipDetails) && $row->is_approved == 0) {
-                        return '<div class="d-flex align-items-center">
-                                    <small class="btn btn-sm btn-warning rounded mx-auto px-3">Rejected</small>
-                                </div>';
-                    }
-                    // Case 2: Not approved but membership exists
+                    // Case 1: No membership and Pending
+                    // if (is_null($membershipDetails) && $row->is_approved == 0) {
+                    //     return '<div class="d-flex align-items-center">
+                    //                 <small class="btn btn-sm btn-warning rounded mx-auto px-3">Rejected</small>
+                    //             </div>';
+                    // }
+                    // Case 2: Pending but membership exists
                     if ($row->is_approved == 0) {
                         $approveButton = '<button data-id="' . $row->id . '" class="btn btn-sm btn-success approve-membership" title="Approve Membership"><i class="fa-solid fa-check"></i></button>';
                         $rejectButton  = '<button data-id="' . $row->id . '" class="btn btn-sm btn-danger reject-membership" title="Reject Membership"><i class="fa-solid fa-xmark"></i></button>';
                 
                         return '<div class="d-flex align-items-center gap-2">
-                                    <small class="btn btn-sm btn-danger rounded text-nowrap">Not Approved</small>
+                                    <small class="btn btn-sm btn-warning rounded text-nowrap">Pending</small>
                                     ' . $approveButton . '
                                     ' . $rejectButton . '
                                 </div>';
@@ -110,7 +111,7 @@ class UserController extends Controller
                     }
                     // Default: Rejected (fallback case)
                     return '<div class="d-flex align-items-center">
-                                <small class="btn btn-sm btn-warning rounded mx-auto px-3">Rejected</small>
+                                <small class="btn btn-sm btn-danger rounded mx-auto px-3">Rejected</small>
                             </div>';
                 })                        
                 ->orderColumn('date', function ($row, $order) {
@@ -166,7 +167,7 @@ class UserController extends Controller
         // Update the 'is_approved' field to 0
         $user = User::find($userId);
         if ($user) {
-            $user->is_approved = 0;
+            $user->is_approved = 2;
             $user->save();
 
             // Soft delete the related membership details record
@@ -451,26 +452,28 @@ class UserController extends Controller
         }
     }
 
-    public function user_orders(Request $request, $id)
+    public function user_investments(Request $request, $id)
     {
         if ($request->ajax()) {
-            $records = Order::select('orders.*', 'users.name as user_name', 'order_status.name as order_status', 'order_status.color as status_badge')
-                ->where([['orders.user_id', $id]])
-                ->leftjoin('users', 'users.id', '=', 'orders.user_id')
-                ->leftjoin('order_status', 'order_status.id', '=', 'orders.order_status_id')->get();
+            $records = Investment::select('investments.*')
+                ->where([['investments.user_id', $id]])
+                ->leftjoin('users', 'users.id', '=', 'investments.user_id')->get();
 
             return DataTables::of($records)
-                ->editColumn('order_no', function ($row) {
-                    return '<a href="' . url('admin/orders/' . $row->id) . '" target="_blank">' . $row->order_no . '</a>';
+                ->editColumn('invest_no', function ($row) {
+                    return '<a href="' . url('admin/investments/' . $row->id) . '" target="_blank">' . $row->invest_no . '</a>';
                 })
-                ->editColumn('order_status_id', function ($row) {
-                    return $order_staus = '<span class="badge ' . $row->status_badge . '">' . $row->order_status . '</span>';
-                })
+                ->editColumn('payment_status', function ($row) {
+                    $status_badge = $row->payment_status == 1 ? 'bg-success' : 'bg-danger';
+                    $status_text = $row->payment_status == 1 ? 'Paid' : 'Pending';
+                
+                    return '<span class="badge ' . $status_badge . '">' . $status_text . '</span>';
+                })                
                 ->editColumn('date', function ($row) {
                     return date('d-m-Y', strtotime($row['date']));
                 })
                 ->removeColumn('id')
-                ->rawColumns(['date', 'order_no', 'order_status_id'])->make(true);
+                ->rawColumns(['date', 'invest_no', 'payment_status'])->make(true);
         }
     }
 
