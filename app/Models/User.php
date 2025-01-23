@@ -21,6 +21,7 @@ class User extends Authenticatable
         'mobile',
         'password',
         'reffer_code',
+        'user_reffer_balance',
         'status',
         'badge_status',
         'image',

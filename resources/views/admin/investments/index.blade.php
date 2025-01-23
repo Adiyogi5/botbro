@@ -68,6 +68,7 @@
                                             <th>Invest No</th>
                                             <th class="actionwidth">Customer Name</th>
                                             <th>Invest Amount</th>
+                                            <th>Rate Of Intrest</th>
                                             <th class="actionwidth">Payment Status</th>
                                             <th>Invest Date(GMT)</th>
                                             <th>Investment Status</th>
@@ -79,6 +80,7 @@
                                             <th class="non_searchable"></th>
                                             <th></th>
                                             <th></th>
+                                            <th class="non_searchable"></th>
                                             <th class="non_searchable"></th>
                                             <th class="non_searchable"></th>
                                             <th class="non_searchable"></th>
@@ -119,7 +121,7 @@
                     }
                 },
                 order: [
-                    [6, 'desc']
+                    [7, 'desc']
                 ],
                 columns: [{
                         data: 'investmentcheck',
@@ -134,6 +136,9 @@
                     },
                     {
                         data: 'invest_amount'
+                    },
+					{
+                        data: 'rate_of_intrest'
                     },
                     {
                         data: 'payment_status'

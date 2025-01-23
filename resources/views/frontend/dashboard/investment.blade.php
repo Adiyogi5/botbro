@@ -114,7 +114,7 @@
                                         </div>
                                         <div class="col-md-2 d-flex align-items-center justify-content-center">
                                             <a href="{{ route('frontend.investmentdetails', $order->id) }}"
-                                                class="btn btn-md btn-warning">View Details</a>
+                                                class="btn btn-md btn-primary py-1">View Details</a>
                                         </div>
                                     </div>
                                 </div>

@@ -21,6 +21,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('update:useragentstatus')->everyMinute();
         $schedule->command('update:badgereward')->everyTwoMinutes();
         $schedule->command('update:walletpayment')->everyTwoMinutes();
+
+        $schedule->command('update:ledgerstatus')->monthlyOn(1, '00:00');
     }
 
     /**

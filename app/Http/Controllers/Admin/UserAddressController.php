@@ -89,6 +89,7 @@ class UserAddressController extends Controller
 
             $data = [
                 'user_id'       => $user->id,
+                'name'          => $user->name,
                 'address_1'     => $request->address_1,
                 'address_2'     => $request->address_2,
                 'postcode'      => $request->postcode,
@@ -139,6 +140,7 @@ class UserAddressController extends Controller
 
             $data = [
                 'user_id'       => $request->user_id,
+                'name'          => $user->name,
                 'address_1'     => $request->address_1,
                 'address_2'     => $request->address_2,
                 'postcode'      => $request->postcode,

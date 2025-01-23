@@ -101,7 +101,6 @@ Route::prefix('/')->name('frontend.')->namespace('Frontend')->group(function () 
 
         Route::get('/badge-history', 'Dashboard\BadgeController@index')->name('badge_history');
         Route::get('/reward-history', 'Dashboard\RewardController@index')->name('reward_history');
-        Route::get('/reffer-history', 'Dashboard\RefferController@index')->name('reffer_history');
         Route::get('/profit-history', 'Dashboard\ProfitController@index')->name('profit_history');
         Route::get('/withdrow-request', 'Dashboard\WithdrowController@index')->name('withdrow_request');
        
@@ -111,6 +110,10 @@ Route::prefix('/')->name('frontend.')->namespace('Frontend')->group(function () 
         Route::post('/invest-money', 'Dashboard\MyInvestmentController@investmoney')->name('investmoney');
         Route::get('/get_filter_data', 'Dashboard\MyInvestmentController@get_filter_data')->name('get_filter_data');
         Route::get('/investment-details/{id}', 'Dashboard\MyInvestmentController@investmentDetails')->name('investmentdetails');
+        Route::post('/withdrow-investment/{id}', 'Dashboard\MyInvestmentController@withdrowInvestment')->name('withdrowinvestment');
+        
+        Route::get('/reffer-history', 'Dashboard\RefferController@index')->name('reffer_history');
+        Route::post('/withdrow-reffer-request', 'Dashboard\RefferController@withdrowrefferrequest')->name('withdrow_reffer_request');
     }); 
 
 });

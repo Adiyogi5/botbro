@@ -135,9 +135,15 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
         Route::get('/customer/{user_id}/user_refer','UserController@user_refer')->name('customer.user_refer'); 
         Route::get('/customer/{user_id}/user_investments','UserController@user_investments')->name('customer.user_investments'); 
         Route::get('/customer/{user_id}/user_wallet','UserController@user_wallet')->name('customer.user_wallet'); 
+
         Route::get('/customer/{user_id}/user_withdraw','UserController@user_withdraw')->name('customer.user_withdraw'); 
         Route::get('/customer/withdraw_reject/{user_id}','UserController@withdraw_reject')->name('customer.withdraw_reject'); 
         Route::get('/customer/withdraw_approve/{user_id}','UserController@withdraw_approve')->name('customer.withdraw_approve'); 
+        
+        Route::get('/customer/{user_id}/user-referral-withdraw','UserController@user_referral_withdraw')->name('customer.user_referral_withdraw'); 
+        Route::get('/customer/referral-withdraw-reject/{user_id}','UserController@referral_withdraw_reject')->name('customer.referral_withdraw_reject'); 
+        Route::get('/customer/referral-withdraw-approve/{user_id}','UserController@referral_withdraw_approve')->name('customer.referral_withdraw_approve'); 
+
         Route::get('/customer/{user_id}/user_address','UserController@user_address')->name('customer.user_address'); 
         Route::get('/customer/{user_id}/user_rewards','UserController@user_rewards')->name('customer.user_rewards'); 
         Route::get('/customer/{user_id}/user_profit_sharing','UserController@user_profit_sharing')->name('customer.user_profit_sharing'); 

@@ -239,6 +239,70 @@ body {
   padding: 5px 10px;
 }
 
+/* Container styling */
+.investment-tabs-container {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Tabs Styling */
+.custom-tabs {
+  border-bottom: 2px solid #ddd;
+  background: #f8f9fa;
+  border-radius: 10px 10px 0 0;
+  padding: 0;
+  margin: 0;
+}
+
+.custom-tabs .nav-item {
+  flex: 1;
+  text-align: center;
+}
+
+.custom-tabs .nav-link {
+  border: none;
+  color: #555;
+  font-weight: 600;
+  padding: 15px;
+  border-radius: 10px 10px 0 0;
+  transition: all 0.3s ease-in-out;
+  font-size: 16px;
+  margin: auto;
+  width: 100%;
+}
+
+.custom-tabs .nav-link.active {
+  background: #007bff;
+  color: #fff;
+  font-weight: 700;
+  border-bottom: 4px solid #0056b3;
+  margin: auto;
+  width: 100%;
+}
+
+/* Tab content styling */
+.custom-tab-content {
+  background: #fff;
+  border-radius: 0 0 12px 12px;
+  border: 1px solid #ddd;
+  border-top: none;
+  min-height: 300px;
+}
+
+/* Add smooth transitions to content */
+.custom-tab-content .tab-pane {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .custom-tabs .nav-link {
+      font-size: 14px;
+      padding: 10px;
+  }
+}
+
 /* ########################### Footer ########################### */
 .footer-logo {
   height: 52px;
@@ -1554,10 +1618,10 @@ body {
 }
 
 .modal-category {
-  color: #3c3c3c;
-  font-size: 32px;
+  color: #0e3167;
+  font-size: 28px;
   font-weight: 400;
-  line-height: 54px;
+  line-height: 38px;
 }
 
 .modal-ship-title {

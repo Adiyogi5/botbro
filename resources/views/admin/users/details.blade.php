@@ -32,7 +32,10 @@
                             <button class="nav-link" id="pills-wallet-tab" data-bs-toggle="pill" data-bs-target="#pills-wallet" type="button" role="tab" aria-controls="pills-wallet" aria-selected="false">Wallet</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-withdraw-tab" data-bs-toggle="pill" data-bs-target="#pills-withdraw" type="button" role="tab" aria-controls="pills-withdraw" aria-selected="false">Width-Draw</button>
+                            <button class="nav-link" id="pills-withdraw-tab" data-bs-toggle="pill" data-bs-target="#pills-withdraw" type="button" role="tab" aria-controls="pills-withdraw" aria-selected="false">Investment Withdrawal</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-Referral-tab" data-bs-toggle="pill" data-bs-target="#pills-Referral" type="button" role="tab" aria-controls="pills-Referral" aria-selected="false">Referral Withdrawal</button>
                             </li>
                             <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-address-tab" data-bs-toggle="pill" data-bs-target="#pills-address" type="button" role="tab" aria-controls="pills-address" aria-selected="false">Address</button>
@@ -133,8 +136,26 @@
                                         <tr>
                                             <th>Voucher No.</th>
                                             <th>Customer Name</th>
+                                            <th>Invest No.</th>
+                                            <th>Current Balance</th>
                                             <th>Request Date</th>
-                                            <th>Amount</th>
+                                            <th>Request Amount</th>
+                                            <th>Payment Method</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                            <div class="tab-pane fade" id="pills-Referral" role="tabpanel" aria-labelledby="pills-Referral-tab">
+                                <table class="table table-bordered table-striped datatable_Referral" style="width:100% !important">
+                                    <thead>
+                                        <tr>
+                                            <th>Voucher No.</th>
+                                            <th>Customer Name</th>
+                                            <th>Current Balance</th>
+                                            <th>Request Date</th>
+                                            <th>Request Amount</th>
                                             <th>Payment Method</th>
                                             <th>Status</th>
                                         </tr>
@@ -364,11 +385,13 @@
             type: 'GET',
             ajax: "{{ url('admin/customer/'.$id.'/user_withdraw') }}",
             order: [
-                [2, "desc"]
+                [4, "desc"]
             ],
             columns: [
                 {data: 'reference_id'},
                 {data: 'customer_name'},
+                {data: 'invest_no'},
+                {data: 'balance'},
                 {data: 'request_date'},
                 {data: 'amount'},
                 {data: 'payment_method'},
@@ -388,6 +411,47 @@
             }
         });
     });
+
+    $(document).ready(function() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        tableObj = $('.datatable_Referral').DataTable({
+            processing: true,
+            serverSide: false,
+            cache: true,
+            bLengthChange: false,
+            type: 'GET',
+            ajax: "{{ url('admin/customer/'.$id.'/user-referral-withdraw') }}",
+            order: [
+                [4, "desc"]
+            ],
+            columns: [
+                {data: 'reference_id'},
+                {data: 'customer_name'},
+                {data: 'user_reffer_balance'},
+                {data: 'request_date'},
+                {data: 'request_amount'},
+                {data: 'payment_method'},
+                {data: 'status','searchable': false,'orderable': false},
+                
+            ],
+            initComplete: function() {
+                this.api().columns().every(function() {
+                    var column = this;
+                    var input = document.createElement("input");
+                    $(input).addClass('form-control form-control-sm');
+                    $(input).appendTo($(column.footer()).empty())
+                        .on('change', function() {
+                            column.search($(this).val(), false, false, true).draw();
+                        });
+                });
+            }
+        });
+    });
+
     $(document).on('click', '.approve_btn', function(e){
         e.preventDefault();
         

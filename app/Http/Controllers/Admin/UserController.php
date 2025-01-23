@@ -5,21 +5,22 @@ use App\Http\Controllers\Controller;
 use App\Models\BadgeMaster;
 use App\Models\GeneralSetting;
 use App\Models\Investment;
+use App\Models\Ledger;
 use App\Models\MembershipDetail;
-use App\Models\Order;
 use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\UserBadgeLog;
 use App\Models\UserProfitSharingLog;
 use App\Models\UserReferral;
+use App\Models\UserReferralWithdrawRequest;
 use App\Models\UserRewardLog;
 use App\Models\UserWallet;
 use App\Models\UserWithdrawRequest;
 use App\Rules\CheckRefer;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -85,7 +86,7 @@ class UserController extends Controller
                     $membershipDetails = MembershipDetail::where('user_id', $row->id)
                         ->whereNull('deleted_at')
                         ->first();
-                                
+
                     // Case 1: No membership and Pending
                     // if (is_null($membershipDetails) && $row->is_approved == 0) {
                     //     return '<div class="d-flex align-items-center">
@@ -96,7 +97,7 @@ class UserController extends Controller
                     if ($row->is_approved == 0) {
                         $approveButton = '<button data-id="' . $row->id . '" class="btn btn-sm btn-success approve-membership" title="Approve Membership"><i class="fa-solid fa-check"></i></button>';
                         $rejectButton  = '<button data-id="' . $row->id . '" class="btn btn-sm btn-danger reject-membership" title="Reject Membership"><i class="fa-solid fa-xmark"></i></button>';
-                
+
                         return '<div class="d-flex align-items-center gap-2">
                                     <small class="btn btn-sm btn-warning rounded text-nowrap">Pending</small>
                                     ' . $approveButton . '
@@ -113,7 +114,7 @@ class UserController extends Controller
                     return '<div class="d-flex align-items-center">
                                 <small class="btn btn-sm btn-danger rounded mx-auto px-3">Rejected</small>
                             </div>';
-                })                        
+                })
                 ->orderColumn('date', function ($row, $order) {
                     $row->orderBy('date', $order);
                 })
@@ -153,6 +154,21 @@ class UserController extends Controller
             $membership->membership_start_date = $currentDate;
             $membership->membership_end_date   = $endDate;
             $membership->save();
+
+            // Update user referral balance
+            $userrefferBonus = User::select('users.*', 'user_referrals.refer_id', 'user_referrals.referral_id')
+                ->join('user_referrals', 'user_referrals.referral_id', '=', 'users.id')
+                ->where('user_referrals.refer_id', $userId)
+                ->where('users.status', 1)
+                ->first();
+
+            if (! $userrefferBonus) {
+                return response()->json(['success' => false, 'message' => 'User Referral detail not found.']);
+            }
+
+            $newBalance                           = $userrefferBonus->user_reffer_balance + 2000;
+            $userrefferBonus->user_reffer_balance = $newBalance;
+            $userrefferBonus->save();
 
             return response()->json(['success' => true, 'message' => 'Membership approved successfully.']);
         } catch (\Exception $e) {
@@ -465,10 +481,10 @@ class UserController extends Controller
                 })
                 ->editColumn('payment_status', function ($row) {
                     $status_badge = $row->payment_status == 1 ? 'bg-success' : 'bg-danger';
-                    $status_text = $row->payment_status == 1 ? 'Paid' : 'Pending';
-                
+                    $status_text  = $row->payment_status == 1 ? 'Paid' : 'Pending';
+
                     return '<span class="badge ' . $status_badge . '">' . $status_text . '</span>';
-                })                
+                })
                 ->editColumn('date', function ($row) {
                     return date('d-m-Y', strtotime($row['date']));
                 })
@@ -500,40 +516,35 @@ class UserController extends Controller
 
     public function user_withdraw(Request $request, $id)
     {
-
         if ($request->ajax()) {
-            $records = UserWithdrawRequest::select('user_withdraw_requests.*', 'users.name as customer_name')
+            $records = UserWithdrawRequest::select('user_withdraw_requests.*', 'users.name as customer_name', 'investments.invest_no')
                 ->where([['user_withdraw_requests.user_id', $id]])
-                ->leftjoin('users', 'users.id', '=', 'user_withdraw_requests.user_id')->get();
+                ->leftjoin('users', 'users.id', '=', 'user_withdraw_requests.user_id')
+                ->leftjoin('investments', 'investments.id', '=', 'user_withdraw_requests.invest_id')->get();
 
             return DataTables::of($records)
+                ->addColumn('balance', function ($row) {
+                    $latestLedgerEntry = Ledger::where('user_id', $row->user_id)
+                        ->where('invest_id', $row->invest_id)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+                    return $latestLedgerEntry ? $latestLedgerEntry->balance : 'N/A';
+                })
                 ->editColumn('reference_id', function ($row) {
                     $rzpayout = ! empty($row->rzpayout_id) ? $row->rzpayout_id : '--';
-                    return "<b>RefId</b><br><small>" . $row->reference_id . '</small><br><b>PayoutId</b><br><small>' . $rzpayout . '</small>';
+                    return "<b>RefId</b><br><small>" . $row->reference_id . '</small>';
                 })
                 ->editColumn('payment_type', function ($row) {
                     return (($row->payment_type == 1) ? 'Credit' : 'Debit');
                 })
                 ->editColumn('payment_method', function ($row) {
-                    if (! empty($row->payment_detail)) {
-                        $payment_detail = json_decode($row->payment_detail);
-
-                        $bank_name           = ! empty($payment_detail->bank_name) ? $payment_detail->bank_name : '--';
-                        $bank_account_name   = ! empty($payment_detail->bank_account_name) ? $payment_detail->bank_account_name : '--';
-                        $bank_account_number = ! empty($payment_detail->bank_account_number) ? $payment_detail->bank_account_number : '--';
-                        $ifsc                = ! empty($payment_detail->ifsc) ? $payment_detail->ifsc : '--';
-
-                        return $row->payment_method . '<br><small> Bank Name: ' . $bank_name . '<br> Bank Account Name: ' . $bank_account_name . '<br> Bank Account Number: ' . $bank_account_number . '<br> Bank IFSC: ' . $ifsc . '</small>';
-                    } else {
-                        return $row->payment_method;
-                    }
+                    return 'Offline';
                 })
                 ->editColumn('request_date', function ($row) {
                     return date('d-m-Y h:i a', strtotime($row['request_date']));
                 })
                 ->editColumn('status', function ($row) {
                     $status = '';
-                    /*$status = $row['status'] == 0 ?'<span class="d-flex"><a href="'.url('admin/customer/withdraw_reject/'.$row['id']).'" class="btn btn-sm btn-danger reject_btn">Reject</a></span>' : ($row['status'] == 1 ? '<span  class="badge btn-success">Approved</span>' : '<span class="badge btn-danger">Rejected</span>');  */
 
                     $status = $row['status'] == 0 ? '<span class="d-flex"><a href="' . url('admin/customer/withdraw_approve/' . $row['id']) . '" class="btn btn-sm btn-success approve_btn mx-1">Approve</a><a href="' . url('admin/customer/withdraw_reject/' . $row['id']) . '" class="btn btn-sm btn-danger reject_btn">Reject</a></span>' : ($row['status'] == 1 ? '<span  class="badge btn-success">Approved</span>' : '<span class="badge btn-danger">Rejected</span>');
                     return $status;
@@ -546,39 +557,158 @@ class UserController extends Controller
 
     public function withdraw_approve(Request $request, $id)
     {
+        try {
+            $withdraw_request_data = UserWithdrawRequest::find($id);
 
-        $withdraw_request_data = UserWithdrawRequest::select('*')->where(['id' => $id])->first();
+            if (! $withdraw_request_data) {
+                return Redirect::back()->with('error', 'Withdrawal request not found!');
+            }
 
-        $wallet_data = User::select('user_balance')->where('id', $withdraw_request_data->user_id)->get()->first();
+            DB::statement("SET SQL_MODE = ''");
 
-        $user_wallet = new UserWallet;
+            $userslist = User::select('users.*', 'investments.id as invest_id', 'investments.user_id', 'investments.rate_of_intrest', 'investments.date')
+                ->leftJoin('investments', 'investments.user_id', '=', 'users.id')
+                ->where('users.id', $withdraw_request_data->user_id)
+                ->where('investments.id', $withdraw_request_data->invest_id)
+                ->where('users.status', 1)
+                ->whereNull('users.deleted_at')
+                ->where('investments.payment_status', 1)
+                ->where('investments.is_approved', 1)
+                ->whereNull('investments.deleted_at')
+                ->first();
 
-        $user_wallet->amount          = $withdraw_request_data->amount;
-        $user_wallet->date            = date('Y-m-d h:i');
-        $user_wallet->user_id         = $withdraw_request_data->user_id;
-        $user_wallet->particulars     = 'Withdraw Request Approved';
-        $user_wallet->payment_type    = 2;
-        $user_wallet->current_balance = $wallet_data->user_balance;
-        $user_wallet->updated_balance = ($wallet_data->user_balance - $withdraw_request_data->amount);
-        $user_wallet->created_at      = date('Y-m-d H:i:s');
-        $user_wallet->updated_at      = date('Y-m-d H:i:s');
-        $user_wallet->save();
+            if (! $userslist) {
+                return Redirect::back()->with('error', 'User investment details not found!');
+            }
 
-        UserWithdrawRequest::where('id', $id)->update(['status' => 1]);
+            $latestLedgerEntry = Ledger::where('user_id', $userslist->user_id)
+                ->where('invest_id', $userslist->invest_id)
+                ->orderBy('created_at', 'desc')
+                ->first();
 
-        User::where('id', $withdraw_request_data->user_id)->update(['user_balance' => ($wallet_data->user_balance - $withdraw_request_data->amount)]);
+            // Check if a valid balance exists
+            if ($latestLedgerEntry && $latestLedgerEntry->balance > 0) {
+                $rateOfInterest         = $userslist->rate_of_intrest;
+                $previousBalance        = $latestLedgerEntry->balance;
+                $withdraw_requestAmount = $withdraw_request_data->amount;
+                $newBalance             = $previousBalance - $withdraw_requestAmount;
 
-        return Redirect::back()->with('success', 'Amount Withdraw Successfully!!');
+                if ($withdraw_requestAmount > $previousBalance) {
+                    return Redirect::back()->with('error', 'Insufficient balance for withdrawal!');
+                }
 
+                DB::beginTransaction();
+
+                // Insert ledger entry for withdrawal
+                Ledger::create([
+                    'user_id'         => $userslist->user_id,
+                    'invest_id'       => $userslist->invest_id,
+                    'date'            => Carbon::now()->format('Y-m-d'),
+                    'description'     => 'Withdrawal Request Approved',
+                    'rate_of_intrest' => 0,
+                    'credit'          => 0,
+                    'debit'           => $withdraw_requestAmount,
+                    'balance'         => $newBalance,
+                ]);
+
+                // Update withdrawal request status
+                UserWithdrawRequest::where('id', $id)->update(['status' => 1]);
+
+                DB::commit();
+
+                return Redirect::back()->with('success', 'Amount Withdrawn Successfully!');
+            } else {
+                UserWithdrawRequest::where('id', $id)->update(['status' => 2]);
+                return Redirect::back()->with('error', 'Insufficient balance for withdrawal.');
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Redirect::back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
 
     public function withdraw_reject(Request $request, $id)
     {
-
         UserWithdrawRequest::where('id', $id)->update(['status' => 2]);
 
         return Redirect::back()->with('error', 'Fund Request Rejected Successfully !!');
+    }
 
+    public function user_referral_withdraw(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $records = UserReferralWithdrawRequest::select('user_referral_withdraw_requests.*', 'users.name as customer_name', 'users.user_reffer_balance')
+                ->where([['user_referral_withdraw_requests.user_id', $id]])
+                ->leftjoin('users', 'users.id', '=', 'user_referral_withdraw_requests.user_id')->get();
+
+            return DataTables::of($records)
+                ->editColumn('reference_id', function ($row) {
+                    $rzpayout = ! empty($row->rzpayout_id) ? $row->rzpayout_id : '--';
+                    return "<b>RefId</b><br><small>" . $row->reference_id . '</small>';
+                })
+                ->editColumn('payment_type', function ($row) {
+                    return (($row->payment_type == 1) ? 'Credit' : 'Debit');
+                })
+                ->editColumn('payment_method', function ($row) {
+                    return 'Offline';
+                })
+                ->editColumn('request_date', function ($row) {
+                    return date('d-m-Y h:i a', strtotime($row['request_date']));
+                })
+                ->editColumn('status', function ($row) {
+                    $status = '';
+
+                    $status = $row['status'] == 0 ? '<span class="d-flex"><a href="' . url('admin/customer/referral-withdraw-approve/' . $row['id']) . '" class="btn btn-sm btn-success approve_btn mx-1">Approve</a><a href="' . url('admin/customer/referral-withdraw-reject/' . $row['id']) . '" class="btn btn-sm btn-danger reject_btn">Reject</a></span>' : ($row['status'] == 1 ? '<span  class="badge btn-success">Approved</span>' : '<span class="badge btn-danger">Rejected</span>');
+                    return $status;
+                })
+                ->removeColumn('id')
+                ->rawColumns(['reference_id', 'request_date', 'payment_method', 'status'])->make(true);
+        }
+
+    }
+
+    public function referral_withdraw_approve(Request $request, $id)
+    {
+        try {
+            // Fetch withdrawal request data
+            $withdraw_request_data = UserReferralWithdrawRequest::find($id);
+           
+            if (! $withdraw_request_data) {
+                return Redirect::back()->with('error', 'Withdrawal request not found!');
+            }
+
+            // Check if the requested balance is available
+            $wallet_data = User::select('user_reffer_balance')
+                ->where('id', $withdraw_request_data->user_id)
+                ->first();
+            
+            if ($wallet_data && $wallet_data->user_reffer_balance >= $withdraw_request_data->request_amount) {
+                // Calculate new balance after withdrawal
+                $newuser_reffer_balance = $wallet_data->user_reffer_balance - $withdraw_request_data->request_amount;
+                
+                // Update user's referral balance
+                User::where('id', $withdraw_request_data->user_id)
+                    ->update(['user_reffer_balance' => $newuser_reffer_balance]);
+
+                // Approve the withdrawal request
+                UserReferralWithdrawRequest::where('id', $id)->update(['status' => 1]);
+
+                return Redirect::back()->with('success', 'Referral Amount Withdrawn Successfully!');
+            } else {
+                // Reject the withdrawal due to insufficient balance
+                UserReferralWithdrawRequest::where('id', $id)->update(['status' => 2]);
+                return Redirect::back()->with('error', 'Insufficient balance for withdrawal.');
+            }
+        } catch (\Exception $e) {
+            return Redirect::back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
+
+    public function referral_withdraw_reject(Request $request, $id)
+    {
+        UserReferralWithdrawRequest::where('id', $id)->update(['status' => 2]);
+
+        return Redirect::back()->with('error', 'Fund Request Rejected Successfully !!');
     }
 
     public function user_address(Request $request, $id)
