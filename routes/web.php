@@ -114,6 +114,9 @@ Route::prefix('/')->name('frontend.')->namespace('Frontend')->group(function () 
         
         Route::get('/reffer-history', 'Dashboard\RefferController@index')->name('reffer_history');
         Route::post('/withdrow-reffer-request', 'Dashboard\RefferController@withdrowrefferrequest')->name('withdrow_reffer_request');
+
+        Route::get('/commission-history', 'Dashboard\CommissionController@index')->name('commission_history');
+        Route::post('/withdrow-commission-request', 'Dashboard\CommissionController@withdrowcommissionrequest')->name('withdrow_commission_request');
     }); 
 
 });

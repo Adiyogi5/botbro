@@ -22,7 +22,7 @@
 
                     </div>
 
-                    @if ($user_approved->is_approved == 0)
+                    @if (empty($user_membership) && $user_approved->is_approved == 0)
                         <div class="col-lg-9 col-md-8 col-12 mt-md-0 mt-3">
                             <div class="row row-cols-1 g-3">
                                 <div class="col-12 mb-2">
@@ -189,7 +189,9 @@
                         </div>
                     @else
                         <div class="col-lg-9 col-md-8 col-12 mt-md-0 mt-3">
+                           
                             <div class="row gy-3">
+                                @if(!empty($user_membership))
                                 @php
                                     $membershipStartDate = \Carbon\Carbon::parse(
                                         $user_membership->membership_start_date,
@@ -199,7 +201,7 @@
                                 @endphp
 
                                 <div class="col-12 mb-2 d-flex text-center justify-content-between">
-                                    <p class="dash-category my-auto">Membership Validity Counter</p>
+                                    <p class="dash-category my-auto">Membership Validity :</p>
                                     <div class="dash-timer my-auto w-100" id="timer-message"
                                         data-remaining-time="{{ $remainingTime }}">
                                         <div class="timer-box">
@@ -224,8 +226,7 @@
                                         </div>
                                     </div>
                                 </div>
-
-
+                                @endif
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 my-auto">
                                     <div class="d-flex card h-100 mb-3 card-dash bg-white overflow-hidden">
                                         <img src="{{ asset('public/images/Ellipse.png') }}"
@@ -249,23 +250,25 @@
                                                 <span> {!! Auth::user()->reffer_code !!}</span>
                                             </p>
 
-                                            @if ($my_balance->badge_level)
+                                            {{-- @if ($my_balance->badge_level)
                                                 <p class="dash-total d-flex text-center justify-content-between">
                                                     <span><strong>Badge: </strong></span>
                                                     <span> {!! $my_balance->badge_level !!}</span>
                                                 </p>
-                                            @endif
+                                            @endif --}}
                                             @if ($refer_by)
                                                 <p class="dash-total d-flex text-center justify-content-between">
                                                     <span><strong>Referred By: </strong></span>
                                                     <span>{!! $refer_by->referred_by !!}</span>
                                                 </p>
                                             @endif
-
+                                            @if (!empty($user_membership->membership_fee))
                                             <p class="dash-total d-flex text-center justify-content-between">
                                                 <span><strong>Membership Fee : </strong></span>
                                                 <span> {{ $user_membership->membership_fee }}</span>
                                             </p>
+                                            @endif
+                                            @if (Auth::user()->is_approved)
                                             <p class="dash-total d-flex text-center justify-content-between">
                                                 <span><strong>Payment Status: </strong></span>
                                                 @if (Auth::user()->is_approved == 1)
@@ -274,6 +277,8 @@
                                                     <span class="badge bg-danger my-auto">Unpaid</span>
                                                 @endif
                                             </p>
+                                            @endif
+                                            @if (Auth::user()->is_approved)
                                             <p class="dash-total d-flex text-center justify-content-between">
                                                 <span><strong>Membership Status: </strong></span>
                                                 @if (Auth::user()->is_approved == 1)
@@ -282,20 +287,25 @@
                                                     <span class="badge bg-danger my-auto">Inactive</span>
                                                 @endif
                                             </p>
+                                            @endif
+                                            @if (!empty($user_membership->membership_start_date))
                                             <p class="dash-total d-flex text-center justify-content-between">
                                                 <span><strong>Membership Start Date : </strong></span>
                                                 <span>{{ \Carbon\Carbon::parse($user_membership->membership_start_date)->format('d-m-Y') }}</span>
                                             </p>
+                                            @endif
+                                            @if (!empty($user_membership->membership_end_date))
                                             <p class="dash-total d-flex text-center justify-content-between">
                                                 <span><strong>Membership End Date : </strong></span>
                                                 <span>{{ \Carbon\Carbon::parse($user_membership->membership_end_date)->format('d-m-Y') }}</span>
                                             </p>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="row row-cols-1 g-3 mt-3">
+                           
+                            {{-- <div class="row row-cols-1 g-3 mt-3">
                                 <div class="col-lg-3 col-md-6 col-6 my-auto">
                                     <div class="card h-100 mb-3 card-dash bg-white overflow-hidden">
                                         <img src="{{ asset('public/images/Ellipse.png') }}"
@@ -376,28 +386,28 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="row row-cols-1 g-3 mt-3">
-                                @if (!$my_balance)
+                                @if (!$totalInvestmentSum)
                                     <div class="col-12">
                                         <span></span>
                                     </div>
                                 @else
-                                    @isset($my_balance)
+                                    @isset($totalInvestmentSum)
                                         <div class="col-xl-4 col-lg-6 col-md-6 col-12 my-auto">
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
-                                                    <p class="dash-balance">Wallet Balance </p>
-                                                    <h5 class="card-title dash-money">₹ {!! $my_balance->user_balance !!}</h5>
+                                                    <p class="dash-balance">Total Investment Balance </p>
+                                                    <h5 class="card-title dash-money">₹ {!! $totalInvestmentSum !!}</h5>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-xl-4 col-lg-6 col-md-6 col-12 my-auto">
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
-                                                    <p class="dash-balance">Withdraw Request</p>
-                                                    <h5 class="card-title dash-money">₹ {!! $requestAmount->total_amount ? $requestAmount->total_amount : 0 !!}</h5>
+                                                    <p class="dash-balance">Current Referral Balance</p>
+                                                    <h5 class="card-title dash-money">₹ {!! $user_refferBalance->user_reffer_balance ? $user_refferBalance->user_reffer_balance : 0 !!}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -405,9 +415,9 @@
                                         <div class="col-xl-4 col-lg-6 col-md-6 col-12 my-auto">
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
-                                                    <p class="dash-balance">Rejected Balance </p>
+                                                    <p class="dash-balance">Current Commission Balance </p>
                                                     <h5 class="card-title dash-money">₹
-                                                        {{ $rejectAmount->total_amount ? $rejectAmount->total_amount : 0 }}
+                                                        {{ $user_commissionBalance->user_commission_balance ? $user_commissionBalance->user_commission_balance : 0 }}
                                                     </h5>
                                                 </div>
                                             </div>

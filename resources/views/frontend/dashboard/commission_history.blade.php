@@ -18,11 +18,17 @@
                     </div>
                     <div class="col-lg-9 col-md-8 col-12 mt-md-0 mt-3">
                         <div class="row row-cols-1 g-3">
-
                             <div class="col-12 d-flex justify-content-between align-item-self mb-1">
-                                <p class="dash-category mb-0">Referral History</p>
-                                <h5 class="ms-auto my-auto py-1 px-2 rounded-1 text-white bg-secondary">Referral Balance :
-                                    {{ CURRENCY_SYMBOL }}{{ $user->user_reffer_balance }}</h5>
+                                <p class="dash-category mb-0">Commission History</p>
+                                    @if($approvedMemberships < 5)
+                                        <h5 class="ms-auto my-auto py-1 px-2 rounded-1 text-white bg-warning">User Type :
+                                            &nbsp;<i class="fa-solid fa-user"></i>&nbsp; Normal</h5>
+                                    @else
+                                        <h5 class="ms-auto my-auto py-1 px-2 rounded-1 text-white bg-warning">User Type :
+                                            &nbsp;<i class="fa-solid fa-user-secret"></i>&nbsp; Agent</h5>
+                                    @endif
+                                <h5 class="ms-auto my-auto py-1 px-2 rounded-1 text-white bg-secondary">Commission Balance :
+                                    {{ CURRENCY_SYMBOL }}{{ $user->user_commission_balance }}</h5>
                             </div>
                             <div class="col-12 card p-0">
                                 <!-- Nav Tabs -->
@@ -38,7 +44,7 @@
                                         <button class="nav-link" id="tab-two-tab" data-bs-toggle="tab"
                                             data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two"
                                             aria-selected="false">
-                                            Withdrow Request
+                                            Withdrow Commission Request
                                         </button>
                                     </li>
                                 </ul>
@@ -60,14 +66,14 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody class="text-center justify-content-center">
-                                                    @if ($my_reffer->isEmpty())
+                                                    @if ($my_commission->isEmpty())
                                                         <tr class="text-center">
                                                             <td colspan="4" class="text-danger"> Referral History Not
                                                                 Found
                                                             </td>
                                                         </tr>
                                                     @else
-                                                        @foreach ($my_reffer as $key => $reffer)
+                                                        @foreach ($my_commission as $key => $reffer)
                                                             <tr>
                                                                 <td>{{ $key + 1 }}</td>
                                                                 <td>
@@ -106,7 +112,7 @@
                                         {{-- ####### Referral Balance History ####### --}}
                                         <div class="col-12">
                                             <div class="d-flex justify-content-between">
-                                                <p class="dash-category">Withdrow Referral Amount Request</p>
+                                                <p class="dash-category">Withdrow Commission Amount Request</p>
                                                 <div>
                                                     <a data-bs-toggle="modal" data-bs-target="#addModal"
                                                         class="btn btn-md btn-primary">
@@ -189,7 +195,7 @@
                                                         <div class="row">
                                                             <div class="col-12 text-center justify-content-center">
                                                                 <span class="mx-auto">
-                                                                    <p class="modal-category">Add Withdrow Referral
+                                                                    <p class="modal-category">Add Withdrow Commission
                                                                         Request</p>
                                                                     <h5>Current Balance: ₹ {!! $my_balance->user_reffer_balance !!}
                                                                     </h5>

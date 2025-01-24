@@ -123,8 +123,8 @@ class MyInvestmentController extends Controller
 
     public function investmentDetails(Request $request, $id = '')
     {
-        $title = 'Order Detail';
-
+        $title = 'Investment Detail';
+        
         $user = auth('web')->user();
 
         DB::statement("SET SQL_MODE = ''");
@@ -133,12 +133,15 @@ class MyInvestmentController extends Controller
             ->leftJoin('countries', 'countries.id', '=', 'user_addresses.country_id')
             ->leftJoin('states', 'states.id', '=', 'user_addresses.state_id')
             ->leftJoin('cities', 'cities.id', '=', 'user_addresses.city_id')
-            ->Where('user_addresses.default_id', 1)
+            ->where(function($query) use ($user) {
+                $query->where('user_addresses.default_id', 1)
+                      ->orWhereNull('user_addresses.default_id');
+            })
             ->Where('investments.user_id', $user->id)
             ->where('investments.id', $request->id)
             ->whereNull('investments.deleted_at')
             ->first();
-
+        
         if (empty($investment_data)) {
             return redirect('investment')->with('error', "Investment not found");
         }
@@ -203,21 +206,18 @@ class MyInvestmentController extends Controller
                 'amount.required' => 'The withdrawal amount is required.',
                 'amount.numeric'  => 'Please enter a valid numeric amount.',
             ]);
-    
-            if (!now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
-                $errorMessage = "Withdrawal requests are only allowed between the 1st and 5th of each month. Please try again during this period.";
-                return redirect()->back()->with('error', $errorMessage);
-            }
-
+            //Your Investment not more then 70% of Total Investment Amount
             $firstTimeCheck = ! UserWithdrawRequest::where('invest_id', $request->id)
                 ->where('user_id', $user->id)
                 ->exists();
-
             $maxWithdrawAmount = $balanceData->balance * 0.7;
 
             if (Carbon::parse($ledgermonthcheck->date)->gt(Carbon::now()->subMonths(6))){
                 $errorMessage = "For Withdrawal Requests Your Investment atleast 6 month old, Please try after 6 month of investment for withdraw Request!!";
                 return redirect()->back()->with('error', $errorMessage);
+            } else if (!now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+                    $errorMessage = "Withdrawal requests are only allowed between the 1st and 5th of each month. Please try again during this period.";
+                    return redirect()->back()->with('error', $errorMessage);
             } else if (($firstTimeCheck && $request->amount > $maxWithdrawAmount)) {
                 $errorMessage = "In First Time Withdrow- Your Investment not more then 70% of Total Investment Amount!!";
                 return redirect()->back()->with('error', $errorMessage);

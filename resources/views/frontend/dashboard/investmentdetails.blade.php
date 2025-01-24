@@ -279,24 +279,25 @@
                                         aria-labelledby="addModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-md">
                                             <div class="modal-content p-3">
-                                                <div class="modal-header border-0">
+                                                <div class="modal-header pt-1 border-0">
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
+                                                <div class="modal-body p-1">
                                                     <div class="row">
                                                         <div class="col-12 text-center justify-content-center">
-                                                            <small class="w-100 text-success">Note : For Withdrawal
-                                                                Requests Your
-                                                                Investment atleast 6 month old</small><br/>
-                                                            <small class="w-100 text-success">Note : Withdrawal requests
-                                                                can only
-                                                                be made between the 1st and 5th of each month.</small>
                                                             <span class="mx-auto">
-                                                                <p class="modal-category">Add Withdrow Request</p>
+                                                                <p class="modal-category">Add Withdrow Investment Request</p>
                                                                 <h5>Current Balance: ₹ {!! $my_balance->balance !!}
                                                                 </h5>
                                                             </span>
+                                                            <small class="w-100 text-success text-decoration-underline">Note</small><br/>
+                                                            <small class="w-100 text-success">1. For Withdrawal
+                                                                Requests Your
+                                                                Investment atleast 6 month old</small><br/>
+                                                            <small class="w-100 text-success">2. Withdrawal requests
+                                                                can only
+                                                                be made between the 1st and 5th of each month.</small>
                                                         </div>
                                                         <div class="col-12 text-center justify-content-center"
                                                             style="border-top: 1px solid #000;     margin: 5px; padding-top: 10px;">
