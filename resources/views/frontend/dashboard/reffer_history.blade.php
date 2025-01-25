@@ -22,7 +22,7 @@
                             <div class="col-12 d-flex justify-content-between align-item-self mb-1">
                                 <p class="dash-category mb-0">Referral History</p>
                                 <h5 class="ms-auto my-auto py-1 px-2 rounded-1 text-white bg-secondary">Referral Balance :
-                                    {{ CURRENCY_SYMBOL }}{{ $user->user_reffer_balance }}</h5>
+                                    {{ CURRENCY_SYMBOL }}{{ $my_balance->balance }}</h5>
                             </div>
                             <div class="col-12 card p-0">
                                 <!-- Nav Tabs -->
@@ -38,6 +38,13 @@
                                         <button class="nav-link" id="tab-two-tab" data-bs-toggle="tab"
                                             data-bs-target="#tab-two" type="button" role="tab" aria-controls="tab-two"
                                             aria-selected="false">
+                                            Referral and Commission Ledger
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="tab-three-tab" data-bs-toggle="tab"
+                                            data-bs-target="#tab-three" type="button" role="tab"
+                                            aria-controls="tab-three" aria-selected="false">
                                             Withdrow Request
                                         </button>
                                     </li>
@@ -102,7 +109,58 @@
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane fade" id="tab-two" role="tabpanel" aria-labelledby="tab-two-tab">
+                                    <!-- Tab Two Content -->
+                                    <div class="tab-pane fade" id="tab-two" role="tabpanel"
+                                        aria-labelledby="tab-two-tab">
+                                        {{-- Referral and Commission Ledger --}}
+                                        {{-- ###### Tabe Three start ######  --}}
+                                        <div class="col-12 p-0">
+                                            <table class="table table-bordered datatable px-3 py-2">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Description</th>
+                                                        <th>Rate of Interest</th>
+                                                        <th class="text-danger">Debit ({{ CURRENCY_SYMBOL }})</th>
+                                                        <th class="text-success">Credit ({{ CURRENCY_SYMBOL }})</th>
+                                                        <th class="fw-bold text-primary">Balance ({{ CURRENCY_SYMBOL }})
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if ($ledgerData->isEmpty())
+                                                    <tr>
+                                                        <td colspan="6" class="text-center text-danger">Record Not
+                                                            Found..!!</td>
+                                                    </tr>
+                                                @else
+                                                    @foreach ($ledgerData as $ledger)
+                                                        <tr>
+                                                            <td>{{ \Carbon\Carbon::parse($ledger->date)->format('d-m-Y') }}
+                                                            </td>
+                                                            <td>{{ $ledger->description }}</td>
+                                                            <td>{{ $ledger->rate_of_intrest > 0 ? $ledger->rate_of_intrest . '%' : '--' }}</td>
+                                                            <td class="text-danger">
+                                                                {{ $ledger->debit ? number_format($ledger->debit, 2) : '--' }}
+                                                            </td>
+                                                            <td class="text-success">
+                                                                {{ $ledger->credit ? number_format($ledger->credit, 2) : '--' }}
+                                                            </td>
+                                                            <td class="fw-bold text-primary">
+                                                                {{ number_format($ledger->balance, 2) }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        {{-- ###### Tabe Three End ######  --}}
+                                    </div>
+
+                                    <!-- Tab Three Content -->
+                                    <div class="tab-pane fade" id="tab-three" role="tabpanel"
+                                        aria-labelledby="tab-three-tab">
                                         {{-- ####### Referral Balance History ####### --}}
                                         <div class="col-12">
                                             <div class="d-flex justify-content-between">
@@ -191,13 +249,14 @@
                                                                 <span class="mx-auto">
                                                                     <p class="modal-category">Add Withdrow Referral
                                                                         Request</p>
-                                                                    <h5>Current Balance: ₹ {!! $my_balance->user_reffer_balance !!}
+                                                                    <h5>Current Balance: ₹ {!! $my_balance->balance !!}
                                                                     </h5>
                                                                 </span>
-                                                                <small class="w-100 text-success text-decoration-underline">Note</small><br/>
+                                                                <small
+                                                                    class="w-100 text-success text-decoration-underline">Note</small><br />
                                                                 <small class="w-100 text-success">1. For Withdrawal
                                                                     Requests
-                                                                    Your Investment atleast 6 month old</small><br/>
+                                                                    Your Investment atleast 6 month old</small><br />
                                                                 <small class="w-100 text-success">2. Withdrawal requests
                                                                     can
                                                                     only be made between the 1st and 5th of each

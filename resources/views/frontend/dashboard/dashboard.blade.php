@@ -22,7 +22,7 @@
 
                     </div>
 
-                    @if (empty($user_membership) && $user_approved->is_approved == 0)
+                    @if ($user_approved->is_approved == 0)
                         <div class="col-lg-9 col-md-8 col-12 mt-md-0 mt-3">
                             <div class="row row-cols-1 g-3">
                                 <div class="col-12 mb-2">
@@ -78,11 +78,13 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <div class="col-md-6 col-12 text-center justify-content-center item-align-self">
-                                            {{-- <h6>Please scan QR Code for Payment : </h6> --}}
-                                            <img class="img-fluid qr-code-img" src="{{ asset($site_settings['qr_code']) }}"
-                                                alt="">
-                                        </div>
+                                        @if(!empty($site_settings['qr_code']))
+                                            <div class="col-md-6 col-12 text-center justify-content-center item-align-self">
+                                                {{-- <h6>Please scan QR Code for Payment : </h6> --}}
+                                                <img class="img-fluid qr-code-img" src="{{ asset($site_settings['qr_code']) }}"
+                                                    alt="">
+                                            </div>
+                                        @endif
                                         @if (
                                             !isset($user_membership) ||
                                                 (is_null($user_membership->reference_id ?? null) &&

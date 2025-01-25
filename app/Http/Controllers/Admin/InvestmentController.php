@@ -10,13 +10,14 @@ use App\Models\Ledger;
 use App\Models\Order;
 use App\Models\OrderHistory;
 use App\Models\OrderStatus;
+use App\Models\RefferEarnsLedger;
 use App\Models\User;
 use App\Models\UserWallet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Mail;
 use Illuminate\Support\Facades\Log;
+use Mail;
 use Yajra\DataTables\DataTables;
 
 class InvestmentController extends Controller
@@ -122,7 +123,7 @@ class InvestmentController extends Controller
     {
         try {
             $request->validate([
-                'id' => 'required|integer|exists:investments,id',
+                'id' => 'required|integer|exists:investments,id,deleted_at,NULL',
             ]);
 
             $investId = $request->input('id');
@@ -150,12 +151,41 @@ class InvestmentController extends Controller
                 'balance'         => $investment->invest_amount,
             ]);
 
+            // Refer And Earn Ledger Start
+            $userRefferBonus = User::select('users.*', 'user_referrals.refer_id', 'user_referrals.referral_id')
+                ->join('user_referrals', 'user_referrals.referral_id', '=', 'users.id')
+                ->where('user_referrals.refer_id', $investment->user_id)
+                ->where('users.status', 1)
+                ->first();
+
+            if ($userRefferBonus) {
+                $userLedgerBalance = RefferEarnsLedger::where('user_id', $userRefferBonus->referral_id)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+
+                $previousBalance = $userLedgerBalance ? $userLedgerBalance->balance : 0;
+                $interestAmount  = $investment->invest_amount * ($investment->rate_of_intrest / 100);
+
+                RefferEarnsLedger::create([
+                    'user_id'         => $userRefferBonus->referral_id,
+                    'refer_id'        => $userRefferBonus->refer_id,
+                    'date'            => now()->format('Y-m-d'),
+                    'description'     => 'Your Referral - ' . ($investment->customer_name ?? 'User') . ' Investment Approved.',
+                    'rate_of_intrest' => $investment->rate_of_intrest,
+                    'credit'          => $interestAmount,
+                    'debit'           => 0,
+                    'balance'         => $previousBalance + $interestAmount,
+                ]);
+
+                Log::info("Referral balance updated and ledger entry created for user ID: {$userRefferBonus->referral_id}.");
+            }
+
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Investment approved successfully.']);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            log::error('Investment approval error: ' . $e->getMessage());
+            Log::error('Investment approval error: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Something went wrong. Please try again later.']);
         }
     }
@@ -188,9 +218,9 @@ class InvestmentController extends Controller
             ->orderBy('date', 'asc')
             ->whereNull('deleted_at')
             ->get();
-            
+
         $title = "Investments";
-        return view('admin.investments.view', compact('title', 'data','ledgerData'));
+        return view('admin.investments.view', compact('title', 'data', 'ledgerData'));
     }
 
     public function create(Request $request)

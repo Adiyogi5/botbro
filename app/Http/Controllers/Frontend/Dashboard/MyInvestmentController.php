@@ -51,7 +51,7 @@ class MyInvestmentController extends Controller
             'payment_type'   => 'required|in:0,1',
             'transaction_id' => 'nullable|required_if:payment_type,1',
             'date'           => 'required|date',
-            'screenshot'     => 'required|mimes:jpg,jpeg,png|max:2048',
+            'screenshot'     => 'nullable|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         try {
@@ -124,7 +124,7 @@ class MyInvestmentController extends Controller
     public function investmentDetails(Request $request, $id = '')
     {
         $title = 'Investment Detail';
-        
+
         $user = auth('web')->user();
 
         DB::statement("SET SQL_MODE = ''");
@@ -133,24 +133,29 @@ class MyInvestmentController extends Controller
             ->leftJoin('countries', 'countries.id', '=', 'user_addresses.country_id')
             ->leftJoin('states', 'states.id', '=', 'user_addresses.state_id')
             ->leftJoin('cities', 'cities.id', '=', 'user_addresses.city_id')
-            ->where(function($query) use ($user) {
+            ->where(function ($query) use ($user) {
                 $query->where('user_addresses.default_id', 1)
-                      ->orWhereNull('user_addresses.default_id');
+                    ->orWhereNull('user_addresses.default_id');
             })
             ->Where('investments.user_id', $user->id)
             ->where('investments.id', $request->id)
             ->whereNull('investments.deleted_at')
             ->first();
-        
+
         if (empty($investment_data)) {
             return redirect('investment')->with('error', "Investment not found");
         }
 
         $ledgerData = Ledger::where('user_id', $user->id)
             ->where('invest_id', $investment_data->id)
-            ->orderBy('date', 'asc')
+            ->orderBy('id', 'desc')
             ->whereNull('deleted_at')
             ->get();
+
+        $ledgermonthcheck = Ledger::where('user_id', $user->id)
+            ->where('invest_id', $investment_data->id)
+            ->whereNull('deleted_at')
+            ->first();
 
         // ###### Widthdrow Request #####
         $my_balance = Ledger::where('user_id', $user->id)
@@ -177,12 +182,153 @@ class MyInvestmentController extends Controller
             ->Where('users.status', '1')
             ->get();
 
-        return view('frontend.dashboard.investmentdetails', compact('title', 'investment_data', 'ledgerData', 'my_balance', 'requestAmount', 'rejectAmount', 'my_withdrow_request'));
+        return view('frontend.dashboard.investmentdetails', compact('title', 'investment_data', 'ledgerData', 'my_balance', 'requestAmount', 'rejectAmount', 'my_withdrow_request', 'ledgermonthcheck'));
     }
+
+    //####### For Full Investment Withdrow Before 6 month calculation Start #######
+    public function checkLedgerMonth(Request $request)
+    {
+        $user         = auth('web')->user();
+        $investmentId = $request->input('invest_id');
+
+        $app_data = GeneralSetting::all();
+        foreach ($app_data as $row) {
+            $site_settings[$row['setting_name']] = $row['filed_value'];
+        }
+
+        $ledger = Ledger::where('user_id', $user->id)
+            ->where('invest_id', $investmentId)
+            ->whereNull('deleted_at')
+            ->first();
+
+        $balanceData = Ledger::where('user_id', $user->id)
+            ->where('invest_id', $investmentId)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if (! $ledger) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No ledger record found for this investment.',
+            ]);
+        }
+
+        $percentageCalculation = $site_settings['full_withdrow_commission_percentage'];
+        $percentageValue       = $percentageCalculation / 100;
+
+        if (Carbon::parse($ledger->date)->gt(Carbon::now()->subMonths($site_settings['withdrow_request_months']))) {
+            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Withdrawals are only allowed within the Date 1 to 5 of the every month.',
+                ]);
+            }
+
+            $calculatedAmount = $balanceData->balance * $percentageValue; // Apply commission percentage
+
+            return response()->json([
+                'success'           => true,
+                'balance'           => $balanceData->balance,
+                'percentage'        => ($calculatedAmount == $balanceData->balance) ? 0 : $percentageCalculation,
+                'calculated_amount' => $calculatedAmount,
+            ]);
+
+        } elseif (Carbon::parse($ledger->date)->lte(Carbon::now()->subMonths($site_settings['withdrow_request_months']))) {
+            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Withdrawals are only allowed within the Date 1 to 5 of the every month.',
+                ]);
+            }
+
+            $calculatedAmount = $balanceData->balance; // Full balance for withdrawal
+            return response()->json([
+                'success'           => true,
+                'balance'           => $balanceData->balance,
+                'percentage'        => ($calculatedAmount == $balanceData->balance) ? 0 : $percentageCalculation,
+                'calculated_amount' => $calculatedAmount,
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'The ledger record is older than 6 months.',
+        ]);
+    }
+
+    public function fullwithdrowInvestment(Request $request, $id = '')
+    {
+        $user = auth('web')->user();
+
+        DB::statement("SET SQL_MODE = ''");
+        $balanceData = Ledger::where('user_id', $user->id)
+            ->where('invest_id', $request->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $requestData = UserWithdrawRequest::where('status', '0')->whereNull('deleted_at')
+            ->where('user_id', $user->id)
+            ->get();
+
+        DB::beginTransaction();
+        try {
+            $validate = $request->validate([
+                'amount' => 'required|numeric',
+            ], [
+                'amount.required' => 'The withdrawal amount is required.',
+                'amount.numeric'  => 'Please enter a valid numeric amount.',
+            ]);
+
+            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+                $errorMessage = "Withdrawal requests are only allowed between the 1st and 5th of each month. Please try again during this period.";
+                return redirect()->back()->with('error', $errorMessage);
+
+            } elseif ($request->amount <= ($balanceData->balance - $requestData->sum('amount'))) {
+
+                $wdata               = new UserWithdrawRequest();
+                $reference_id        = RandcardStr(15);
+                $wdata->user_id      = $user->id;
+                $wdata->invest_id    = $balanceData->invest_id;
+                $wdata->reference_id = $reference_id;
+                $wdata->amount       = $request->amount;
+                $wdata->request_date = now()->format('Y-m-d H:i:s');
+                $wdata->status       = 0;
+                $wdata->save();
+
+                /// Send Notification to Admin
+                $adnoti                    = new AdminNotification();
+                $adnoti->title             = "Investment Full Withdrawal Request Amount";
+                $adnoti->message           = "Get new withdraw request from " . $user->name . "!!";
+                $adnoti->notification_type = 1;
+                $adnoti->is_read           = 0;
+                $adnoti->created_at        = now()->format('Y-m-d H:i:s');
+                $adnoti->updated_at        = now()->format('Y-m-d H:i:s');
+                $adnoti->save();
+
+                DB::commit();
+                $request->session()->flash('success', 'Your Withdraw Request Submitted Successfully');
+                return redirect()->back();
+            } else {
+                $availableBalance = $balanceData->balance - $requestData->sum('amount');
+                $errorMessage     = "Your requested amount is not more than your available balance. Your Available Balance is: {$availableBalance}";
+                return redirect()->back()->with('error', $errorMessage);
+            }
+
+        } catch (\Exception $e) {
+            $errorMessage = 'Failed to Submit Withdraw Request: ' . $e->getMessage();
+            return redirect()->back()->with('error', $errorMessage)->withInput();
+        }
+    }
+    //####### For Full Investment Withdrow Before 6 month calculation End #######
+    
 
     public function withdrowInvestment(Request $request, $id = '')
     {
-        $user = auth('web')->user();
+        $user     = auth('web')->user();
+        $app_data = GeneralSetting::all();
+        foreach ($app_data as $row) {
+            $site_settings[$row['setting_name']] = $row['filed_value'];
+        }
 
         DB::statement("SET SQL_MODE = ''");
         $balanceData = Ledger::where('user_id', $user->id)
@@ -197,7 +343,14 @@ class MyInvestmentController extends Controller
         $requestData = UserWithdrawRequest::where('status', '0')->whereNull('deleted_at')
             ->where('user_id', $user->id)
             ->get();
-        
+
+        $firstInvestBalance = Ledger::where('user_id', $user->id)
+            ->where('invest_id', $request->id)
+            ->orderBy('created_at', 'asc')
+            ->first();
+
+        $totalIntrest = $balanceData->balance - $firstInvestBalance->balance; //Intrest Balance Calculation
+
         DB::beginTransaction();
         try {
             $validate = $request->validate([
@@ -206,57 +359,129 @@ class MyInvestmentController extends Controller
                 'amount.required' => 'The withdrawal amount is required.',
                 'amount.numeric'  => 'Please enter a valid numeric amount.',
             ]);
-            //Your Investment not more then 70% of Total Investment Amount
-            $firstTimeCheck = ! UserWithdrawRequest::where('invest_id', $request->id)
-                ->where('user_id', $user->id)
-                ->exists();
-            $maxWithdrawAmount = $balanceData->balance * 0.7;
 
-            if (Carbon::parse($ledgermonthcheck->date)->gt(Carbon::now()->subMonths(6))){
-                $errorMessage = "For Withdrawal Requests Your Investment atleast 6 month old, Please try after 6 month of investment for withdraw Request!!";
-                return redirect()->back()->with('error', $errorMessage);
-            } else if (!now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
-                    $errorMessage = "Withdrawal requests are only allowed between the 1st and 5th of each month. Please try again during this period.";
-                    return redirect()->back()->with('error', $errorMessage);
-            } else if (($firstTimeCheck && $request->amount > $maxWithdrawAmount)) {
-                $errorMessage = "In First Time Withdrow- Your Investment not more then 70% of Total Investment Amount!!";
-                return redirect()->back()->with('error', $errorMessage);
-            } else if ($request->amount <= ($balanceData->balance - $requestData->sum('amount'))) {
-                $wdata               = new UserWithdrawRequest();
-                $reference_id        = RandcardStr(15);
-                $wdata->user_id      = $user->id;
-                $wdata->invest_id    = $balanceData->invest_id;
-                $wdata->reference_id = $reference_id;
-                $wdata->amount       = $request->amount;
-                $wdata->request_date = now()->format('Y-m-d H:i:s');
-                $wdata->status       = 0;
-                $wdata->save();
-
-                /// Send Notification to Admin
-                $adnoti                    = new AdminNotification();
-                $adnoti->title             = "Investment Withdrawal Request Amount";
-                $adnoti->message           = "Get new withdraw request from " . $user->name . "!!";
-                $adnoti->notification_type = 1;
-                $adnoti->is_read           = 0;
-                $adnoti->created_at        = now()->format('Y-m-d H:i:s');
-                $adnoti->updated_at        = now()->format('Y-m-d H:i:s');
-                $adnoti->save();
-
-                DB::commit();
-                $request->session()->flash('success', 'Your Withdraw Request Submitted Successfully');
-                return redirect()->back();
-            } else {
-                $availableBalance = $balanceData->balance;
-                $errorMessage     = "Your requested amount is not more than your available balance. Your Available Balance is: {$availableBalance}";
+            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+                $errorMessage = "Withdrawal requests are only allowed between the 1st and 5th of each month. Please try again during this period.";
                 return redirect()->back()->with('error', $errorMessage);
             }
-
+            
+            // Check if the investment is less than the required months old
+            if (Carbon::parse($ledgermonthcheck->date)->gt(Carbon::now()->subMonths($site_settings['withdrow_request_months']))) {
+                if ($request->amount <= ($totalIntrest - $requestData->sum('amount'))) {
+                    $withdrawableAmount = $totalIntrest;
+                } else {
+                    $availableBalance = $totalIntrest - $requestData->sum('amount');
+                    $errorMessage = "Your requested amount exceeds your available interest balance. Your Available Intrest Balance is: {$availableBalance}";
+                    return redirect()->back()->with('error', $errorMessage);
+                }
+            } 
+            // If investment is older than required months, allow full balance withdrawal
+            else if (Carbon::parse($ledgermonthcheck->date)->lte(Carbon::now()->subMonths($site_settings['withdrow_request_months']))) {
+                if ($request->amount <= ($balanceData->balance - $requestData->sum('amount'))) {
+                    $withdrawableAmount = $balanceData->balance;
+                } else {
+                    $availableBalance = $balanceData->balance - $requestData->sum('amount');
+                    $errorMessage = "Your requested amount exceeds your available balance. Your Available Balance is: {$availableBalance}";
+                    return redirect()->back()->with('error', $errorMessage);
+                }
+            }
+            
+            // Process withdrawal if validation passes
+            $wdata               = new UserWithdrawRequest();
+            $reference_id        = RandcardStr(15);
+            $wdata->user_id      = $user->id;
+            $wdata->invest_id    = $balanceData->invest_id;
+            $wdata->reference_id = $reference_id;
+            $wdata->amount       = $request->amount;
+            $wdata->request_date = now()->format('Y-m-d H:i:s');
+            $wdata->status       = 0;
+            $wdata->save();
+            
+            /// Send Notification to Admin
+            $adnoti                    = new AdminNotification();
+            $adnoti->title             = "Investment Withdrawal Request Amount";
+            $adnoti->message           = "Get new withdraw request from " . $user->name . "!!";
+            $adnoti->notification_type = 1;
+            $adnoti->is_read           = 0;
+            $adnoti->created_at        = now()->format('Y-m-d H:i:s');
+            $adnoti->updated_at        = now()->format('Y-m-d H:i:s');
+            $adnoti->save();
+            
+            DB::commit();
+            $request->session()->flash('success', 'Your Withdraw Request Submitted Successfully');
+            return redirect()->back();
+            
         } catch (\Exception $e) {
             $errorMessage = 'Failed to Submit Withdraw Request: ' . $e->getMessage();
             return redirect()->back()->with('error', $errorMessage)->withInput();
         }
     }
 
+    // if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+            //     $errorMessage = "Withdrawal requests are only allowed between the 1st and 5th of each month. Please try again during this period.";
+            //     return redirect()->back()->with('error', $errorMessage);
+
+            // } else if (Carbon::parse($ledgermonthcheck->date)->gt(Carbon::now()->subMonths($site_settings['withdrow_request_months']))) {
+
+            //     if ($request->amount <= ($totalIntrest - $requestData->sum('amount'))) {
+            //         $wdata               = new UserWithdrawRequest();
+            //         $reference_id        = RandcardStr(15);
+            //         $wdata->user_id      = $user->id;
+            //         $wdata->invest_id    = $balanceData->invest_id;
+            //         $wdata->reference_id = $reference_id;
+            //         $wdata->amount       = $request->amount;
+            //         $wdata->request_date = now()->format('Y-m-d H:i:s');
+            //         $wdata->status       = 0;
+            //         $wdata->save();
+
+            //         /// Send Notification to Admin
+            //         $adnoti                    = new AdminNotification();
+            //         $adnoti->title             = "Investment Withdrawal Request Amount";
+            //         $adnoti->message           = "Get new withdraw request from " . $user->name . "!!";
+            //         $adnoti->notification_type = 1;
+            //         $adnoti->is_read           = 0;
+            //         $adnoti->created_at        = now()->format('Y-m-d H:i:s');
+            //         $adnoti->updated_at        = now()->format('Y-m-d H:i:s');
+            //         $adnoti->save();
+
+            //         DB::commit();
+            //         $request->session()->flash('success', 'Your Withdraw Request Submitted Successfully');
+            //         return redirect()->back();
+            //     } else {
+            //         $availableBalance = $totalIntrest - $requestData->sum('amount');
+            //         $errorMessage     = "Your requested amount is not more than your available Intrest balance. Your Available Balance is: {$availableBalance}";
+            //         return redirect()->back()->with('error', $errorMessage);
+            //     }
+
+            // } else if (Carbon::parse($ledgermonthcheck->date)->lt(Carbon::now()->subMonths($site_settings['withdrow_request_months'])) && $request->amount <= ($balanceData->balance - $requestData->sum('amount'))) {
+            //     $wdata               = new UserWithdrawRequest();
+            //     $reference_id        = RandcardStr(15);
+            //     $wdata->user_id      = $user->id;
+            //     $wdata->invest_id    = $balanceData->invest_id;
+            //     $wdata->reference_id = $reference_id;
+            //     $wdata->amount       = $request->amount;
+            //     $wdata->request_date = now()->format('Y-m-d H:i:s');
+            //     $wdata->status       = 0;
+            //     $wdata->save();
+
+            //     /// Send Notification to Admin
+            //     $adnoti                    = new AdminNotification();
+            //     $adnoti->title             = "Investment Withdrawal Request Amount";
+            //     $adnoti->message           = "Get new withdraw request from " . $user->name . "!!";
+            //     $adnoti->notification_type = 1;
+            //     $adnoti->is_read           = 0;
+            //     $adnoti->created_at        = now()->format('Y-m-d H:i:s');
+            //     $adnoti->updated_at        = now()->format('Y-m-d H:i:s');
+            //     $adnoti->save();
+
+            //     DB::commit();
+            //     $request->session()->flash('success', 'Your Withdraw Request Submitted Successfully');
+            //     return redirect()->back();
+            // } else {
+            //     $availableBalance = $balanceData->balance - $requestData->sum('amount');
+            //     $errorMessage     = "Your requested amount is not more than your available balance. Your Available Balance is: {$availableBalance}";
+            //     return redirect()->back()->with('error', $errorMessage);
+            // }
     // #########################################################################
 
     public function my_return(Request $request)

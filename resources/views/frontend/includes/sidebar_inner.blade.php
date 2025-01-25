@@ -87,7 +87,7 @@
                             aria-current="page"
                             style="{{ request()->routeIs('frontend.my_address') ? 'color:white !important;' : '' }}"
                             href="{{ route('frontend.my_address') }}"><i
-                                class="fa-solid fa-location-dot faa-profile"></i> My Address</a>
+                                class="fa-solid fa-map-location-dot faa-profile"></i> My Address</a>
                     </li>
 
                     {{-- <li
@@ -114,17 +114,17 @@
                             aria-current="page"
                             style="{{ request()->routeIs('frontend.reffer_history') ? 'color:white !important;' : '' }}"
                             href="{{ route('frontend.reffer_history') }}"><i
-                                class="fa-solid fa-network-wired faa-profile"></i> Reffer History</a>
+                                class="fa-solid fa-network-wired faa-profile"></i> Reffer & Commission</a>
                     </li>
 
-                    <li
+                    {{-- <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.commission_history') ? 'text-white bg-lime' : '' }}">
                         <a class="nav-link sidebar-link {{ request()->routeIs('frontend.commission_history') ? 'text-white bg-lime' : '' }}"
                             aria-current="page"
                             style="{{ request()->routeIs('frontend.commission_history') ? 'color:white !important;' : '' }}"
                             href="{{ route('frontend.commission_history') }}"><i
                                 class="fa-solid fa-hand-holding-dollar faa-profile"></i> Commission History</a>
-                    </li>
+                    </li> --}}
 
                     {{-- <li
                         class="nav-item px-3 text-center justify-content-start d-flex border-bottom {{ request()->routeIs('frontend.profit_history') ? 'text-white bg-lime' : '' }}">

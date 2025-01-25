@@ -2,27 +2,28 @@
 namespace App\Console\Commands;
 
 use App\Models\Ledger;
+use App\Models\RefferEarnsLedger;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class UpdateLedgerStatus extends Command
+class UpdateReferCommissionLedgerStatus extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'update:ledgerstatus';
+    protected $signature = 'update:referandcommissionledgerstatus';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Manage user ledger status.';
+    protected $description = 'Manage User Refer & Commission Ledger status.';
 
     /**
      * Execute the console command.
@@ -48,36 +49,47 @@ class UpdateLedgerStatus extends Command
             }
 
             foreach ($userslist as $user) {
-                $latestLedgerEntry = Ledger::where('user_id', $user->user_id)
-                    ->where('invest_id', $user->invest_id)
+
+                $userrefferBonus = User::select('users.*', 'user_referrals.refer_id', 'user_referrals.referral_id')
+                    ->join('user_referrals', 'user_referrals.referral_id', '=', 'users.id')
+                    ->where('user_referrals.referral_id', $user->id)
+                    ->where('users.status', 1)
+                    ->get();
+
+                $ledgerData = Ledger::where('user_id', $user->id)
+                    ->orderBy('id', 'desc')
+                    ->whereNull('deleted_at')
+                    ->get();
+
+                $latestLedgerEntry = RefferEarnsLedger::where('user_id', $user->user_id)
                     ->whereDate('date', '!=', Carbon::now()->format('Y-m-d'))
                     ->orderBy('created_at', 'desc')
                     ->first();
-            
+
                 if ($latestLedgerEntry && $latestLedgerEntry->balance > 0) {
                     $rateOfInterest  = $user->rate_of_intrest;
                     $previousBalance = $latestLedgerEntry->balance;
-            
+
                     // Convert the ledger date to Carbon instance
                     $ledgerDateCarbon = Carbon::parse($latestLedgerEntry->date);
-                    
+
                     // Get the total number of days in the month of the ledger date
                     $totalMonthDays = $ledgerDateCarbon->daysInMonth;
-                    
+
                     // Get the day of the month from the ledger entry date
                     $ledgerDay = $ledgerDateCarbon->day;
-                    
+
                     // Calculate remaining days in the month
                     $remainingDays = $totalMonthDays - $ledgerDay;
-                   
+
                     if ($remainingDays > 0) {
                         // Calculate daily interest
                         $dailyInterestRate = ($rateOfInterest / 100) / $totalMonthDays;
                         $interestAmount    = $previousBalance * $dailyInterestRate * $remainingDays;
-            
+
                         // New balance after applying interest
                         $newBalance = $previousBalance + $interestAmount;
-            
+
                         // Insert new ledger entry with calculated balance
                         Ledger::create([
                             'user_id'         => $user->user_id,
@@ -89,7 +101,7 @@ class UpdateLedgerStatus extends Command
                             'debit'           => 0,
                             'balance'         => $newBalance,
                         ]);
-            
+
                         Log::info("Ledger updated for user ID: {$user->user_id}, Interest for {$remainingDays} days: {$interestAmount}, New Balance: {$newBalance}");
                     } else {
                         Log::info("No remaining days to apply interest for user ID: {$user->user_id}");
@@ -97,7 +109,7 @@ class UpdateLedgerStatus extends Command
                 } else {
                     Log::info("No valid ledger entry found for user ID: {$user->user_id}");
                 }
-            }            
+            }
             return Command::SUCCESS;
         } catch (\Exception $e) {
             Log::error('Error updating ledger status: ' . $e->getMessage());

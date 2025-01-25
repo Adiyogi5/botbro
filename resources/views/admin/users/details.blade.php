@@ -28,9 +28,9 @@
                             <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-investments-tab" data-bs-toggle="pill" data-bs-target="#pills-investments" type="button" role="tab" aria-controls="pills-investments" aria-selected="false">Investments</button>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            {{-- <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-wallet-tab" data-bs-toggle="pill" data-bs-target="#pills-wallet" type="button" role="tab" aria-controls="pills-wallet" aria-selected="false">Wallet</button>
-                            </li>
+                            </li> --}}
                             <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-withdraw-tab" data-bs-toggle="pill" data-bs-target="#pills-withdraw" type="button" role="tab" aria-controls="pills-withdraw" aria-selected="false">Investment Withdrawal</button>
                             </li>

@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('update:walletpayment')->everyTwoMinutes();
 
         $schedule->command('update:ledgerstatus')->monthlyOn(1, '00:00');
+        $schedule->command('update:referandcommissionledgerstatus')->monthlyOn(1, '00:00');
         $schedule->command('update:membershipvalidity')->dailyAt('00:00');
     }
 

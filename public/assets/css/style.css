@@ -1618,10 +1618,13 @@ body {
 }
 
 .modal-category {
-  color: #0e3167;
+  color: #ffffff;
   font-size: 28px;
   font-weight: 400;
   line-height: 38px;
+  background-color: #0e3167;
+  border-radius: 8px;
+  padding: 4px;
 }
 
 .modal-ship-title {

@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Frontend\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminNotification;
+use App\Models\Ledger;
+use App\Models\RefferEarnsLedger;
 use App\Models\User;
 use App\Models\UserReferral;
 use App\Models\UserReferralWithdrawRequest;
@@ -24,7 +26,8 @@ class RefferController extends Controller
             ->Where('users.status', '1')
             ->get();
 
-        $my_balance = User::Where('id', $user->id)->whereNull('deleted_at')
+        $my_balance = RefferEarnsLedger::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
             ->first();
 
         $requestAmount = UserReferralWithdrawRequest::selectRaw('SUM(request_amount) as total_amount')
@@ -42,14 +45,22 @@ class RefferController extends Controller
             ->Where('user_id', $user->id)
             ->Where('users.status', '1')
             ->get();
-        // dd($my_reffer);
-        return view('frontend.dashboard.reffer_history', compact('title', 'user', 'my_reffer', 'my_balance', 'requestAmount', 'rejectAmount', 'my_withdrow_request'));
+       
+        $ledgerData = RefferEarnsLedger::where('user_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->whereNull('deleted_at')
+            ->get();
+
+        return view('frontend.dashboard.reffer_history', compact('title', 'user', 'my_reffer', 'my_balance', 'requestAmount', 'rejectAmount', 'my_withdrow_request','ledgerData'));
     }
 
     public function withdrowrefferrequest(Request $request)
     {
         $user        = auth('web')->user();
-        $balanceData = User::where('id', $user->id)->whereNull('deleted_at')->first();
+        $balanceData = RefferEarnsLedger::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->whereNull('deleted_at')
+            ->first();
 
         $requestData = UserReferralWithdrawRequest::where('status', '0')->whereNull('deleted_at')
             ->where('user_id', $user->id)
@@ -82,7 +93,7 @@ class RefferController extends Controller
             if ($approvedMemberships < 5 || $totalMembers < 6) {
                 $errorMessage = "To request a withdrawal, you must have at least 5 approved memberships and 6 On Board. Please try again after meeting this requirement.";
                 return redirect()->back()->with('error', $errorMessage);
-            } else if ($request->amount <= ($balanceData->user_reffer_balance - $requestData->sum('request_amount'))) {
+            } else if ($request->amount <= ($balanceData->balance - $requestData->sum('request_amount'))) {
                 $wdata                 = new UserReferralWithdrawRequest();
                 $reference_id          = RandcardStr(15);
                 $wdata->user_id        = $user->id;
@@ -106,7 +117,7 @@ class RefferController extends Controller
                 $request->session()->flash('success', 'Your Referral Withdraw Request Submitted Successfully');
                 return redirect()->back();
             } else {
-                $availableBalance = $balanceData->user_reffer_balance - $requestData->sum('amount');
+                $availableBalance = $balanceData->balance - $requestData->sum('amount');
                 $errorMessage     = "Your requested amount is not more than your available balance. Your Available Balance is: {$availableBalance}";
                 return redirect()->back()->with('error', $errorMessage);
             }

@@ -123,7 +123,8 @@
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <p class="fw-bold">Transaction Id : </p>
-                                                <p>{{ $investment_data->transaction_id }}</p>
+                                                <p>{{ !empty($investment_data->transaction_id) ? $investment_data->transaction_id : '--' }}
+                                                </p>
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <p class="fw-bold mb-0">Payment Status:</p>
@@ -132,14 +133,16 @@
                                                     {{ $investment_data->payment_status == 1 ? 'PAID' : 'PENDING' }}
                                                 </span>
                                             </div>
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <p class="fw-bold">Payment Screenshot : </p>
-                                                <p><a href="{{ imageexist($investment_data->screenshot) }}"
-                                                        target="_blank"><img class="img-fluid border"
-                                                            src="{{ imageexist($investment_data->screenshot) }}"
-                                                            alt=""
-                                                            style="height: 150px; width:auto; margin-top:3px;"></a></p>
-                                            </div>
+                                            @if (!empty($investment_data->screenshot))
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <p class="fw-bold">Payment Screenshot : </p>
+                                                    <p><a href="{{ imageexist($investment_data->screenshot) }}"
+                                                            target="_blank"><img class="img-fluid border"
+                                                                src="{{ imageexist($investment_data->screenshot) }}"
+                                                                alt=""
+                                                                style="height: 150px; width:auto; margin-top:3px;"></a></p>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                     {{-- ###### Tabe One End ######  --}}
@@ -164,29 +167,36 @@
                                                     <th>Date</th>
                                                     <th>Description</th>
                                                     <th>Rate of Interest</th>
-                                                    <th class="text-danger">Debit (₹)</th>
-                                                    <th class="text-success">Credit (₹)</th>
-                                                    <th class="fw-bold text-primary">Balance (₹)</th>
+                                                    <th class="text-danger">Debit ({{ CURRENCY_SYMBOL }})</th>
+                                                    <th class="text-success">Credit ({{ CURRENCY_SYMBOL }})</th>
+                                                    <th class="fw-bold text-primary">Balance ({{ CURRENCY_SYMBOL }})</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($ledgerData as $ledger)
+                                                @if ($ledgerData->isEmpty())
                                                     <tr>
-                                                        <td>{{ \Carbon\Carbon::parse($ledger->date)->format('d-m-Y') }}
-                                                        </td>
-                                                        <td>{{ $ledger->description }}</td>
-                                                        <td>{{ $ledger->rate_of_intrest ?? '-' }}%</td>
-                                                        <td class="text-danger">
-                                                            {{ $ledger->debit ? number_format($ledger->debit, 2) : '-' }}
-                                                        </td>
-                                                        <td class="text-success">
-                                                            {{ $ledger->credit ? number_format($ledger->credit, 2) : '-' }}
-                                                        </td>
-                                                        <td class="fw-bold text-primary">
-                                                            {{ number_format($ledger->balance, 2) }}
-                                                        </td>
+                                                        <td colspan="6" class="text-center text-danger">Record Not
+                                                            Found..!!</td>
                                                     </tr>
-                                                @endforeach
+                                                @else
+                                                    @foreach ($ledgerData as $ledger)
+                                                        <tr>
+                                                            <td>{{ \Carbon\Carbon::parse($ledger->date)->format('d-m-Y') }}
+                                                            </td>
+                                                            <td>{{ $ledger->description }}</td>
+                                                            <td>{{ $ledger->rate_of_intrest > 0 ? $ledger->rate_of_intrest . '%' : '--' }}</td>
+                                                            <td class="text-danger">
+                                                                {{ $ledger->debit ? number_format($ledger->debit, 2) : '--' }}
+                                                            </td>
+                                                            <td class="text-success">
+                                                                {{ $ledger->credit ? number_format($ledger->credit, 2) : '--' }}
+                                                            </td>
+                                                            <td class="fw-bold text-primary">
+                                                                {{ number_format($ledger->balance, 2) }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -200,6 +210,13 @@
                                     <div class="col-12 px-3">
                                         <div class="d-flex justify-content-between">
                                             <p class="dash-category">Withdrow Request</p>
+                                            <div>
+                                                <a id="openFullWithdrawModal" data-bs-toggle="modal"
+                                                    data-bs-target="#addfullwithdrowModal" class="btn btn-md btn-warning">
+                                                    <i class="fa-solid fa-paper-plane"></i> Full Withdraw Request
+                                                </a>
+
+                                            </div>
                                             <div>
                                                 <a data-bs-toggle="modal" data-bs-target="#addModal"
                                                     class="btn btn-md btn-primary">
@@ -274,6 +291,71 @@
                                         </div>
                                     </div>
                                     {{-- ###### Tabe Three End ######  --}}
+
+
+                                    {{-- ############# Modal For Full Withdrow Request Add ##############  --}}
+                                    <div class="modal fade" id="addfullwithdrowModal" tabindex="-1"
+                                        aria-labelledby="addfullwithdrowModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-md">
+                                            <div class="modal-content p-3">
+                                                <div class="modal-header pt-1 border-0">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body p-1">
+                                                    <div class="row">
+                                                        <div class="col-12 text-center justify-content-center">
+                                                            <span class="mx-auto">
+                                                                <p class="modal-category">Full Withdrow Investment Request
+                                                                </p>
+                                                                @if (!empty($my_balance->balance))
+                                                                    <h5>Current Balance: ₹ {!! $my_balance->balance !!}
+                                                                    </h5>
+                                                                @endif
+                                                            </span>
+                                                            <small
+                                                                class="w-100 text-success text-decoration-underline">Note</small><br />
+                                                            <small class="w-100 text-success">1. For Withdrawal Requests
+                                                                Your Investment atleast {{$site_settings['withdrow_request_months']}} month old. If you want to Withdrow
+                                                                Full Amount then Charges May Apply</small><br />
+                                                            <small class="w-100 text-success">2. Withdrawal requests can
+                                                                only be made between the 1st and 5th of each month.</small>
+                                                        </div>
+                                                        @if (!empty($my_balance->balance))
+                                                            <div class="col-12 text-center justify-content-center"
+                                                                style="border-top: 1px solid #000;     margin: 5px; padding-top: 10px;">
+                                                                <form id="addfullwithdrowForm" method="post"
+                                                                    action="{{ route('frontend.fullwithdrowinvestment', $my_balance->invest_id) }}">
+                                                                    @csrf
+                                                                    <div class="mb-3 col-10 mx-auto">
+                                                                        <label for="amount" id="fullamount-label"
+                                                                            class="form-label">Amount</label>
+                                                                        <input type="text"
+                                                                            class="form-control rounded-0 mb-2"
+                                                                            id="fullamount" name="amount"
+                                                                            placeholder="Enter Amount" readonly>
+                                                                        <h6 id="calculationResult"
+                                                                            class="text-primary mt-3"></h6>
+                                                                    </div>
+                                                                    <div class="text-center">
+                                                                        <button type="submit" id="submitBtn"
+                                                                            class="btn btn-primary">Submit</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        @else
+                                                            <div class="col-12 text-center justify-content-center">
+                                                                <h6 class="text-danger mt-3">You are not eligible to make a
+                                                                    withdrawal request for this investment. Please Wait For
+                                                                    Approval this Investment by Admin..</h6>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     {{-- ############# Modal For Withdrow Request Add ##############  --}}
                                     <div class="modal fade" id="addModal" tabindex="-1" role="dialog"
                                         aria-labelledby="addModalLabel" aria-hidden="true">
@@ -287,53 +369,63 @@
                                                     <div class="row">
                                                         <div class="col-12 text-center justify-content-center">
                                                             <span class="mx-auto">
-                                                                <p class="modal-category">Add Withdrow Investment Request</p>
-                                                                <h5>Current Balance: ₹ {!! $my_balance->balance !!}
-                                                                </h5>
+                                                                <p class="modal-category">Add Withdrow Investment Request
+                                                                </p>
+                                                                @if (!empty($my_balance->balance))
+                                                                    <h5>Current Balance: ₹ {!! $my_balance->balance !!}
+                                                                    </h5>
+                                                                @endif
                                                             </span>
-                                                            <small class="w-100 text-success text-decoration-underline">Note</small><br/>
-                                                            <small class="w-100 text-success">1. For Withdrawal
-                                                                Requests Your
-                                                                Investment atleast 6 month old</small><br/>
-                                                            <small class="w-100 text-success">2. Withdrawal requests
-                                                                can only
-                                                                be made between the 1st and 5th of each month.</small>
+                                                            <small
+                                                                class="w-100 text-success text-decoration-underline">Note</small><br />
+                                                            <small class="w-100 text-success">1. For Withdrawal Requests Your Investment atleast {{$site_settings['withdrow_request_months']}} month old. If you want to Withdrow Amount then you can withdrow only Intrest Amount.</small><br />
+                                                            <small class="w-100 text-success">2. Withdrawal requests can only be made between the 1st and 5th of each month.</small>
                                                         </div>
-                                                        <div class="col-12 text-center justify-content-center"
-                                                            style="border-top: 1px solid #000;     margin: 5px; padding-top: 10px;">
-                                                            <form id="addForm" name="addForm" method="post"
-                                                                action="{{ route('frontend.withdrowinvestment', $my_balance->invest_id) }}"
-                                                                enctype="multipart/form-data">
-                                                                @csrf
-                                                                <div class="row g-3">
-                                                                    <div class="col-md-10 col-12 mx-auto">
-                                                                        <label for="amount"
-                                                                            class="form-label">Amount</label>
-                                                                        <input type="text"
-                                                                            class="form-control rounded-0"
-                                                                            value="{{ old('amount') }}" id="amount"
-                                                                            name="amount"
-                                                                            onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/[^\d\.]/g, '')"
-                                                                            placeholder="Enter Amount">
-                                                                        <label class="error"
-                                                                            id="personError">{{ $errors->first('amount') }}</label>
+                                                        @if (!empty($my_balance->balance))
+                                                            <div class="col-12 text-center justify-content-center"
+                                                                style="border-top: 1px solid #000;     margin: 5px; padding-top: 10px;">
+                                                                <form id="addForm" name="addForm" method="post"
+                                                                    action="{{ route('frontend.withdrowinvestment', $my_balance->invest_id) }}"
+                                                                    enctype="multipart/form-data">
+                                                                    @csrf
+                                                                    <div class="row g-3">
+                                                                        <div class="col-md-10 col-12 mx-auto">
+                                                                            <label for="amount"
+                                                                                class="form-label">Amount</label>
+                                                                            <input type="text"
+                                                                                class="form-control rounded-0"
+                                                                                value="{{ old('amount') }}"
+                                                                                id="amount" name="amount"
+                                                                                onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/[^\d\.]/g, '')"
+                                                                                placeholder="Enter Amount">
+                                                                            <label class="error"
+                                                                                id="personError">{{ $errors->first('amount') }}</label>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
 
-                                                                <div class="row">
-                                                                    <div
-                                                                        class="text-center justify-content-center pt-3 pb-0">
-                                                                        <button type="submit" id="SubmitWidthdraw"
-                                                                            class="btn btn-primary px-3" />Submit</button>
+                                                                    <div class="row">
+                                                                        <div
+                                                                            class="text-center justify-content-center pt-3 pb-0">
+                                                                            <button type="submit" id="SubmitWidthdraw"
+                                                                                class="btn btn-primary px-3" />Submit</button>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
+                                                                </form>
+                                                            </div>
+                                                        @else
+                                                            <div class="col-12 text-center justify-content-center">
+                                                                <h6 class="text-danger mt-3">You are not eligible to make a
+                                                                    withdrawal request for this investment. Please Wait For
+                                                                    Approval this Investment by Admin..</h6>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -360,6 +452,83 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
+            // Handle modal opening and fetch calculated amount
+            $('#openFullWithdrawModal').on('click', function(event) {
+                event.preventDefault();
+
+                $.ajax({
+                    url: "{{ route('frontend.checkLedgerMonth') }}",
+                    type: "POST",
+                    data: {
+                        invest_id: "{{ $my_balance->invest_id }}",
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            var calculatedAmount = parseFloat(response.calculated_amount)
+                                .toFixed(2);
+                            var formulaText =
+                                `Calculated Amount = ${response.balance} * ${response.percentage}% = ₹${calculatedAmount}`;
+
+                            $('#fullamount').val(calculatedAmount).prop('readonly', true);
+                            $('#calculationResult').html(formulaText).removeClass('text-danger')
+                                .addClass('text-primary');
+                            $('#fullamount-label').show();
+                            $('#fullamount').show();
+                            $('#submitBtn').show();
+                        } else {
+                            $('#calculationResult').html("<span class='text-danger'>" + response
+                                .message + "</span>");
+                            $('#fullamount-label').hide();
+                            $('#fullamount').hide();
+                            $('#submitBtn').hide();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#calculationResult').html(
+                            "<span class='text-danger'>Error fetching data.</span>");
+                    }
+                });
+            });
+
+            // Handle form submission with confirmation alert
+            $('#addfullwithdrowForm').on('submit', function(event) {
+                event.preventDefault();
+
+                var amount = $('#fullamount').val();
+                if (amount == '' || amount == '0') {
+                    $('#calculationResult').html(
+                        "<span class='text-danger'>Please enter a valid amount!</span>");
+                    return false;
+                }
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    html: "Your withdrawal request amount is ₹" + amount,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, submit it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Processing...",
+                            html: "Please wait while we process your request.",
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Submit the form after confirmation
+                        event.target.submit();
+                    }
+                });
+            });
+
+
+            //Add Withdrow Request for Intrest Amount 
             $('#SubmitWidthdraw').on('click', function(event) {
                 event.preventDefault();
                 var fee = {{ TRANSFER_FEE }};

@@ -5,13 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
-class MembershipDetail extends Model
+class RefferEarnsLedger extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory,SoftDeletes;
+
     protected $fillable = [
-        'name','mobile','email','subject','message','deleted_at'
+        'user_id','refer_id','date', 'rate_of_intrest', 'description', 'credit', 'debit', 'balance'
     ];
 
     protected $dates = ['deleted_at'];
+
 }

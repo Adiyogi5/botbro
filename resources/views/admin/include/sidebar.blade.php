@@ -229,7 +229,7 @@
                                     </a>
                                 </li>
                             @endif
-                            @if (userCan(107))
+                            {{-- @if (userCan(107))
                                 <li class="nav-item">
                                     <a href="{{ route('admin.badge_masters.index') }}"
                                         class="nav-link {{ @$a121 }}">
@@ -246,7 +246,7 @@
                                         <p>Reward Masters</p>
                                     </a>
                                 </li>
-                            @endif
+                            @endif --}}
                             @if (userCan(109))
                                 <li class="nav-item">
                                     <a href="{{ route('admin.gift.index') }}" class="nav-link {{ @$a123 }}">
@@ -412,7 +412,7 @@
                 </li>
                 @endif --}}
 
-                @if (userCan(121))
+                {{-- @if (userCan(121))
                     <li class="nav-item <?= $active13 ?> <?= $active13 ? ' menu-open' : '' ?>">
                         <a href="{{ url('admin/rewards') }}" class="nav-link <?= $active13 ?>">
                             <i class="nav-icon fa fa-award"></i>
@@ -428,7 +428,7 @@
                             <p>Profit Sharing </p>
                         </a>
                     </li>
-                @endif
+                @endif --}}
 
                 @if (userCan([123, 124]))
                     {{-- <li class="nav-item {{ @$active5 }} {{ @$active5 ? 'menu-open' : '' }}">

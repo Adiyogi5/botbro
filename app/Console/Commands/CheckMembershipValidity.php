@@ -33,37 +33,37 @@ class CheckMembershipValidity extends Command
     {
         try {
             DB::statement("SET SQL_MODE = ''");
-    
+
             $userslist = User::select(
-                    'users.*', 
-                    'membership_details.id as membership_id', 
-                    'membership_details.user_id', 
-                    'membership_details.membership_start_date', 
-                    'membership_details.membership_end_date'
-                )
+                'users.*',
+                'membership_details.id as membership_id',
+                'membership_details.user_id',
+                'membership_details.membership_start_date',
+                'membership_details.membership_end_date'
+            )
                 ->leftJoin('membership_details', 'membership_details.user_id', '=', 'users.id')
                 ->where('users.status', 1)
                 ->whereNull('users.deleted_at')
                 ->whereNull('membership_details.deleted_at')
                 ->get();
-    
+            
             if ($userslist->isEmpty()) {
                 Log::info('All users membership validity is up to date.');
                 return Command::SUCCESS;
             }
-    
+
             foreach ($userslist as $user) {
                 
-                if (Carbon::parse($user->membership_end_date) < Carbon::now()) {
+                if (($user->membership_end_date) < today()->format('Y-m-d')) {
+
                     $membershipValidity = MembershipDetail::where('user_id', $user->id)
-                        ->orderBy('created_at', 'desc')
                         ->whereNull('deleted_at')
+                        ->orderBy('created_at', 'desc')
                         ->first();
-                       dd($membershipValidity);
+
                     if ($membershipValidity) {
-                        
                         $membershipValidity->update([
-                            'deleted_at' => Carbon::now()->format('Y-m-d'),
+                            'deleted_at' => Carbon::now(),
                         ]);
 
                         User::where('id', $user->id)->update([
@@ -76,7 +76,7 @@ class CheckMembershipValidity extends Command
                     }
                 }
             }
-    
+
             return Command::SUCCESS;
         } catch (\Exception $e) {
             Log::error('Error updating membership validity: ' . $e->getMessage());

@@ -7,6 +7,7 @@ use App\Models\GeneralSetting;
 use App\Models\Investment;
 use App\Models\Ledger;
 use App\Models\MembershipDetail;
+use App\Models\RefferEarnsLedger;
 use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\UserBadgeLog;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
@@ -162,19 +164,57 @@ class UserController extends Controller
                 ->where('users.status', 1)
                 ->first();
 
-            if (! $userrefferBonus) {
-                return response()->json(['success' => false, 'message' => 'User Referral detail not found.']);
-            }
-
-            $newBalance                           = $userrefferBonus->user_reffer_balance + 2000;
-            $userrefferBonus->user_reffer_balance = $newBalance;
-            $userrefferBonus->save();
+            if ($userrefferBonus) {
+                $userLedgerBalance = RefferEarnsLedger::where('user_id', $userrefferBonus->referral_id)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+            
+                $previousBalance = $userLedgerBalance ? $userLedgerBalance->balance : 0;
+                $interestAmount  = 2000;  // Consider making this dynamic if needed
+            
+                RefferEarnsLedger::create([
+                    'user_id'         => $userrefferBonus->referral_id,
+                    'refer_id'        => $userrefferBonus->refer_id,
+                    'date'            => now()->format('Y-m-d'),
+                    'description'     => 'Your Referral - ' . $user->name . ' Membership Approved.',
+                    'rate_of_intrest' => 0,
+                    'credit'          => $interestAmount,
+                    'debit'           => 0,
+                    'balance'         => $previousBalance + $interestAmount,
+                ]);
+            
+                // Optional: Log success message
+                Log::info("Referral balance updated and ledger entry created for user ID: {$userrefferBonus->referral_id}.");
+            }            
 
             return response()->json(['success' => true, 'message' => 'Membership approved successfully.']);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
+
+//     $userledgerBalance = User::select('users.*', 'reffer_earns_ledgers.refer_id', 'reffer_earns_ledgers.user_id')
+//     ->join('reffer_earns_ledgers', 'reffer_earns_ledgers.user_id', '=', 'users.id')
+//     ->where('reffer_earns_ledgers.refer_id', $userId)
+//     ->where('users.status', 1)
+//     ->first();
+
+// // If referral details are found, update balance
+// if ($userrefferBonus) {
+
+//     RefferEarnsLedger::create([
+//         'user_id'         => $userrefferBonus->referral_id,
+//         'refer_id'        => $userrefferBonus->refer_id,
+//         'date'            => now()->format('Y-m-d'),
+//         'description'     => 'Your Refferal -'. $user->name .' Membership Approved.',
+//         'rate_of_intrest' => 0,
+//         'credit'          => 2000,
+//         'debit'           => 0,
+//         'balance'         => $userledgerBalance ? $userledgerBalance->balance + 2000 : 2000,
+//     ]);
+//     // Optional: Log success message
+//     Log::info("Referral balance updated and ledger entry created for user ID: {$userrefferBonus->referral_id}.");
+// }
 
     public function rejectMembership(Request $request)
     {
@@ -672,7 +712,7 @@ class UserController extends Controller
         try {
             // Fetch withdrawal request data
             $withdraw_request_data = UserReferralWithdrawRequest::find($id);
-           
+
             if (! $withdraw_request_data) {
                 return Redirect::back()->with('error', 'Withdrawal request not found!');
             }
@@ -681,11 +721,11 @@ class UserController extends Controller
             $wallet_data = User::select('user_reffer_balance')
                 ->where('id', $withdraw_request_data->user_id)
                 ->first();
-            
+
             if ($wallet_data && $wallet_data->user_reffer_balance >= $withdraw_request_data->request_amount) {
                 // Calculate new balance after withdrawal
                 $newuser_reffer_balance = $wallet_data->user_reffer_balance - $withdraw_request_data->request_amount;
-                
+
                 // Update user's referral balance
                 User::where('id', $withdraw_request_data->user_id)
                     ->update(['user_reffer_balance' => $newuser_reffer_balance]);

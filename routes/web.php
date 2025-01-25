@@ -110,13 +110,15 @@ Route::prefix('/')->name('frontend.')->namespace('Frontend')->group(function () 
         Route::post('/invest-money', 'Dashboard\MyInvestmentController@investmoney')->name('investmoney');
         Route::get('/get_filter_data', 'Dashboard\MyInvestmentController@get_filter_data')->name('get_filter_data');
         Route::get('/investment-details/{id}', 'Dashboard\MyInvestmentController@investmentDetails')->name('investmentdetails');
+
+        Route::post('/fullwithdrow-investment/{id}', 'Dashboard\MyInvestmentController@fullwithdrowInvestment')->name('fullwithdrowinvestment');
+        Route::post('/check-ledger-month', 'Dashboard\MyInvestmentController@checkLedgerMonth')->name('checkLedgerMonth');
+
         Route::post('/withdrow-investment/{id}', 'Dashboard\MyInvestmentController@withdrowInvestment')->name('withdrowinvestment');
         
         Route::get('/reffer-history', 'Dashboard\RefferController@index')->name('reffer_history');
         Route::post('/withdrow-reffer-request', 'Dashboard\RefferController@withdrowrefferrequest')->name('withdrow_reffer_request');
 
-        Route::get('/commission-history', 'Dashboard\CommissionController@index')->name('commission_history');
-        Route::post('/withdrow-commission-request', 'Dashboard\CommissionController@withdrowcommissionrequest')->name('withdrow_commission_request');
     }); 
 
 });

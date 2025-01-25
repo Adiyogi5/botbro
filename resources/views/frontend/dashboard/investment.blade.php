@@ -21,7 +21,7 @@
                                 action="{{ route('frontend.investmoney') }}" enctype="multipart/form-data">
                                 @csrf
                                 <div class="col">
-                                    <label for="invest_amount" class="form-label">Invest Amount</label>
+                                    <label for="invest_amount" class="form-label">Invest Amount <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" id="invest_amount" name="invest_amount"
                                         value="{{ old('invest_amount', $site_settings['invest_amount']) }}"
                                         min="{{ $site_settings['invest_amount'] }}">
@@ -30,20 +30,22 @@
                                 </div>
 
                                 <div class="col">
-                                    <label for="payment_type" class="form-label">Payment Type</label>
+                                    <label for="payment_type" class="form-label">Payment Type <span class="text-danger">*</span></label>
                                     <select class="form-control form-select" id="payment_type" name="payment_type">
-                                        <option value="0" {{ old('payment_type', '1') == '0' ? 'selected' : '' }}>Cash
-                                            On Delivery</option>
-                                        <option value="1" {{ old('payment_type', '1') == '1' ? 'selected' : '' }}>
-                                            Online Payment</option>
-                                    </select>
+                                        <option value="0" {{ old('payment_type', '0') == '0' ? 'selected' : '' }}>
+                                            Offline
+                                        </option>
+                                        <option value="1" {{ old('payment_type') == '1' ? 'selected' : '' }}>
+                                            Online
+                                        </option>
+                                    </select>                                    
                                     <label class="error" id="paymentTypeError">{{ $errors->first('payment_type') }}</label>
                                 </div>
 
-                                <div class="col" id="transactionDiv" style="display: none;">
-                                    <label for="transaction_id" class="form-label">Transaction ID</label>
+                                <div class="col" id="transactionDiv">
+                                    <label for="transaction_id" class="form-label">Transaction ID <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="transaction_id" name="transaction_id"
-                                        value="{{ old('transaction_id') }}">
+                                        value="{{ old('transaction_id') }}" placeholder="Enter Tranjection Id">
                                     <label class="error"
                                         id="transactionIdError">{{ $errors->first('transaction_id') }}</label>
                                 </div>
@@ -56,7 +58,7 @@
                                 </div>
 
                                 <div class="col">
-                                    <label for="date" class="form-label">Date</label>
+                                    <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
                                     <input type="date" class="form-control" id="date" name="date"
                                         value="{{ now()->toDateString() }}" readonly>
                                     <label class="error" id="dateError">{{ $errors->first('date') }}</label>
@@ -168,17 +170,17 @@
     <script type="text/javascript">
         $(document).ready(function() {
             // Handle Payment Type Selection
-            $("#payment_type").on("change", function() {
-                if ($(this).val() === "1") {
-                    // Online Payment: Show transaction ID field and make it required
-                    $("#transactionDiv").show();
-                    $("#transaction_id").prop("required", true);
-                } else {
-                    // Cash on Delivery: Hide transaction ID field and remove required attribute
-                    $("#transactionDiv").hide();
-                    $("#transaction_id").prop("required", false).val("");
-                }
-            }).trigger("change"); // Trigger the change event on page load
+            // $("#payment_type").on("change", function() {
+            //     if ($(this).val() === "1") {
+            //         // Online Payment: Show transaction ID field and make it required
+            //         $("#transactionDiv").show();
+            //         $("#transaction_id").prop("required", true);
+            //     } else {
+            //         // Cash on Delivery: Hide transaction ID field and remove required attribute
+            //         $("#transactionDiv").hide();
+            //         $("#transaction_id").prop("required", false).val("");
+            //     }
+            // }).trigger("change"); // Trigger the change event on page load
 
             // Form Validation
             $("#investmentForm").validate({
@@ -194,7 +196,7 @@
                         },
                     },
                     screenshot: {
-                        required: true,
+                        required: false,
                         accept: "image/jpeg,image/png,image/jpg",
                     },
                 },
