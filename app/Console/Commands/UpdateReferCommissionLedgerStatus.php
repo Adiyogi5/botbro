@@ -34,8 +34,10 @@ class UpdateReferCommissionLedgerStatus extends Command
     {
         try {
             DB::statement("SET SQL_MODE = ''");
-            $userslist = User::select('users.*', 'investments.id as invest_id', 'investments.user_id', 'investments.rate_of_intrest', 'investments.date')
+
+            $userslist = User::select('users.*', 'investments.id as invest_id', 'investments.user_id', 'investments.rate_of_intrest', 'investments.date', 'user_referrals.refer_id')
                 ->leftJoin('investments', 'investments.user_id', '=', 'users.id')
+                ->join('user_referrals', 'user_referrals.referral_id', '=', 'users.id')
                 ->where('users.status', 1)
                 ->whereNull('users.deleted_at')
                 ->where('investments.payment_status', 1)
@@ -49,51 +51,38 @@ class UpdateReferCommissionLedgerStatus extends Command
             }
 
             foreach ($userslist as $user) {
-
-                $userrefferBonus = User::select('users.*', 'user_referrals.refer_id', 'user_referrals.referral_id')
-                    ->join('user_referrals', 'user_referrals.referral_id', '=', 'users.id')
-                    ->where('user_referrals.referral_id', $user->id)
-                    ->where('users.status', 1)
-                    ->get();
-
-                $ledgerData = Ledger::where('user_id', $user->id)
-                    ->orderBy('id', 'desc')
+                $userInvestments = Ledger::where('user_id', $user->id)
                     ->whereNull('deleted_at')
-                    ->get();
+                    ->sum('balance');
 
                 $latestLedgerEntry = RefferEarnsLedger::where('user_id', $user->user_id)
-                    ->whereDate('date', '!=', Carbon::now()->format('Y-m-d'))
                     ->orderBy('created_at', 'desc')
                     ->first();
 
-                if ($latestLedgerEntry && $latestLedgerEntry->balance > 0) {
+                if ($latestLedgerEntry && $user->refer_id == $latestLedgerEntry->user_id) {
                     $rateOfInterest  = $user->rate_of_intrest;
-                    $previousBalance = $latestLedgerEntry->balance;
+                    $previousBalance = $latestLedgerEntry->balance ?? 0;
 
                     // Convert the ledger date to Carbon instance
                     $ledgerDateCarbon = Carbon::parse($latestLedgerEntry->date);
 
-                    // Get the total number of days in the month of the ledger date
+                    // Get total number of days in the month and remaining days
                     $totalMonthDays = $ledgerDateCarbon->daysInMonth;
-
-                    // Get the day of the month from the ledger entry date
-                    $ledgerDay = $ledgerDateCarbon->day;
-
-                    // Calculate remaining days in the month
-                    $remainingDays = $totalMonthDays - $ledgerDay;
+                    $ledgerDay      = $ledgerDateCarbon->day;
+                    $remainingDays  = $totalMonthDays - $ledgerDay;
 
                     if ($remainingDays > 0) {
-                        // Calculate daily interest
+                        // Calculate daily interest and total interest amount
                         $dailyInterestRate = ($rateOfInterest / 100) / $totalMonthDays;
-                        $interestAmount    = $previousBalance * $dailyInterestRate * $remainingDays;
+                        $interestAmount    = $userInvestments * $dailyInterestRate * $remainingDays;
 
                         // New balance after applying interest
                         $newBalance = $previousBalance + $interestAmount;
 
                         // Insert new ledger entry with calculated balance
-                        Ledger::create([
-                            'user_id'         => $user->user_id,
-                            'invest_id'       => $user->invest_id,
+                        RefferEarnsLedger::create([
+                            'user_id'         => $user->refer_id,
+                            'refer_id'        => $user->id,
                             'date'            => Carbon::now()->format('Y-m-d'),
                             'description'     => "Interest applied for {$remainingDays} days",
                             'rate_of_intrest' => $rateOfInterest,
@@ -102,14 +91,15 @@ class UpdateReferCommissionLedgerStatus extends Command
                             'balance'         => $newBalance,
                         ]);
 
-                        Log::info("Ledger updated for user ID: {$user->user_id}, Interest for {$remainingDays} days: {$interestAmount}, New Balance: {$newBalance}");
+                        Log::info("Ledger updated for user ID: {$user->id}, Interest for {$remainingDays} days: {$interestAmount}, New Balance: {$newBalance}");
                     } else {
-                        Log::info("No remaining days to apply interest for user ID: {$user->user_id}");
+                        Log::info("No remaining days to apply interest for user ID: {$user->id}");
                     }
                 } else {
-                    Log::info("No valid ledger entry found for user ID: {$user->user_id}");
+                    Log::info("No valid ledger entry found for user ID: {$user->id}");
                 }
             }
+
             return Command::SUCCESS;
         } catch (\Exception $e) {
             Log::error('Error updating ledger status: ' . $e->getMessage());
