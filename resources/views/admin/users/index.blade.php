@@ -11,21 +11,21 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-end">
                             <div class="me-auto row">
-                                <div class="col-md-6">
-                                    <small class="fw-bold" for="purchase_status">Purchase Status</small>
-                                    <select class="form-select" id="purchase_status" name="purchase_status">
+                                <div class="col-md-7">
+                                    <small class="fw-bold" for="is_approved">Membership Status</small>
+                                    <select class="form-select" id="is_approved" name="is_approved">
                                         <option value="">All</option>
-                                        <option value="0">Only Registration</option>
-                                        <option value="1">Delivery Successfully</option>
-                                        <option value="2">Purchased (Under Return Days) </option>
+                                        <option value="0">Pending</option>
+                                        <option value="1">Approved</option>
+                                        <option value="2">Rejected</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
-                                    <small class="fw-bold" for="is_agent_allow">Customer</small>
+                                <div class="col-md-5">
+                                    <small class="fw-bold" for="is_agent_allow">Bedge Level</small>
                                     <select class="form-select" id="is_agent_allow" name="is_agent_allow">
                                         <option value="">All</option>
-                                        <option value="1">Agent</option>
                                         <option value="0">Member</option>
+                                        <option value="1">Agent</option>
                                     </select>
                                 </div>
                             </div>
@@ -42,7 +42,6 @@
                                         <th>Name</th>
                                         <th>Mobile</th>
                                         <th>Badge</th>
-                                        <th>Purchase Stutus</th>
                                         <th>Membership Stutus</th>
                                         <th>Registered On</th>
                                         <th class="statuswidth">Status</th>
@@ -79,7 +78,7 @@
                     url: "{{ route('admin.customer.index') }}",
                     type: "GET",
                     data: function(d) {
-                        d.purchase_status = $('#purchase_status').val();
+                        d.is_approved = $('#is_approved').val();
                         d.is_agent_allow = $('#is_agent_allow').val();
                     }
                 },
@@ -94,9 +93,6 @@
                     },
                     {
                         data: 'badge_level'
-                    },
-                    {
-                        data: 'purchase_status'
                     },
                     {
                         data: 'is_approved'
@@ -127,11 +123,8 @@
                     });
                 }
             });
-            $('#purchase_status').on('change', function() {
-                $('.datatable').DataTable().draw(true);
-            });
-            $('#is_agent_allow').on('change', function() {
-                $('.datatable').DataTable().draw(true);
+            $('#is_approved, #is_agent_allow').on('change', function() {
+                tableObj.draw();
             });
         });
 

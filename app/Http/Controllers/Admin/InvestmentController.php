@@ -35,8 +35,7 @@ class InvestmentController extends Controller
             $date                 = $request->date ?? null;
             $investment_paystatus = $request->investment_paystatus ?? null;
 
-            $records = Investment::select('*')
-                ->where('deleted_at', null);
+            $records = Investment::withTrashed()->select('*');
 
             if (! empty($date)) {
                 $records = $records->whereDate('investments.date', '=', date('Y-m-d', strtotime($date)));
@@ -44,11 +43,11 @@ class InvestmentController extends Controller
 
             if (! empty($investment_paystatus)) {
                 if ($investment_paystatus == 1) {
-                    $records = $records->where('investments.payment_type', '=', 0);
+                    $records = $records;
                 } elseif ($investment_paystatus == 2) {
-                    $records = $records->where('investments.payment_type', '=', 1)->where('investments.payment_status', '=', 1);
+                    $records = $records->where('investments.payment_status', '=', 1);
                 } elseif ($investment_paystatus == 3) {
-                    $records = $records->where('investments.payment_type', '=', 1)->where('investments.payment_status', '=', 0);
+                    $records = $records->where('investments.payment_status', '=', 0);
                 }
             }
 
@@ -61,9 +60,10 @@ class InvestmentController extends Controller
                 })
                 ->editColumn('payment_status', function ($row) {
                     if ($row->payment_type == 0) {
-                        $sname = 'COD';
+                        $sname = '<b>Offline </b> : ';
+                        $sname .= ($row->payment_status == 0) ? 'Pending' : 'Paid';
                     } else {
-                        $sname = '<b>Online Payment</b>: ';
+                        $sname = '<b>Online </b> : ';
                         $sname .= ($row->payment_status == 0) ? 'Pending' : 'Paid';
                     }
                     return $sname;
@@ -76,11 +76,11 @@ class InvestmentController extends Controller
                         ->first();
 
                     // Case 1: No membership and Pending
-                    // if (is_null($investmentDetails) && $row->is_approved == 0) {
-                    //     return '<div class="d-flex align-items-center">
-                    //                 <small class="btn btn-sm btn-primary rounded mx-auto px-3">Rejected</small>
-                    //             </div>';
-                    // }
+                    if (is_null($investmentDetails) && $row->is_approved == 0) {
+                        return '<div class="d-flex align-items-center">
+                                    <small class="btn btn-sm btn-danger rounded mx-auto px-3">Rejected</small>
+                                </div>';
+                    }
                     // Case 2: Pending but membership exists
                     if ($row->is_approved == 0) {
                         $approveButton = '<button data-id="' . $row->id . '" class="btn btn-sm btn-success approve-investment" title="Approve Investment"><i class="fa-solid fa-check"></i></button>';
@@ -195,6 +195,10 @@ class InvestmentController extends Controller
         $investId = $request->input('id');
 
         $investment = Investment::where('id', $investId)->first();
+        $investment->update([
+            'payment_status' => 0,
+            'is_approved'    => 0,
+        ]);
         if ($investment) {
             $investment->delete();
         }

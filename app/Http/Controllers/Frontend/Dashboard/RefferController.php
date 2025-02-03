@@ -51,7 +51,18 @@ class RefferController extends Controller
             ->whereNull('deleted_at')
             ->get();
 
-        return view('frontend.dashboard.reffer_history', compact('title', 'user', 'my_reffer', 'my_balance', 'requestAmount', 'rejectAmount', 'my_withdrow_request','ledgerData'));
+        $approvedMemberships = UserReferral::select('user_referrals.*', 'users.is_approved')
+            ->leftjoin('users', 'users.id', '=', 'user_referrals.refer_id')
+            ->where('user_referrals.referral_id', $user->id)
+            ->where('users.is_approved', 1)
+            ->count();
+           
+        $totalMembers = UserReferral::select('user_referrals.*', 'users.is_approved')
+            ->leftjoin('users', 'users.id', '=', 'user_referrals.refer_id')
+            ->where('user_referrals.referral_id', $user->id)
+            ->count();
+         
+        return view('frontend.dashboard.reffer_history', compact('title', 'user', 'my_reffer', 'my_balance', 'requestAmount', 'rejectAmount', 'my_withdrow_request','ledgerData','approvedMemberships','totalMembers'));
     }
 
     public function withdrowrefferrequest(Request $request)

@@ -3,8 +3,10 @@ namespace App\Http\Controllers\Frontend\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Investment;
+use App\Models\Ledger;
 use App\Models\MembershipDetail;
 use App\Models\Order;
+use App\Models\RefferEarnsLedger;
 use App\Models\User;
 use App\Models\UserReferral;
 use Illuminate\Http\Request;
@@ -28,36 +30,53 @@ class DashboardController extends Controller
             ->leftjoin('users', 'users.id', '=', 'user_referrals.referral_id')
             ->first();
 
-        $investmentData = Investment::where('investments.user_id', $user->id)
-            ->whereNull('investments.deleted_at')
-            ->selectRaw('SUM(invest_amount) as total_sum, MAX(id) as last_id')
-            ->first();
+        $investmentData = Ledger::select('balance')
+            ->where('user_id', $user->id)
+            ->whereNull('deleted_at')
+            ->whereIn('id', function ($query) use ($user) {
+                $query->selectRaw('MAX(id)')
+                    ->from('ledgers')
+                    ->whereColumn('ledgers.invest_id', 'invest_id') 
+                    ->where('user_id', $user->id)
+                    ->whereNull('deleted_at')
+                    ->groupBy('invest_id'); 
+            })
+            ->sum('balance'); 
+        
 
-        $latestInvestment   = Investment::find($investmentData->last_id);
-        $totalInvestmentSum = $investmentData->total_sum;
-
-        $user_refferBalance = User::select('users.id', 'users.user_reffer_balance')
-            ->Where('id', $user->id)->whereNull('deleted_at')
+        $user_refferBalance = RefferEarnsLedger::Where('user_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->whereNull('deleted_at')
             ->first();
 
         $user_commissionBalance = User::select('users.id', 'users.user_commission_balance')
             ->Where('id', $user->id)->whereNull('deleted_at')
             ->first();
 
-        $total_order_count = Order::Where('user_id', $user->id)
-            ->whereNotIn('order_status_id', [0])
-            ->whereNull('deleted_at')->count();
-        $delivered_order_count = Order::Where('user_id', $user->id)
-            ->where('order_status_id', 5)
-            ->whereNull('deleted_at')->count();
-        $cancel_order_count = Order::Where('user_id', $user->id)
-            ->where('order_status_id', 6)
-            ->whereNull('deleted_at')->count();
-        $pending_order_count = Order::Where('user_id', $user->id)
-            ->whereNotIn('order_status_id', [5, 6])
-            ->whereNull('deleted_at')->count();
-
-        return view('frontend.dashboard.dashboard', compact('title', 'user_membership', 'total_order_count', 'delivered_order_count', 'cancel_order_count', 'pending_order_count', 'investmentData', 'totalInvestmentSum', 'user_refferBalance', 'user_commissionBalance', 'refer_by'));
+        $approvedMemberships = UserReferral::select('user_referrals.*', 'users.is_approved')
+            ->leftjoin('users', 'users.id', '=', 'user_referrals.refer_id')
+            ->where('user_referrals.referral_id', $user->id)
+            ->where('users.is_approved', 1)
+            ->count();
+           
+        $totalMembers = UserReferral::select('user_referrals.*', 'users.is_approved')
+            ->leftjoin('users', 'users.id', '=', 'user_referrals.refer_id')
+            ->where('user_referrals.referral_id', $user->id)
+            ->count();
+            
+        $investmentCounts = Investment::where('user_id', $user->id)
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw('SUM(CASE WHEN is_approved = 1 AND deleted_at IS NULL THEN 1 ELSE 0 END) as approved')
+            ->selectRaw('SUM(CASE WHEN is_approved = 0 AND deleted_at IS NULL THEN 1 ELSE 0 END) as pending')
+            ->selectRaw('SUM(CASE WHEN deleted_at IS NOT NULL THEN 1 ELSE 0 END) as rejected')
+            ->first();
+        
+        $total_investment_count = $investmentCounts->total;
+        $approved_investment_count = $investmentCounts->approved;
+        $pending_investment_count = $investmentCounts->pending;
+        $rejected_investment_count = $investmentCounts->rejected;
+        
+        return view('frontend.dashboard.dashboard', compact('title', 'user_membership', 'approvedMemberships', 'totalMembers',  'investmentData', 'user_refferBalance', 'user_commissionBalance', 'refer_by','total_investment_count','approved_investment_count','pending_investment_count','rejected_investment_count'));
     }
 
     public function qrcodepayment(Request $request)

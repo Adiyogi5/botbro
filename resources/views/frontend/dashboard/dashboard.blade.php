@@ -302,12 +302,27 @@
                                                 <span>{{ \Carbon\Carbon::parse($user_membership->membership_end_date)->format('d-m-Y') }}</span>
                                             </p>
                                             @endif
+                                            @if ($approvedMemberships > 5 || $totalMembers > 6)
+                                            <p class="dash-total d-flex text-center justify-content-between">
+                                                <span><strong>Badge Level : </strong></span>
+                                                <span class="py-0 px-2 rounded-2 my-auto bg-secondary">
+                                                    <i class="fa-solid fa-user-secret"></i> Agent
+                                                </span>
+                                            </p>
+                                            @else
+                                            <p class="dash-total d-flex text-center justify-content-between">
+                                                <span><strong>Badge Level : </strong></span>
+                                                <span class="py-0 px-2 rounded-2 my-auto bg-secondary">
+                                                    <i class="fa-solid fa-user"></i> Normal User
+                                                </span>
+                                            </p>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
                            
-                            {{-- <div class="row row-cols-1 g-3 mt-3">
+                            <div class="row row-cols-1 g-3 mt-3">
                                 <div class="col-lg-3 col-md-6 col-6 my-auto">
                                     <div class="card h-100 mb-3 card-dash bg-white overflow-hidden">
                                         <img src="{{ asset('public/images/Ellipse.png') }}"
@@ -320,8 +335,8 @@
                                             </div>
                                             <div class="col-md-7 col-7">
                                                 <div class="card-body card-ship-padd d-grid">
-                                                    <h5 class="card-title dash-number">{{ $total_order_count }}</h5>
-                                                    <p class="dash-total"> Total
+                                                    <h5 class="card-title dash-number">{{ $total_investment_count }}</h5>
+                                                    <p class="dash-total"> Total Invetment
                                                     </p>
                                                 </div>
                                             </div>
@@ -340,8 +355,8 @@
                                             </div>
                                             <div class="col-md-7 col-7">
                                                 <div class="card-body card-ship-padd d-grid">
-                                                    <h5 class="card-title dash-number">{{ $delivered_order_count }}</h5>
-                                                    <p class="dash-total"> Delivered
+                                                    <h5 class="card-title dash-number">{{ $approved_investment_count }}</h5>
+                                                    <p class="dash-total"> Approved Investment
                                                     </p>
                                                 </div>
                                             </div>
@@ -360,8 +375,8 @@
                                             </div>
                                             <div class="col-md-7 col-7">
                                                 <div class="card-body card-ship-padd d-grid">
-                                                    <h5 class="card-title dash-number">{{ $cancel_order_count }}</h5>
-                                                    <p class="dash-total"> Cancel
+                                                    <h5 class="card-title dash-number">{{ $pending_investment_count }}</h5>
+                                                    <p class="dash-total"> Pending Investment
                                                     </p>
                                                 </div>
                                             </div>
@@ -380,41 +395,41 @@
                                             </div>
                                             <div class="col-md-7 col-7">
                                                 <div class="card-body card-ship-padd d-grid">
-                                                    <h5 class="card-title dash-number">{{ $pending_order_count }}</h5>
-                                                    <p class="dash-total"> Pending
+                                                    <h5 class="card-title dash-number">{{ $rejected_investment_count }}</h5>
+                                                    <p class="dash-total"> Rejected Investment
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
 
                             <div class="row row-cols-1 g-3 mt-3">
-                                @if (!$totalInvestmentSum)
+                                @if (!$investmentData)
                                     <div class="col-12">
                                         <span></span>
                                     </div>
                                 @else
-                                    @isset($totalInvestmentSum)
-                                        <div class="col-xl-4 col-lg-6 col-md-6 col-12 my-auto">
+                                    @isset($investmentData)
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-12 my-auto">
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
-                                                    <p class="dash-balance">Total Investment Balance </p>
-                                                    <h5 class="card-title dash-money">₹ {!! $totalInvestmentSum !!}</h5>
+                                                    <p class="dash-balance">Investment Balance </p>
+                                                    <h5 class="card-title dash-money">₹ {!! $investmentData !!}</h5>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-4 col-lg-6 col-md-6 col-12 my-auto">
+                                        <div class="col-xl-6 col-lg-6 col-md-6 col-12 my-auto">
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
-                                                    <p class="dash-balance">Current Referral Balance</p>
-                                                    <h5 class="card-title dash-money">₹ {!! $user_refferBalance->user_reffer_balance ? $user_refferBalance->user_reffer_balance : 0 !!}</h5>
+                                                    <p class="dash-balance">Referral & Commission Balance</p>
+                                                    <h5 class="card-title dash-money">₹ {!! $user_refferBalance->balance ? $user_refferBalance->balance : 0 !!}</h5>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-xl-4 col-lg-6 col-md-6 col-12 my-auto">
+                                        {{-- <div class="col-xl-4 col-lg-6 col-md-6 col-12 my-auto">
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
                                                     <p class="dash-balance">Current Commission Balance </p>
@@ -423,7 +438,7 @@
                                                     </h5>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     @endisset
                                 @endif
                             </div>

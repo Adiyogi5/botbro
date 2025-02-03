@@ -36,5 +36,11 @@ define('TRANSFER_FEE','2');
 
 define('CURRENCY_SYMBOL','₹');
 
+define('COMMISSION', [
+	1 => ["label" => "Less Than or Equal to 1Cr", "max" => 10000000, "rate" => 1],
+	2 => ["label" => "1Cr To 5Cr", "max" => 50000000, "rate" => 2], 
+	3 => ["label" => "5Cr To 10Cr", "max" => 100000000, "rate" => 3], 
+	4 => ["label" => "Above 10Cr", "max" => null, "rate" => 5],      
+]);
 define('STATUS_TYPE',[1=>"Assign",2=>"Accepted",3=>"Reject",4=>"No Reply"]);
 define('PAYMENT_TYPE',[1=>"Online",2=>"Cash On Delivery"]);

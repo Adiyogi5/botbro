@@ -36,6 +36,7 @@ class UpdateLedgerStatus extends Command
             $userslist = User::select('users.*', 'investments.id as invest_id', 'investments.user_id', 'investments.rate_of_intrest', 'investments.date')
                 ->leftJoin('investments', 'investments.user_id', '=', 'users.id')
                 ->where('users.status', 1)
+                ->where('users.is_approved', 1)
                 ->whereNull('users.deleted_at')
                 ->where('investments.payment_status', 1)
                 ->where('investments.is_approved', 1)

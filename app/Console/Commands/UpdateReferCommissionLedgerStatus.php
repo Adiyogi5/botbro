@@ -35,14 +35,12 @@ class UpdateReferCommissionLedgerStatus extends Command
         try {
             DB::statement("SET SQL_MODE = ''");
 
-            $userslist = User::select('users.*', 'investments.id as invest_id', 'investments.user_id', 'investments.rate_of_intrest', 'investments.date', 'user_referrals.refer_id')
-                ->leftJoin('investments', 'investments.user_id', '=', 'users.id')
+            $userslist = User::select('users.*', 'user_referrals.refer_id')
                 ->join('user_referrals', 'user_referrals.referral_id', '=', 'users.id')
                 ->where('users.status', 1)
+                ->where('users.is_approved', 1)
                 ->whereNull('users.deleted_at')
-                ->where('investments.payment_status', 1)
-                ->where('investments.is_approved', 1)
-                ->whereNull('investments.deleted_at')
+                ->groupBy('users.id')
                 ->get();
 
             if ($userslist->isEmpty()) {
@@ -50,41 +48,97 @@ class UpdateReferCommissionLedgerStatus extends Command
                 return Command::SUCCESS;
             }
 
-            foreach ($userslist as $user) {
-                $userInvestments = Ledger::where('user_id', $user->id)
-                    ->whereNull('deleted_at')
-                    ->sum('balance');
+            $usersreferlist = User::select('users.*', 'user_referrals.refer_id')
+                ->join('user_referrals', 'user_referrals.referral_id', '=', 'users.id')
+                ->where('users.status', 1)
+                ->where('users.is_approved', 1)
+                ->whereNull('users.deleted_at')
+                ->get();
 
-                $latestLedgerEntry = RefferEarnsLedger::where('user_id', $user->user_id)
+            foreach ($userslist as $user) {
+                $userReferrals = $usersreferlist->where('id', $user->id)->pluck('refer_id')->toArray();
+
+                // Get the latest ledger balance for each user
+                $userReferandCommissions = Ledger::whereIn('user_id', $userReferrals)
+                    ->whereNull('deleted_at')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->groupBy('user_id')
+                    ->map(function ($records) {
+                        return $records->first()->balance; 
+                    });
+
+                $totalBalance = $userReferandCommissions->sum();
+
+                // Get the correct rate of interest based on total balance
+                $rateOfInterest = 0;
+                foreach (COMMISSION as $commission) {
+                    if ($commission['max'] === null || $totalBalance <= $commission['max']) {
+                        $rateOfInterest = $commission['rate'];
+                        break; 
+                    }
+                }
+
+                ################### Average of All Date ###################
+                ###########################################################
+                $latestLedgerEntry = Ledger::whereIn('user_id', $userReferrals)
+                    ->whereNull('deleted_at')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->groupBy('user_id');
+
+                // Collect all dates from all users
+                $allDates = $latestLedgerEntry->flatMap(function ($records) {
+                    return $records->pluck('date')->map(function ($date) {
+                        return strtotime($date); 
+                    });
+                });
+
+                // Calculate the average timestamp
+                $averageTimestamp = $allDates->avg();
+
+                // Convert the average timestamp back to a date
+                $averageDate = date('Y-m-d', $averageTimestamp);
+
+                // Now, get the latest record date for each user
+                $latestLedgerEntry = $latestLedgerEntry->map(function ($records) {
+                    return $records->first()->date;
+                });
+
+                $commissionIntrestDay = [
+                    'latestLedgerEntry' => $latestLedgerEntry,
+                    'averageDate'       => $averageDate,
+                ];
+
+                ################### Check Legder Data and Give Intrest ###################
+                ##########################################################################
+                $latestrefercommissionLedgerEntry = RefferEarnsLedger::where('user_id', $user->id)
                     ->orderBy('created_at', 'desc')
                     ->first();
-
-                if ($latestLedgerEntry && $user->refer_id == $latestLedgerEntry->user_id) {
-                    $rateOfInterest  = $user->rate_of_intrest;
-                    $previousBalance = $latestLedgerEntry->balance ?? 0;
+              
+                if ($latestrefercommissionLedgerEntry && $user->id == $latestrefercommissionLedgerEntry->user_id) {
+                    $previousBalance = $latestrefercommissionLedgerEntry->balance ?? 0;
 
                     // Convert the ledger date to Carbon instance
-                    $ledgerDateCarbon = Carbon::parse($latestLedgerEntry->date);
-
-                    // Get total number of days in the month and remaining days
-                    $totalMonthDays = $ledgerDateCarbon->daysInMonth;
-                    $ledgerDay      = $ledgerDateCarbon->day;
-                    $remainingDays  = $totalMonthDays - $ledgerDay;
+                    $ledgerDateCarbon = Carbon::parse($averageDate);
+                    $totalMonthDays   = $ledgerDateCarbon->daysInMonth;
+                    $ledgerDay        = $ledgerDateCarbon->day;
+                    $remainingDays    = $totalMonthDays - $ledgerDay;
 
                     if ($remainingDays > 0) {
                         // Calculate daily interest and total interest amount
                         $dailyInterestRate = ($rateOfInterest / 100) / $totalMonthDays;
-                        $interestAmount    = $userInvestments * $dailyInterestRate * $remainingDays;
+                        $interestAmount    = $totalBalance * $dailyInterestRate * $remainingDays;
 
                         // New balance after applying interest
                         $newBalance = $previousBalance + $interestAmount;
 
                         // Insert new ledger entry with calculated balance
                         RefferEarnsLedger::create([
-                            'user_id'         => $user->refer_id,
-                            'refer_id'        => $user->id,
+                            'user_id'         => $user->id,
+                            'refer_id'        => 0,
                             'date'            => Carbon::now()->format('Y-m-d'),
-                            'description'     => "Interest applied for {$remainingDays} days",
+                            'description'     => "Referral commission interest applied for {$remainingDays} days on the total Investment.",
                             'rate_of_intrest' => $rateOfInterest,
                             'credit'          => $interestAmount,
                             'debit'           => 0,

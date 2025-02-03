@@ -40,8 +40,8 @@
                                             <select class="form-select" id="investment_paystatus"
                                                 name="investment_paystatus">
                                                 <option value="">All</option>
-                                                <option value="2">Online Paid</option>
-                                                <option value="3">Online Unpaid</option>
+                                                <option value="2">Paid</option>
+                                                <option value="3">Unpaid</option>
                                             </select>
                                         </div>
                                     </div>
@@ -53,9 +53,9 @@
                                 </div>
 
                                 <div class="col-12" style="border-top: 1px solid #ccc; margin-top:10px;">
-                                    <small><b>NOTE : </b> <b style="color:#FF0000;background-color:#FF0000;">Cod</b>
-                                        Rejected,&nbsp; <b style="color:#009900;background-color:#009900;">Cod</b>
-                                        Approved,&nbsp; <b style="color:#e7d10b;background-color:#e7d10b;">Cod</b> Pending&nbsp;
+                                    <small><b>NOTE : </b> <b style="color:#FF0000;background-color:#FF0000;">Offline</b>
+                                        Rejected,&nbsp; <b style="color:#009900;background-color:#009900;">Offline</b>
+                                        Approved,&nbsp; <b style="color:#e7d10b;background-color:#e7d10b;">Offline</b> Pending&nbsp;
                                     </small>
                                 </div>
                             </div>

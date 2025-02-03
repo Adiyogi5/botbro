@@ -47,17 +47,40 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
 
-            $purchase_status = $request->purchase_status ?? null;
-            $is_agent_allow  = $request->is_agent_allow ?? null;
+            $is_agent_allow = $request->is_agent_allow ?? null;
+            $is_approved    = $request->is_approved ?? null;
 
-            $records = User::select('users.*', 'badge_masters.name as badge_level', 'users.created_at as date')
-                ->leftjoin('badge_masters', 'badge_masters.id', '=', 'users.badge_status')
-                ->where([['users.deleted_at', null]]);
-            if (! empty($purchase_status) || $purchase_status == "0") {
-                $records = $records->where('users.purchase_status', '=', $purchase_status);
+            $records = User::select(
+                'users.*',
+                DB::raw("
+                        CASE
+                            WHEN (SELECT COUNT(*) FROM user_referrals
+                                  JOIN users ON users.id = user_referrals.refer_id
+                                  WHERE user_referrals.referral_id = users.id
+                                  AND users.is_approved = 1) > 5
+                            OR (SELECT COUNT(*) FROM user_referrals
+                                  WHERE user_referrals.referral_id = users.id) > 6
+                            THEN 'Agent'
+                            ELSE 'Member'
+                        END AS badge_level
+                    "),
+                'users.created_at as date'
+            )
+                ->leftJoin('user_referrals', 'users.id', '=', 'user_referrals.refer_id')
+                ->whereNull('users.deleted_at');
+
+            // Filter by membership status
+            if (! is_null($is_approved) && $is_approved !== '') {
+                $records->where('users.is_approved', $is_approved);
             }
-            if (! empty($is_agent_allow) || $is_agent_allow == "0") {
-                $records = $records->where('users.is_agent_allow', '=', $is_agent_allow);
+
+            // Filter by badge level (Member or Agent)
+            if (! is_null($is_agent_allow) && $is_agent_allow !== '') {
+                if ($is_agent_allow == 1) {
+                    $records->having('badge_level', 'Agent');
+                } else {
+                    $records->having('badge_level', 'Member');
+                }
             }
 
             return DataTables::of($records)
@@ -72,16 +95,6 @@ class UserController extends Controller
                 })
                 ->editColumn('date', function ($row) {
                     return date('d-m-Y h:i a', strtotime($row['date']));
-                })
-                ->addColumn('purchase_status', function ($row) {
-                    if ($row->purchase_status == 0) {
-                        $purchase_status = 'Only Registration';
-                    } else if ($row->purchase_status == 1) {
-                        $purchase_status = 'Delivery Successfully';
-                    } else if ($row->purchase_status == 2) {
-                        $purchase_status = 'Purchased (Under Return Days)';
-                    }
-                    return '<small>' . $purchase_status . '</small>';
                 })
                 ->addColumn('is_approved', function ($row) {
                     // Fetch membership details
@@ -126,7 +139,7 @@ class UserController extends Controller
                     <button data-id="' . $row->id . '" class="btn btn-sm btn-danger delete_record" title="Delete"><i class="fa fa-trash"></i></button>';
                 })
                 ->removeColumn('id')
-                ->rawColumns(['status', 'purchase_status', 'is_approved', 'name', 'action'])->make(true);
+                ->rawColumns(['status', 'is_approved', 'name', 'action'])->make(true);
         }
 
         $title  = "Customer";
@@ -168,10 +181,10 @@ class UserController extends Controller
                 $userLedgerBalance = RefferEarnsLedger::where('user_id', $userrefferBonus->referral_id)
                     ->orderBy('created_at', 'desc')
                     ->first();
-            
+
                 $previousBalance = $userLedgerBalance ? $userLedgerBalance->balance : 0;
-                $interestAmount  = 2000;  // Consider making this dynamic if needed
-            
+                $interestAmount  = 2000; // Consider making this dynamic if needed
+
                 RefferEarnsLedger::create([
                     'user_id'         => $userrefferBonus->referral_id,
                     'refer_id'        => $userrefferBonus->refer_id,
@@ -182,10 +195,10 @@ class UserController extends Controller
                     'debit'           => 0,
                     'balance'         => $previousBalance + $interestAmount,
                 ]);
-            
+
                 // Optional: Log success message
                 Log::info("Referral balance updated and ledger entry created for user ID: {$userrefferBonus->referral_id}.");
-            }            
+            }
 
             return response()->json(['success' => true, 'message' => 'Membership approved successfully.']);
         } catch (\Exception $e) {
@@ -194,27 +207,27 @@ class UserController extends Controller
     }
 
 //     $userledgerBalance = User::select('users.*', 'reffer_earns_ledgers.refer_id', 'reffer_earns_ledgers.user_id')
-//     ->join('reffer_earns_ledgers', 'reffer_earns_ledgers.user_id', '=', 'users.id')
-//     ->where('reffer_earns_ledgers.refer_id', $userId)
-//     ->where('users.status', 1)
-//     ->first();
+    //     ->join('reffer_earns_ledgers', 'reffer_earns_ledgers.user_id', '=', 'users.id')
+    //     ->where('reffer_earns_ledgers.refer_id', $userId)
+    //     ->where('users.status', 1)
+    //     ->first();
 
 // // If referral details are found, update balance
-// if ($userrefferBonus) {
+    // if ($userrefferBonus) {
 
 //     RefferEarnsLedger::create([
-//         'user_id'         => $userrefferBonus->referral_id,
-//         'refer_id'        => $userrefferBonus->refer_id,
-//         'date'            => now()->format('Y-m-d'),
-//         'description'     => 'Your Refferal -'. $user->name .' Membership Approved.',
-//         'rate_of_intrest' => 0,
-//         'credit'          => 2000,
-//         'debit'           => 0,
-//         'balance'         => $userledgerBalance ? $userledgerBalance->balance + 2000 : 2000,
-//     ]);
-//     // Optional: Log success message
-//     Log::info("Referral balance updated and ledger entry created for user ID: {$userrefferBonus->referral_id}.");
-// }
+    //         'user_id'         => $userrefferBonus->referral_id,
+    //         'refer_id'        => $userrefferBonus->refer_id,
+    //         'date'            => now()->format('Y-m-d'),
+    //         'description'     => 'Your Refferal -'. $user->name .' Membership Approved.',
+    //         'rate_of_intrest' => 0,
+    //         'credit'          => 2000,
+    //         'debit'           => 0,
+    //         'balance'         => $userledgerBalance ? $userledgerBalance->balance + 2000 : 2000,
+    //     ]);
+    //     // Optional: Log success message
+    //     Log::info("Referral balance updated and ledger entry created for user ID: {$userrefferBonus->referral_id}.");
+    // }
 
     public function rejectMembership(Request $request)
     {
@@ -749,6 +762,36 @@ class UserController extends Controller
         UserReferralWithdrawRequest::where('id', $id)->update(['status' => 2]);
 
         return Redirect::back()->with('error', 'Fund Request Rejected Successfully !!');
+    }
+
+    public function user_referandcommission(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $records = RefferEarnsLedger::where('user_id', $id)
+                ->orderBy('id', 'desc')
+                ->whereNull('deleted_at')
+                ->get();
+
+            return DataTables::of($records)
+                ->editColumn('date', function ($row) {
+                    return date('d-m-Y', strtotime($row->date));
+                })
+                ->editColumn('rate_of_intrest', function ($row) {
+                    return $row->rate_of_intrest > 0 ? $row->rate_of_intrest . '%' : '--';
+                })
+                ->editColumn('debit', function ($row) {
+                    return $row->debit ? '<span class="text-danger">' . number_format($row->debit, 2) . '</span>' : '--';
+                })
+                ->editColumn('credit', function ($row) {
+                    return $row->credit ? '<span class="text-success">' . number_format($row->credit, 2) . '</span>' : '--';
+                })
+                ->editColumn('balance', function ($row) {
+                    return '<span class="fw-bold text-primary">' . number_format($row->balance, 2) . '</span>';
+                })
+                ->removeColumn('id')
+                ->rawColumns(['debit', 'credit', 'balance']) // Allow HTML formatting
+                ->make(true);
+        }
     }
 
     public function user_address(Request $request, $id)

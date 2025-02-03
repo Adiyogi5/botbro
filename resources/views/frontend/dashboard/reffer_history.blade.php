@@ -21,6 +21,15 @@
 
                             <div class="col-12 d-flex justify-content-between align-item-self mb-1">
                                 <p class="dash-category mb-0">Referral History</p>
+                                @if ($approvedMemberships > 5 || $totalMembers > 6)
+                                    <h5 class="ms-auto my-auto py-1 px-3 rounded-1 text-white bg-secondary">
+                                        <i class="fa-solid fa-user-secret"></i> Agent
+                                    </h5>
+                                @else
+                                    <h5 class="ms-auto my-auto py-1 px-3 rounded-1 text-white bg-secondary">
+                                        <i class="fa-solid fa-user"></i> Member
+                                    </h5>
+                                @endif
                                 <h5 class="ms-auto my-auto py-1 px-2 rounded-1 text-white bg-secondary">Referral Balance :
                                     {{ CURRENCY_SYMBOL }}{{ $my_balance->balance }}</h5>
                             </div>

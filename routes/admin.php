@@ -145,12 +145,12 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
         Route::get('/customer/referral-withdraw-approve/{user_id}','UserController@referral_withdraw_approve')->name('customer.referral_withdraw_approve'); 
 
         Route::get('/customer/{user_id}/user_address','UserController@user_address')->name('customer.user_address'); 
+        Route::get('/customer/{user_id}/user_referandcommission','UserController@user_referandcommission')->name('customer.user_referandcommission'); 
         Route::get('/customer/{user_id}/user_rewards','UserController@user_rewards')->name('customer.user_rewards'); 
         Route::get('/customer/{user_id}/user_profit_sharing','UserController@user_profit_sharing')->name('customer.user_profit_sharing'); 
 
         Route::post('/approve-membership', 'UserController@approveMembership')->name('approve.membership');
         Route::post('/reject-membership', 'UserController@rejectMembership')->name('reject.membership');
-
 
         // investments Route
         Route::resource('/investments', 'InvestmentController');
@@ -159,7 +159,6 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function(){
 
         Route::post('/approve-investment', 'InvestmentController@approveInvestment')->name('approve.investment');
         Route::post('/reject-investment', 'InvestmentController@rejectInvestment')->name('reject.investment');
-
 
         /// Contact Inquires Routes
         Route::resource('/contact_inquires', 'ContactInquiryController');
