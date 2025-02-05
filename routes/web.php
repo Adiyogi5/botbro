@@ -111,8 +111,7 @@ Route::prefix('/')->name('frontend.')->namespace('Frontend')->group(function () 
         Route::get('/get_filter_data', 'Dashboard\MyInvestmentController@get_filter_data')->name('get_filter_data');
         Route::get('/investment-details/{id}', 'Dashboard\MyInvestmentController@investmentDetails')->name('investmentdetails');
         
-        Route::post('/fullwithdrow-investment/{id}', 'Dashboard\MyInvestmentController@fullwithdrowInvestment')
-        ->name('fullwithdrowinvestment');    
+        Route::post('/fullwithdrow-investment/{id}', 'Dashboard\MyInvestmentController@fullwithdrowInvestment')->name('fullwithdrowinvestment');    
         Route::post('/check-ledger-month', 'Dashboard\MyInvestmentController@checkLedgerMonth')->name('checkLedgerMonth');
 
         Route::post('/withdrow-investment/{id}', 'Dashboard\MyInvestmentController@withdrowInvestment')->name('withdrowinvestment');

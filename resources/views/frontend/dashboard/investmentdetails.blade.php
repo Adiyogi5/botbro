@@ -167,9 +167,9 @@
                                                     <th>Date</th>
                                                     <th>Description</th>
                                                     <th>Rate of Interest</th>
-                                                    <th class="text-danger">Debit ({{ CURRENCY_SYMBOL }})</th>
-                                                    <th class="text-success">Credit ({{ CURRENCY_SYMBOL }})</th>
-                                                    <th class="fw-bold text-primary">Balance ({{ CURRENCY_SYMBOL }})</th>
+                                                    <th class="text-danger">Debit (₹)</th>
+                                                    <th class="text-success">Credit (₹)</th>
+                                                    <th class="fw-bold text-primary">Balance (₹)</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -184,7 +184,8 @@
                                                             <td>{{ \Carbon\Carbon::parse($ledger->date)->format('d-m-Y') }}
                                                             </td>
                                                             <td>{{ $ledger->description }}</td>
-                                                            <td>{{ $ledger->rate_of_intrest > 0 ? $ledger->rate_of_intrest . '%' : '--' }}</td>
+                                                            <td>{{ $ledger->rate_of_intrest > 0 ? $ledger->rate_of_intrest . '%' : '--' }}
+                                                            </td>
                                                             <td class="text-danger">
                                                                 {{ $ledger->debit ? number_format($ledger->debit, 2) : '--' }}
                                                             </td>
@@ -315,7 +316,9 @@
                                                             <small
                                                                 class="w-100 text-success text-decoration-underline">Note</small><br />
                                                             <small class="w-100 text-success">1. For Withdrawal Requests
-                                                                Your Investment atleast {{$site_settings['withdrow_request_months']}} month old. If you want to Withdrow
+                                                                Your Investment atleast
+                                                                {{ $site_settings['withdrow_request_months'] }} month old.
+                                                                If you want to Withdrow
                                                                 Full Amount then Charges May Apply</small><br />
                                                             <small class="w-100 text-success">2. Withdrawal requests can
                                                                 only be made between the 1st and 5th of each month.</small>
@@ -377,8 +380,13 @@
                                                             </span>
                                                             <small
                                                                 class="w-100 text-success text-decoration-underline">Note</small><br />
-                                                            <small class="w-100 text-success">1. For Withdrawal Requests Your Investment atleast {{$site_settings['withdrow_request_months']}} month old. If you want to Withdrow Amount then you can withdrow only Intrest Amount.</small><br />
-                                                            <small class="w-100 text-success">2. Withdrawal requests can only be made between the 1st and 5th of each month.</small>
+                                                            <small class="w-100 text-success">1. For Withdrawal Requests
+                                                                Your Investment atleast
+                                                                {{ $site_settings['withdrow_request_months'] }} month old.
+                                                                If you want to Withdrow Amount then you can withdrow only
+                                                                Intrest Amount.</small><br />
+                                                            <small class="w-100 text-success">2. Withdrawal requests can
+                                                                only be made between the 1st and 5th of each month.</small>
                                                         </div>
                                                         @if (!empty($my_balance->balance))
                                                             <div class="col-12 text-center justify-content-center"
