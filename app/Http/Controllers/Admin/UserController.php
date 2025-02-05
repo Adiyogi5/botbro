@@ -599,7 +599,7 @@ class UserController extends Controller
                 ->editColumn('status', function ($row) {
                     $status = '';
 
-                    $status = $row['status'] == 0 ? '<span class="d-flex"><a href="' . url('admin/customer/withdraw_approve/' . $row['id']) . '" class="btn btn-sm btn-success approve_btn mx-1">Approve</a><a href="' . url('admin/customer/withdraw_reject/' . $row['id']) . '" class="btn btn-sm btn-danger reject_btn">Reject</a></span>' : ($row['status'] == 1 ? '<span  class="badge btn-success">Approved</span>' : '<span class="badge btn-danger">Rejected</span>');
+                    $status = $row['status'] == 0 ? '<span class="d-flex"><a href="' . route('admin.customer.withdraw_approve', $row['id']) . '" class="btn btn-sm btn-success approve_btn mx-1">Approve</a><a href="' . route('admin.customer.withdraw_approve', $row['id']) . '" class="btn btn-sm btn-danger reject_btn">Reject</a></span>' : ($row['status'] == 1 ? '<span  class="badge btn-success">Approved</span>' : '<span class="badge btn-danger">Rejected</span>');
                     return $status;
                 })
                 ->removeColumn('id')
@@ -607,6 +607,90 @@ class UserController extends Controller
         }
 
     }
+
+//     public function withdraw_approve(Request $request, $id)
+    //     {
+    //         try {
+    //             $withdraw_request_data = UserWithdrawRequest::find($id);
+
+//             if (! $withdraw_request_data) {
+    //                 return Redirect::back()->with('error', 'Withdrawal request not found!');
+    //             }
+
+//             DB::statement("SET SQL_MODE = ''");
+
+//             $userslist = User::select('users.*', 'investments.id as invest_id', 'investments.user_id', 'investments.rate_of_intrest', 'investments.date')
+    //                 ->leftJoin('investments', 'investments.user_id', '=', 'users.id')
+    //                 ->where('users.id', $withdraw_request_data->user_id)
+    //                 ->where('investments.id', $withdraw_request_data->invest_id)
+    //                 ->where('users.status', 1)
+    //                 ->whereNull('users.deleted_at')
+    //                 ->where('investments.payment_status', 1)
+    //                 ->where('investments.is_approved', 1)
+    //                 ->whereNull('investments.deleted_at')
+    //                 ->first();
+
+//             if (! $userslist) {
+    //                 return Redirect::back()->with('error', 'User investment details not found!');
+    //             }
+
+//             $latestLedgerEntry = Ledger::where('user_id', $userslist->user_id)
+    //                 ->where('invest_id', $userslist->invest_id)
+    //                 ->orderBy('created_at', 'desc')
+    //                 ->first();
+
+//             // Check if a valid balance exists
+    //             if ($latestLedgerEntry && $latestLedgerEntry->balance > 0) {
+    //                 $rateOfInterest         = $userslist->rate_of_intrest;
+    //                 $previousBalance        = $latestLedgerEntry->balance;
+    //                 $withdraw_requestAmount = $withdraw_request_data->amount;
+    //                 // $newBalance             = $previousBalance - $withdraw_requestAmount;
+
+//                 // if ($withdraw_requestAmount > $previousBalance) {
+    //                 //     return Redirect::back()->with('error', 'Insufficient balance for withdrawal!');
+    //                 // }
+
+//                 $is_full_withdraw = $request->input('is_full_withdraw', 0);
+    // dd($is_full_withdraw);
+    //                 if ($is_full_withdraw == 1) {
+    //                     $newBalance = 0; // Full Withdraw
+    //                 } else {
+    //                     $newBalance = $previousBalance - $withdraw_requestAmount;
+    //                 }
+
+//                 if ($withdraw_requestAmount > $previousBalance) {
+    //                     return Redirect::back()->with('error', 'Insufficient balance for withdrawal!');
+    //                 }
+
+//                 DB::beginTransaction();
+
+//                 // Insert ledger entry for withdrawal
+    //                 Ledger::create([
+    //                     'user_id'         => $userslist->user_id,
+    //                     'invest_id'       => $userslist->invest_id,
+    //                     'date'            => Carbon::now()->format('Y-m-d'),
+    //                     'description'     => 'Withdrawal Request Approved',
+    //                     'rate_of_intrest' => 0,
+    //                     'credit'          => 0,
+    //                     'debit'           => $withdraw_requestAmount,
+    //                     'balance'         => $newBalance,
+    //                 ]);
+
+//                 // Update withdrawal request status
+    //                 UserWithdrawRequest::where('id', $id)->update(['status' => 1]);
+
+//                 DB::commit();
+
+//                 return Redirect::back()->with('success', 'Amount Withdrawn Successfully!');
+    //             } else {
+    //                 UserWithdrawRequest::where('id', $id)->update(['status' => 2]);
+    //                 return Redirect::back()->with('error', 'Insufficient balance for withdrawal.');
+    //             }
+    //         } catch (\Exception $e) {
+    //             DB::rollBack();
+    //             return Redirect::back()->with('error', 'An error occurred: ' . $e->getMessage());
+    //         }
+    //     }
 
     public function withdraw_approve(Request $request, $id)
     {
@@ -639,12 +723,18 @@ class UserController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->first();
 
-            // Check if a valid balance exists
             if ($latestLedgerEntry && $latestLedgerEntry->balance > 0) {
-                $rateOfInterest         = $userslist->rate_of_intrest;
                 $previousBalance        = $latestLedgerEntry->balance;
                 $withdraw_requestAmount = $withdraw_request_data->amount;
-                $newBalance             = $previousBalance - $withdraw_requestAmount;
+                $is_full_withdraw       = $withdraw_request_data->is_full_withdraw;
+
+                if ($is_full_withdraw == 1) {
+                    $newBalance = 0; // Full withdrawal
+                } elseif ($is_full_withdraw == 2) {
+                    $newBalance = $previousBalance - $withdraw_requestAmount; // Partial withdrawal
+                } else {
+                    $newBalance = $previousBalance;
+                }
 
                 if ($withdraw_requestAmount > $previousBalance) {
                     return Redirect::back()->with('error', 'Insufficient balance for withdrawal!');

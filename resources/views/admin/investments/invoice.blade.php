@@ -172,10 +172,10 @@
                                         <?= date('h:i A', strtotime($data['created_at'])) ?></th>
                                 </tr>
                                 <tr>
-                                    <th colspan="2" scope="col"><b>PAYMENT METHOD</b><br>
+                                    <th colspan="2" scope="col"><b>PAYMENT METHOD : </b>
                                         @if ($data['payment_type'] == 0)
-                                            {{ 'COD' }}
-                                        @else
+                                            {{ 'Offline' }}
+                                            <br>
                                             <span class="small">
                                                 <b>Payment Status:</b>
                                                 @if ($data['payment_status'] == 0)

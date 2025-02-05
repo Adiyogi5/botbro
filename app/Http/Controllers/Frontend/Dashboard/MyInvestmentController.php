@@ -217,7 +217,7 @@ class MyInvestmentController extends Controller
         $percentageValue       = $percentageCalculation / 100;
 
         if (Carbon::parse($ledger->date)->gt(Carbon::now()->subMonths($site_settings['withdrow_request_months']))) {
-            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(5))) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Withdrawals are only allowed within the Date 1 to 5 of the every month.',
@@ -279,20 +279,21 @@ class MyInvestmentController extends Controller
                 'amount.numeric'  => 'Please enter a valid numeric amount.',
             ]);
 
-            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(5))) {
                 $errorMessage = "Withdrawal requests are only allowed between the 1st and 5th of each month. Please try again during this period.";
                 return redirect()->back()->with('error', $errorMessage);
 
             } elseif ($request->amount <= ($balanceData->balance - $requestData->sum('amount'))) {
 
-                $wdata               = new UserWithdrawRequest();
-                $reference_id        = RandcardStr(15);
-                $wdata->user_id      = $user->id;
-                $wdata->invest_id    = $balanceData->invest_id;
-                $wdata->reference_id = $reference_id;
-                $wdata->amount       = $request->amount;
-                $wdata->request_date = now()->format('Y-m-d H:i:s');
-                $wdata->status       = 0;
+                $wdata                      = new UserWithdrawRequest();
+                $reference_id               = RandcardStr(15);
+                $wdata->user_id             = $user->id;
+                $wdata->invest_id           = $balanceData->invest_id;
+                $wdata->reference_id        = $reference_id;
+                $wdata->is_full_withdraw    = 1;
+                $wdata->amount              = $request->amount;
+                $wdata->request_date        = now()->format('Y-m-d H:i:s');
+                $wdata->status              = 0;
                 $wdata->save();
 
                 /// Send Notification to Admin
@@ -306,7 +307,7 @@ class MyInvestmentController extends Controller
                 $adnoti->save();
 
                 DB::commit();
-                $request->session()->flash('success', 'Your Withdraw Request Submitted Successfully');
+                $request->session()->flash('success', 'Your Full Withdraw Request Submitted Successfully');
                 return redirect()->back();
             } else {
                 $availableBalance = $balanceData->balance - $requestData->sum('amount');
@@ -360,7 +361,7 @@ class MyInvestmentController extends Controller
                 'amount.numeric'  => 'Please enter a valid numeric amount.',
             ]);
 
-            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(5))) {
                 $errorMessage = "Withdrawal requests are only allowed between the 1st and 5th of each month. Please try again during this period.";
                 return redirect()->back()->with('error', $errorMessage);
             }
@@ -387,14 +388,15 @@ class MyInvestmentController extends Controller
             }
             
             // Process withdrawal if validation passes
-            $wdata               = new UserWithdrawRequest();
-            $reference_id        = RandcardStr(15);
-            $wdata->user_id      = $user->id;
-            $wdata->invest_id    = $balanceData->invest_id;
-            $wdata->reference_id = $reference_id;
-            $wdata->amount       = $request->amount;
-            $wdata->request_date = now()->format('Y-m-d H:i:s');
-            $wdata->status       = 0;
+            $wdata                      = new UserWithdrawRequest();
+            $reference_id               = RandcardStr(15);
+            $wdata->user_id             = $user->id;
+            $wdata->invest_id           = $balanceData->invest_id;
+            $wdata->reference_id        = $reference_id;
+            $wdata->is_full_withdraw    = 2;
+            $wdata->amount              = $request->amount;
+            $wdata->request_date        = now()->format('Y-m-d H:i:s');
+            $wdata->status              = 0;
             $wdata->save();
             
             /// Send Notification to Admin

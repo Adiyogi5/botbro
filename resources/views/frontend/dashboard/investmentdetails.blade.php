@@ -215,7 +215,6 @@
                                                     data-bs-target="#addfullwithdrowModal" class="btn btn-md btn-warning">
                                                     <i class="fa-solid fa-paper-plane"></i> Full Withdraw Request
                                                 </a>
-
                                             </div>
                                             <div>
                                                 <a data-bs-toggle="modal" data-bs-target="#addModal"
@@ -526,7 +525,6 @@
                     }
                 });
             });
-
 
             //Add Withdrow Request for Intrest Amount 
             $('#SubmitWidthdraw').on('click', function(event) {
