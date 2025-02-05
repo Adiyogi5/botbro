@@ -206,12 +206,13 @@
                                         style="width:100% !important">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>Date</th>
                                                 <th>Description</th>
                                                 <th>Rate of Interest</th>
-                                                <th class="text-danger">Debit ({{ CURRENCY_SYMBOL }})</th>
-                                                <th class="text-success">Credit ({{ CURRENCY_SYMBOL }})</th>
-                                                <th class="fw-bold text-primary">Balance ({{ CURRENCY_SYMBOL }})
+                                                <th class="text-danger">Debit (₹)</th>
+                                                <th class="text-success">Credit (₹)</th>
+                                                <th class="fw-bold text-primary">Balance (₹)</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -483,7 +484,7 @@
                 type: 'GET',
                 ajax: "{{ url('admin/customer/' . $id . '/user_withdraw') }}",
                 order: [
-                    [4, "desc"]
+                    [4, "asc"]
                 ],
                 columns: [{
                         data: 'reference_id'
@@ -541,7 +542,7 @@
                 type: 'GET',
                 ajax: "{{ url('admin/customer/' . $id . '/user-referral-withdraw') }}",
                 order: [
-                    [4, "desc"]
+                    [3, "desc"]
                 ],
                 columns: [{
                         data: 'reference_id'
@@ -633,39 +634,17 @@
                 bLengthChange: false,
                 type: 'GET',
                 ajax: "{{ url('admin/customer/' . $id . '/user_referandcommission') }}",
-                // order: [
-                //     [0, "desc"]
-                // ],
-                columns: [{
-                        data: 'date',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'description',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'rate_of_intrest',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'debit',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'credit',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'balance',
-                        orderable: false,
-                        searchable: false
-                    }
+                order: [
+                    [0, "desc"]
+                ],
+                columns: [
+                    { data: 'id', visible: false, orderable: true }, // ID column is hidden but sortable
+                    { data: 'date', orderable: false, searchable: false },
+                    { data: 'description', orderable: false, searchable: false },
+                    { data: 'rate_of_intrest', orderable: false, searchable: false },
+                    { data: 'debit', orderable: false, searchable: false },
+                    { data: 'credit', orderable: false, searchable: false },
+                    { data: 'balance', orderable: false, searchable: false }
                 ],
                 initComplete: function() {
                     this.api().columns().every(function() {

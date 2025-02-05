@@ -52,7 +52,7 @@ class JoinUsController extends Controller
             'mobile' => 'required|numeric|min:10|unique:users,mobile',
             'password' => 'required',
             'confirm_password' => 'required|same:password',
-            'reffer_code' => ['nullable', 'max:100', new CheckRefer('users')],
+            'reffer_code' => ['required', 'max:100', new CheckRefer('users')],
             'g-recaptcha-response' => ['required', new ReCaptcha]
         ]);
         

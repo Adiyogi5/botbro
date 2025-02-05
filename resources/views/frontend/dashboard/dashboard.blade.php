@@ -420,6 +420,8 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endisset
+                                        @isset($user_refferBalance)
                                         <div class="col-xl-6 col-lg-6 col-md-6 col-12 my-auto">
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
@@ -428,7 +430,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        @endisset
                                         {{-- <div class="col-xl-4 col-lg-6 col-md-6 col-12 my-auto">
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
@@ -439,7 +441,7 @@
                                                 </div>
                                             </div>
                                         </div> --}}
-                                    @endisset
+                                    
                                 @endif
                             </div>
                         </div>

@@ -10,8 +10,8 @@
     {{-- ######################## Contact Us Start ############################# --}}
     <section>
         <div class="container my-3 my-lg-5">
-            <div class="row justify-content-center form-join-border">
-                <div class="col-lg-7 col-12 form-join" id="contact-scroll">
+            <div class="row justify-content-center">
+                <div class="col-lg-9 col-12 form-join form-join-border" id="contact-scroll">
 
                     <h3 class="mb-3 text-center mx-auto">Contact Us</h3>
                     
@@ -91,7 +91,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-lg-5 col-12 bg-contactus">
+                {{-- <div class="col-lg-5 col-12 bg-contactus">
                     <div class="join-form-margin py-lg-0 py-3">
                         <!--Icons-->
                         <div class="row text-center">
@@ -116,7 +116,7 @@
                             {!! $site_settings['google_iframe'] !!}
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>

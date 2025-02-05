@@ -504,13 +504,15 @@ class UserController extends Controller
         }
 
     }
+
     public function user_refer(Request $request, $id)
     {
         if ($request->ajax()) {
             $records = UserReferral::select('user_referrals.*', 'refrer.name as refrer_name', 'refrral.reffer_code as ref_code', 'refrral.name as user_refrral')
                 ->where([['user_referrals.referral_id', $id]])
                 ->leftjoin('users as refrer', 'refrer.id', '=', 'user_referrals.refer_id')
-                ->leftjoin('users as refrral', 'refrral.id', '=', 'user_referrals.referral_id')->get();
+                ->leftjoin('users as refrral', 'refrral.id', '=', 'user_referrals.referral_id')
+                ->orderBy('id', 'DESC')->get();
 
             return DataTables::of($records)
                 ->editColumn('created_at', function ($row) {
@@ -526,7 +528,7 @@ class UserController extends Controller
         if ($request->ajax()) {
             $records = Investment::select('investments.*')
                 ->where([['investments.user_id', $id]])
-                ->leftjoin('users', 'users.id', '=', 'investments.user_id')->get();
+                ->leftjoin('users', 'users.id', '=', 'investments.user_id')->orderBy('id', 'DESC')->get();
 
             return DataTables::of($records)
                 ->editColumn('invest_no', function ($row) {
@@ -573,7 +575,8 @@ class UserController extends Controller
             $records = UserWithdrawRequest::select('user_withdraw_requests.*', 'users.name as customer_name', 'investments.invest_no')
                 ->where([['user_withdraw_requests.user_id', $id]])
                 ->leftjoin('users', 'users.id', '=', 'user_withdraw_requests.user_id')
-                ->leftjoin('investments', 'investments.id', '=', 'user_withdraw_requests.invest_id')->get();
+                ->leftjoin('investments', 'investments.id', '=', 'user_withdraw_requests.invest_id')
+                ->get();
 
             return DataTables::of($records)
                 ->addColumn('balance', function ($row) {
@@ -777,8 +780,8 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             $records = RefferEarnsLedger::where('user_id', $id)
-                ->orderBy('id', 'desc')
                 ->whereNull('deleted_at')
+                ->orderBy('id', 'desc') // Ensure ordering by ID
                 ->get();
 
             return DataTables::of($records)
@@ -797,7 +800,7 @@ class UserController extends Controller
                 ->editColumn('balance', function ($row) {
                     return '<span class="fw-bold text-primary">' . number_format($row->balance, 2) . '</span>';
                 })
-                ->removeColumn('id')
+                // ->removeColumn('id')
                 ->rawColumns(['debit', 'credit', 'balance']) // Allow HTML formatting
                 ->make(true);
         }

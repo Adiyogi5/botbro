@@ -6,7 +6,7 @@
     <section>
         <div class="container my-3 my-lg-5">
             <div class="row justify-content-center">
-                <div class="col-lg-9">
+                <div class="col-lg-9 col-12">
 
                     @if ($message = Session::get('success'))
                         <div id="success-message" class="alert alert-success alert-block margin10 flash-message">
@@ -36,8 +36,7 @@
                                 </div>
 
                                 <div class="col-md-6 col-12">
-                                    <label for="email" class="form-label">Email <span
-                                            class="text-danger">*</span></label>
+                                    <label for="email" class="form-label">Email </label>
                                     <input type="email" class="form-control rounded-0" value="{{ old('email') }}"
                                         id="email" name="email" placeholder="Enter Your Email">
                                     <label for="email" class="error"></label>
@@ -116,7 +115,8 @@
                         </div>
 
                         <div class="form-join form-join-border">
-                            <h3 class="mb-3">Choose Your UPay Living Products Refers</h3>
+                            <h3 class="mb-3">Choose Your UPay Living Products Refers <span
+                                class="text-danger">*</span></h3>
                             <div class="row g-3">
                                 <div class="col-md-6 col-12">
                                     <div class="d-flex">
@@ -284,6 +284,7 @@
                         required: true,
                         equalTo: "#password", // Assuming your password field has id="password"
                     },
+                    reffer_code: "required",
                     check_box: "required",
                     captcha: "required",
                 },
@@ -305,6 +306,7 @@
                         required: "Please Enter Confirm Password",
                         equalTo: "Passwords do not match",
                     },
+                    reffer_code: "Please Enter Refer Code",
                     check_box: "Please Agree to Terms of Use",
                     captcha: "Please Enter Captcha",
                 },

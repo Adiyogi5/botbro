@@ -30,8 +30,10 @@
                                         <i class="fa-solid fa-user"></i> Member
                                     </h5>
                                 @endif
+                                @isset($my_balance)
                                 <h5 class="ms-auto my-auto py-1 px-2 rounded-1 text-white bg-secondary">Referral Balance :
-                                    {{ CURRENCY_SYMBOL }}{{ $my_balance->balance }}</h5>
+                                    ₹ {!! $my_balance->balance !!}</h5>
+                                @endisset
                             </div>
                             <div class="col-12 card p-0">
                                 <!-- Nav Tabs -->
@@ -130,9 +132,9 @@
                                                         <th>Date</th>
                                                         <th>Description</th>
                                                         <th>Rate of Interest</th>
-                                                        <th class="text-danger">Debit ({{ CURRENCY_SYMBOL }})</th>
-                                                        <th class="text-success">Credit ({{ CURRENCY_SYMBOL }})</th>
-                                                        <th class="fw-bold text-primary">Balance ({{ CURRENCY_SYMBOL }})
+                                                        <th class="text-danger">Debit (₹)</th>
+                                                        <th class="text-success">Credit (₹)</th>
+                                                        <th class="fw-bold text-primary">Balance (₹)
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -258,15 +260,17 @@
                                                                 <span class="mx-auto">
                                                                     <p class="modal-category">Add Withdrow Referral
                                                                         Request</p>
-                                                                    <h5>Current Balance: ₹ {!! $my_balance->balance !!}
-                                                                    </h5>
+                                                                        @isset($my_balance)
+                                                                        <h5>Current Balance: ₹ {!! $my_balance->balance !!}
+                                                                        </h5>
+                                                                        @endisset
                                                                 </span>
                                                                 <small
                                                                     class="w-100 text-success text-decoration-underline">Note</small><br />
-                                                                <small class="w-100 text-success">1. For Withdrawal
+                                                                {{-- <small class="w-100 text-success">1. For Withdrawal
                                                                     Requests
-                                                                    Your Investment atleast 6 month old</small><br />
-                                                                <small class="w-100 text-success">2. Withdrawal requests
+                                                                    Your Investment atleast 6 month old</small><br /> --}}
+                                                                <small class="w-100 text-success">1. Withdrawal requests
                                                                     can
                                                                     only be made between the 1st and 5th of each
                                                                     month.</small>

@@ -54,7 +54,7 @@
                     </ul>
                 </div>
 
-                <div
+                {{-- <div
                     class="col-lg-2 col-md-4 col-sm-4 col-12 text-sm-start justify-content-sm-start text-center justify-content-center mt-md-0 mt-3">
                     <p class="h5 mb-4 footer-heading">Social</p>
                     <span class="mt-4">
@@ -86,7 +86,7 @@
                             </a>
                         @endif
                     </span>
-                </div>
+                </div> --}}
 
                 <div
                     class="col-lg-4 col-md-12 col-12 text-lg-end justify-content-lg-end text-center justify-content-center mt-md-0 mt-3">

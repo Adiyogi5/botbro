@@ -97,7 +97,7 @@ class RefferController extends Controller
                 'amount.numeric'  => 'Please enter a valid numeric amount.',
             ]);
     
-            if (!now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+            if (!now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(5))) {
                 $errorMessage = "Withdrawal requests are only allowed between the 1st and 5th of each month. Please try again during this period.";
                 return redirect()->back()->with('error', $errorMessage);
             }
