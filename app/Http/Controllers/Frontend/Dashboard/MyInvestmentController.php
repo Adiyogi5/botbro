@@ -234,7 +234,7 @@ class MyInvestmentController extends Controller
             ]);
 
         } elseif (Carbon::parse($ledger->date)->lte(Carbon::now()->subMonths($site_settings['withdrow_request_months']))) {
-            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(4))) {
+            if (! now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(5))) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Withdrawals are only allowed within the Date 1 to 5 of the every month.',
