@@ -38,7 +38,7 @@
                                                                 class="fa-solid fa-circle-info"></i></a>
                                                         <p class="myorder-detail"> {!! $myorder['customer_name'] !!} </p>
                                                         <p class="myorder-detail"> {!! $myorder['customer_mobile'] !!} </p>
-                                                        <p class="myorder-detail"> ₹ {!! $myorder['total'] !!} </p>
+                                                        <p class="myorder-detail"> $ {!! $myorder['total'] !!} </p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-5 col-6 text-end justify-content-end">
@@ -127,7 +127,7 @@
                                 var options = { day: 'numeric', month: 'long', year: 'numeric' };
                                 var formattedDate = orderDate.toLocaleDateString('en-US', options).replace(/(\d+)([^\d])(\d+)([^\d])(\d+)/, '$1$2-$3$4-$5');
 
-                                $('#dataContainer').append('<div class="card mb-3 card-myorder "><div class="row g-0 padd-small"><div class="col-md-7 col-6 text-start justify-content-start"><div class="card-body card-ship-padd"><a class="myorder-id textdecoration-none" href="{{ route("frontend.order_view", "") }}/' + item.id + '">Order No. ' + item.order_no + ' <i class="fa-solid fa-circle-info"></i></a> <p class="myorder-detail"> ' + item.customer_name + ' </p> <p class="myorder-detail"> ' + item.customer_mobile + ' </p> <p class="myorder-detail"> ₹ ' + item.total + ' </p> </div> </div> <div class="col-md-5 col-6 text-end justify-content-end"> <div class="card-body card-ship-padd">  <p class="myorder-date "> ' + formattedDate + ' </p> <span class="fw-bold ' + item.status_class + '"> ' + item.status_text + ' </span> <div class="d-flex gap-2 mt-3 justify-content-end"> <a href=" {{ route("frontend.order_view", "") }}/' + item.id + '" class="btn btn-md btn-warning text-white btn-upaycard"> View Details </a> </div> </div> </div> </div> </div>');
+                                $('#dataContainer').append('<div class="card mb-3 card-myorder "><div class="row g-0 padd-small"><div class="col-md-7 col-6 text-start justify-content-start"><div class="card-body card-ship-padd"><a class="myorder-id textdecoration-none" href="{{ route("frontend.order_view", "") }}/' + item.id + '">Order No. ' + item.order_no + ' <i class="fa-solid fa-circle-info"></i></a> <p class="myorder-detail"> ' + item.customer_name + ' </p> <p class="myorder-detail"> ' + item.customer_mobile + ' </p> <p class="myorder-detail"> $ ' + item.total + ' </p> </div> </div> <div class="col-md-5 col-6 text-end justify-content-end"> <div class="card-body card-ship-padd">  <p class="myorder-date "> ' + formattedDate + ' </p> <span class="fw-bold ' + item.status_class + '"> ' + item.status_text + ' </span> <div class="d-flex gap-2 mt-3 justify-content-end"> <a href=" {{ route("frontend.order_view", "") }}/' + item.id + '" class="btn btn-md btn-warning text-white btn-upaycard"> View Details </a> </div> </div> </div> </div> </div>');
                             }else{
                                 $('#dataContainer').html('<p class="text-center">Data not found !!</p>');
                             }

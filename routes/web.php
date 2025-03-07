@@ -34,8 +34,8 @@ Route::prefix('/')->name('frontend.')->namespace('Frontend')->group(function () 
 
     Route::get('/privacy-policy', 'PrivacyController@index')->name('privacy');
     Route::get('/terms-conditions', 'TermsController@index')->name('terms');
-    Route::get('/cancel-refund-policy', 'ReturnController@index')->name('return');
-    Route::get('/shipping-delivery', 'ShipCancelController@index')->name('shipandcancel');
+    // Route::get('/cancel-refund-policy', 'ReturnController@index')->name('return');
+    Route::get('/cancel-refund-policy', 'ShipCancelController@index')->name('shipandcancel');
 
     Route::namespace('Auth')->group(function(){
         //Login Routes

@@ -40,7 +40,7 @@
 
       <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-secondary text-center">
+        <div class="small-box bg-warning text-center">
           <div class="inner">
             <h3>{{$bannercount}}</h3>
 
@@ -53,7 +53,7 @@
         </div>
       </div>
 
-      <div class="col-lg-3 col-6">
+      {{-- <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box bg-warning text-center">
           <div class="inner">
@@ -141,7 +141,7 @@
           </div>
           <a href="{{url('admin/blog')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
-      </div>
+      </div> --}}
 
       <div class="col-lg-3 col-6">
         <!-- small box -->
@@ -160,7 +160,7 @@
 
       <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-primary text-center">
+        <div class="small-box bg-danger text-center">
           <div class="inner">
             <h3>{{$inquirycount}}</h3>
 
@@ -175,7 +175,7 @@
 
       <div class="col-lg-3 col-6">
         <!-- small box -->
-        <div class="small-box bg-secondary text-center">
+        <div class="small-box bg-dark text-center">
           <div class="inner">
             <h3>{{$notificationcount}}</h3>
 

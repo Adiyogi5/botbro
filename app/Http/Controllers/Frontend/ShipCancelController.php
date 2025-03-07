@@ -11,7 +11,7 @@ class ShipCancelController extends Controller
      public function index(Request $request)
     {
         
-        $shipandcencel_cms = Cms::where('cms.slug', 'shipping-delivery')
+        $shipandcencel_cms = Cms::where('cms.slug', 'cancellation-and-refund-policy')
         ->where('status', '1')->first();
         $title = $shipandcencel_cms->name;
         

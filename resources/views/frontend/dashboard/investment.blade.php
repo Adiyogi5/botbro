@@ -20,7 +20,7 @@
                             <form class="row gx-2 p-2" id="investmentForm" method="post"
                                 action="{{ route('frontend.investmoney') }}" enctype="multipart/form-data">
                                 @csrf
-                                <div class="col">
+                                <div class="col-xl col-lg-4 col-md-4 col-6">
                                     <label for="invest_amount" class="form-label">Invest Amount <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" id="invest_amount" name="invest_amount"
                                         value="{{ old('invest_amount', $site_settings['invest_amount']) }}"
@@ -29,7 +29,7 @@
                                         id="investAmountError">{{ $errors->first('invest_amount') }}</label>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-xl col-lg-4 col-md-4 col-6">
                                     <label for="payment_type" class="form-label">Payment Type <span class="text-danger">*</span></label>
                                     <select class="form-control form-select" id="payment_type" name="payment_type">
                                         <option value="0" {{ old('payment_type', '0') == '0' ? 'selected' : '' }}>
@@ -42,7 +42,7 @@
                                     <label class="error" id="paymentTypeError">{{ $errors->first('payment_type') }}</label>
                                 </div>
 
-                                <div class="col" id="transactionDiv">
+                                <div class="col-xl col-lg-4 col-md-4 col-6" id="transactionDiv">
                                     <label for="transaction_id" class="form-label">Transaction ID <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="transaction_id" name="transaction_id"
                                         value="{{ old('transaction_id') }}" placeholder="Enter Tranjection Id">
@@ -50,21 +50,21 @@
                                         id="transactionIdError">{{ $errors->first('transaction_id') }}</label>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-xl col-lg-4 col-md-4 col-6">
                                     <label for="screenshot" class="form-label">Screenshot</label>
                                     <input type="file" class="form-control" id="screenshot" name="screenshot"
                                         accept="image/png, image/jpeg, image/jpg">
                                     <label class="error" id="screenshotError">{{ $errors->first('screenshot') }}</label>
                                 </div>
 
-                                <div class="col">
+                                <div class="col-xl col-lg-4 col-md-4 col-6">
                                     <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
                                     <input type="date" class="form-control" id="date" name="date"
                                         value="{{ now()->toDateString() }}" readonly>
                                     <label class="error" id="dateError">{{ $errors->first('date') }}</label>
                                 </div>
 
-                                <div class="col-1 mt-4 pt-2 text-center">
+                                <div class="col-xl-1 col-lg-4 col-md-4 col-6 mt-4 pt-2 text-center">
                                     <button type="submit" class="btn btn-md btn-success">Invest</button>
                                 </div>
                             </form>
@@ -72,7 +72,7 @@
 
                         <hr>
                         
-                        <div class="col-12 d-flex">
+                        <div class="col-12 d-flex mb-2">
                             <p class="dash-category">My Investments</p>
                             <input type="text" name="investno_search" id="investno_search"
                                 class="form-control w-25 ml-auto" placeholder="Search By Investment No">
@@ -81,7 +81,7 @@
                             @forelse ($my_order as $order)
                                 <div class="card mb-3 shadow-sm">
                                     <div class="row g-0">
-                                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                        <div class="col-lg-2 col-md-3 col-12 d-flex align-items-center justify-content-center">
                                             <div
                                                 class="bg-primary d-flex align-item-center text-white text-center justify-content-center rounded-1 h-100 w-100 p-3">
                                                 <div class="my-auto">
@@ -89,7 +89,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-lg-8 col-md-7 col-12">
                                             <div class="card-body">
                                                 <h5 class="card-title">#{{ $order->invest_no }}</h5>
                                                 <p class="card-text mb-0"><strong>Date:</strong>
@@ -114,7 +114,7 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                        <div class="col-md-2 col-12 d-flex align-items-center justify-content-center mb-md-0 mb-2">
                                             <a href="{{ route('frontend.investmentdetails', $order->id) }}"
                                                 class="btn btn-md btn-primary py-1">View Details</a>
                                         </div>

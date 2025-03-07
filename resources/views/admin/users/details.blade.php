@@ -210,9 +210,9 @@
                                                 <th>Date</th>
                                                 <th>Description</th>
                                                 <th>Rate of Interest</th>
-                                                <th class="text-danger">Debit (₹)</th>
-                                                <th class="text-success">Credit (₹)</th>
-                                                <th class="fw-bold text-primary">Balance (₹)</th>
+                                                <th class="text-danger">Debit ($)</th>
+                                                <th class="text-success">Credit ($)</th>
+                                                <th class="fw-bold text-primary">Balance ($)</th>
                                             </tr>
                                         </thead>
                                     </table>

@@ -45,7 +45,7 @@
                         </li>
                         <li class="my-2">
                             <a class="footer-title text-decoration-none text-white"
-                                href="{{ route('frontend.return') }}">Cancellation and Refund Policy</a>
+                                href="{{ route('frontend.shipandcancel') }}">Cancellation and Refund Policy</a>
                         </li>
                         {{-- <li class="my-2">
                             <a class="footer-title text-decoration-none text-white"
@@ -108,6 +108,6 @@
 
     <!-- Copyright -->
     <div class="container text-center justify-content-center py-2 px-2 bg-light copyright d-md-flex d-grid">
-        <span> {{ $site_settings['copyright'] }} </span> 
+        <span> {{ $site_settings['copyright'] }}. <a href="https://adiyogitechnosoft.com/" target="_blank">Design and Developed by Adiyogi Technosoft Pvt Ltd.</a></span> 
     </div>
     <!-- Copyright -->

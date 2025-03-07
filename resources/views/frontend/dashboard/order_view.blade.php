@@ -150,6 +150,7 @@
                                         <div id="collapseThree" class="accordion-collapse collapse show"
                                             aria-labelledby="headingThree" data-bs-parent="#accordionInfo">
                                             <div class="accordion-body overflow-scroll">
+                                                <div class="table-responsive">
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <th>S.no</th>
@@ -249,6 +250,7 @@
                                                     </tfoot>
                                                     </tbody>
                                                 </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -269,7 +271,7 @@
                                         <div id="collapsefour" class="accordion-collapse collapse"
                                             aria-labelledby="headingOne" data-bs-parent="#accordionExample2">
                                             <div class="accordion-body">
-
+                                                <div class="table-responsive">
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
@@ -301,6 +303,7 @@
                                                         @endforelse
                                                     </tbody>
                                                 </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

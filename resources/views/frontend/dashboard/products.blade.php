@@ -85,7 +85,7 @@
                                                 src="{{ imageexist($products->image) }}" alt="Card image cap ratio-1x1">
                                             <div class="card-body">
                                                 <h5 class="product-title ">{{ $products->name }}</h5>
-                                                <p class="product-price">Price: ₹{{ $products->price }}</p>
+                                                <p class="product-price">Price: ${{ $products->price }}</p>
                                                 <div class="text-center justify-content-center">
                                                     <a href="{{ route('frontend.productdetails', ['slug' => $products->slug]) }}"
                                                         class="btn btn-md btn-warning text-white btn-upaycard">

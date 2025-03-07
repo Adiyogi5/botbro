@@ -79,7 +79,7 @@
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <li><a class="nav-link nav-subtitle border-bottom ps-2 {{ request()->routeIs('frontend.whyrobotrade') ? 'active' : '' }}"
-                                        href="{{ route('frontend.whyrobotrade') }}">Why Join Robo trade</a></li>
+                                        href="{{ route('frontend.whyrobotrade') }}">Why Join Robos trade</a></li>
 
                                 @if (Auth::check() == null)
                                     <li><a class="nav-link nav-subtitle ps-2 {{ request()->routeIs('frontend.joinus') ? 'active' : '' }}"
@@ -95,7 +95,7 @@
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <li><a class="nav-link nav-subtitle border-bottom ps-2 {{ request()->routeIs('frontend.aboutus') ? 'active' : '' }}"
-                                        href="{{ route('frontend.aboutus') }}">About Robo trade</a></li>
+                                        href="{{ route('frontend.aboutus') }}">About Robos trade</a></li>
                                 <li><a class="nav-link nav-subtitle ps-2 {{ request()->routeIs('frontend.ourleadership') ? 'active' : '' }}"
                                         href="{{ route('frontend.ourleadership') }}">Our Leadership</a></li>
                             </ul>

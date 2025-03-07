@@ -19,20 +19,20 @@
                     <div class="col-lg-9 col-md-8 col-12 mt-md-0 mt-3">
                         <div class="row row-cols-1 g-3">
 
-                            <div class="col-12 d-flex justify-content-between align-item-self mb-1">
+                            <div class="col-12 d-lg-flex text-lg-start justify-content-lg-between d-grid text-center justify-content-center gap-2 align-item-self mb-1">
                                 <p class="dash-category mb-0">Referral History</p>
                                 @if ($approvedMemberships > 5 || $totalMembers > 6)
-                                    <h5 class="ms-auto my-auto py-1 px-3 rounded-1 text-white bg-secondary">
+                                    <h5 class="ms-lg-auto my-auto py-1 px-lg-3 px-2 rounded-1 text-white bg-secondary">
                                         <i class="fa-solid fa-user-secret"></i> Agent
                                     </h5>
                                 @else
-                                    <h5 class="ms-auto my-auto py-1 px-3 rounded-1 text-white bg-secondary">
+                                    <h5 class="ms-lg-auto my-auto py-1 px-lg-3 px-2 rounded-1 text-white bg-secondary">
                                         <i class="fa-solid fa-user"></i> Member
                                     </h5>
                                 @endif
                                 @isset($my_balance)
                                 <h5 class="ms-auto my-auto py-1 px-2 rounded-1 text-white bg-secondary">Referral Balance :
-                                    ₹ {!! $my_balance->balance !!}</h5>
+                                    $ {!! $my_balance->balance !!}</h5>
                                 @endisset
                             </div>
                             <div class="col-12 card p-0">
@@ -61,12 +61,13 @@
                                     </li>
                                 </ul>
 
-                                <div class="tab-content custom-tab-content p-4" id="investmentTabsContent">
+                                <div class="tab-content custom-tab-content p-lg-4 p-2" id="investmentTabsContent">
                                     <!-- Tab One Content -->
                                     <div class="tab-pane fade show active" id="tab-one" role="tabpanel"
                                         aria-labelledby="tab-one-tab">
                                         {{-- ####### Reffer History Table ####### --}}
-                                        <div class="col-12 overflow-scroll">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
                                             <table class="table table-bordered">
                                                 <thead class="text-center justify-content-center">
                                                     <tr>
@@ -117,6 +118,7 @@
                                                     @endif
                                                 </tbody>
                                             </table>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -126,15 +128,16 @@
                                         {{-- Referral and Commission Ledger --}}
                                         {{-- ###### Tabe Three start ######  --}}
                                         <div class="col-12 p-0">
-                                            <table class="table table-bordered datatable px-3 py-2">
+                                            <div class="table-responsive">
+                                            <table class="table table-bordered datatable px-lg-3 px-2 py-2">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Description</th>
                                                         <th>Rate of Interest</th>
-                                                        <th class="text-danger">Debit (₹)</th>
-                                                        <th class="text-success">Credit (₹)</th>
-                                                        <th class="fw-bold text-primary">Balance (₹)
+                                                        <th class="text-danger">Debit ($)</th>
+                                                        <th class="text-success">Credit ($)</th>
+                                                        <th class="fw-bold text-primary">Balance ($)
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -165,6 +168,7 @@
                                                 @endif
                                                 </tbody>
                                             </table>
+                                            </div>
                                         </div>
                                         {{-- ###### Tabe Three End ######  --}}
                                     </div>
@@ -174,7 +178,7 @@
                                         aria-labelledby="tab-three-tab">
                                         {{-- ####### Referral Balance History ####### --}}
                                         <div class="col-12">
-                                            <div class="d-flex justify-content-between">
+                                            <div class="d-lg-flex text-lg-start justify-content-lg-between d-grid text-center justify-content-center gap-2">
                                                 <p class="dash-category">Withdrow Referral Amount Request</p>
                                                 <div>
                                                     <a data-bs-toggle="modal" data-bs-target="#addModal"
@@ -188,13 +192,14 @@
                                                     Membership Approved.</small>
                                             </div>
                                         </div>
-                                        <div class="col-12 overflow-scroll">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
                                             <table class="table table-bordered">
                                                 <thead class="text-center justify-content-center">
                                                     <tr>
                                                         <th scope="col">S.No</th>
                                                         <th scope="col">Voucher No</th>
-                                                        <th scope="col">Request Amount</th>
+                                                        <th scope="col">Request Amount ($)</th>
                                                         <th scope="col">Request Date</th>
                                                         <th scope="col">Status</th>
                                                     </tr>
@@ -243,6 +248,7 @@
                                                     @endif
                                                 </tbody>
                                             </table>
+                                            </div>
                                         </div>
 
                                         {{-- ############# Modal For Withdrow Request Add ##############  --}}
@@ -261,7 +267,7 @@
                                                                     <p class="modal-category">Add Withdrow Referral
                                                                         Request</p>
                                                                         @isset($my_balance)
-                                                                        <h5>Current Balance: ₹ {!! $my_balance->balance !!}
+                                                                        <h5>Current Balance: $ {!! $my_balance->balance !!}
                                                                         </h5>
                                                                         @endisset
                                                                 </span>
@@ -284,7 +290,7 @@
                                                                     <div class="row g-3">
                                                                         <div class="col-md-10 col-12 mx-auto">
                                                                             <label for="amount"
-                                                                                class="form-label">Amount</label>
+                                                                                class="form-label">Amount ($)</label>
                                                                             <input type="text"
                                                                                 class="form-control rounded-0"
                                                                                 value="{{ old('amount') }}"
@@ -342,7 +348,7 @@
 
                 Swal.fire({
                     title: "Are you sure?",
-                    html: "Your widthdraw request is ₹" + amount + " ",
+                    html: "Your widthdraw request is $" + amount + " ",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: '#d33',

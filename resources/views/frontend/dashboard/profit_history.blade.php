@@ -22,6 +22,7 @@
                             <p class="dash-category">Profit Sharing History</p>
                         </div>
                         <div class="col-12">
+                            <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead class="text-center justify-content-center">
                                     <tr>
@@ -54,6 +55,7 @@
                                     @endif
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -28,7 +28,7 @@
                                         <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                             <div class="card-body bg-dash-out card-ship-padd py-3">
                                                 <p class="dash-balance"> Balance </p>
-                                                <h5 class="card-title dash-money">₹ {!! $my_balance->user_balance !!}</h5>
+                                                <h5 class="card-title dash-money">$ {!! $my_balance->user_balance !!}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -38,7 +38,7 @@
                                     <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                         <div class="card-body bg-dash-out card-ship-padd py-3">
                                             <p class="dash-balance">Withdraw Request</p>
-                                            <h5 class="card-title dash-money">₹ {!! ($requestAmount->total_amount) ? $requestAmount->total_amount : 0 !!}</h5>
+                                            <h5 class="card-title dash-money">$ {!! ($requestAmount->total_amount) ? $requestAmount->total_amount : 0 !!}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -47,7 +47,7 @@
                                     <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                         <div class="card-body bg-dash-out card-ship-padd py-3">
                                             <p class="dash-balance">Rejected Balance </p>
-                                            <h5 class="card-title dash-money">₹ {{ ($rejectAmount->total_amount) ? $rejectAmount->total_amount : 0 }}</h5>
+                                            <h5 class="card-title dash-money">$ {{ ($rejectAmount->total_amount) ? $rejectAmount->total_amount : 0 }}</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -65,7 +65,7 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <small class="w-100">For Withdrawal Requests to a Bank Account, an additional ₹{{TRANSFER_FEE}} charges an online transfer fee & platform fee</small>
+                                <small class="w-100">For Withdrawal Requests to a Bank Account, an additional ${{TRANSFER_FEE}} charges an online transfer fee & platform fee</small>
                                 @if ($message = Session::get('success'))
                                     <div id="success-message"
                                         class="alert alert-success alert-block margin10 flash-message">
@@ -78,7 +78,8 @@
                                     </div>
                                 @endif
                             </div>
-                            <div class="col-12 overflow-scroll">
+                            <div class="col-12">
+                                <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead class="text-center justify-content-center">
                                         <tr>
@@ -131,6 +132,7 @@
                                         @endif
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -147,10 +149,10 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-12 ">
-                                            <small class="w-100">For Withdrawal Requests to a Bank Account, an additional ₹{{TRANSFER_FEE}} charges an online transfer fee & platform fee</small>
+                                            <small class="w-100">For Withdrawal Requests to a Bank Account, an additional ${{TRANSFER_FEE}} charges an online transfer fee & platform fee</small>
                                             <span>
                                                 <p class="modal-category">Add Withdrow Request</p>
-                                                <h5 class="card-title">Wallet Balance: ₹ {!! $my_balance->user_balance !!}</h5>
+                                                <h5 class="card-title">Wallet Balance: $ {!! $my_balance->user_balance !!}</h5>
                                             </span>
                                         </div>
                                         <div class="col-12"  style="border-top: 1px solid #000;     margin: 5px; padding-top: 10px;">
@@ -206,7 +208,7 @@
 
                 Swal.fire({
                     title: "Are you sure?",
-                    html: "Your widthdraw request is ₹"+amount+", Online transfer fee is ₹"+charges+".<br><b> Transfer amount to Bank is ₹"+transferAmout+" !!</b>",
+                    html: "Your widthdraw request is $"+amount+", Online transfer fee is $"+charges+".<br><b> Transfer amount to Bank is $"+transferAmout+" !!</b>",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: '#d33',

@@ -1530,7 +1530,7 @@
 @media (min-width: 320px) and (max-width: 429px) {
   /* ############### Header ################ */
   .header-logo {
-    height: 60px;
+    height: 52px;
   }
   .nav-title {
     font-size: 14px;
@@ -2222,7 +2222,7 @@
 @media (max-width: 320px) {
   /* ############### Header ################ */
   .header-logo {
-    height: 45px;
+    height: 38px;
   }
   .nav-title {
     font-size: 14px;

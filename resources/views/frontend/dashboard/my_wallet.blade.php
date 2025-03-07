@@ -35,7 +35,7 @@
                                                 <div class="col-lg-10 col-md-9 col-8 my-auto">
                                                     <div class="card-body card-ship-padd py-3">
                                                         <p class="dash-balance"> Balance </p>
-                                                        <h5 class="card-title dash-money">₹ {!! $my_balance[0]->user_balance !!}</h5>
+                                                        <h5 class="card-title dash-money">$ {!! $my_balance[0]->user_balance !!}</h5>
                                                     </div>
                                                 </div>
                                             </div>

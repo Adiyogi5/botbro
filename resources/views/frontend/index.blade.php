@@ -86,7 +86,7 @@
     @if (!empty($offers))
         @foreach ($offers as $key => $row)
             @if ($key == 0)
-                <section class="my-3">
+                <section class="">
                     <div>
                         <div class="offer_banner">
                             <img src="{{ imageexist($row['image']) }}"  class="img-fluid offer_banner-img w-100">
@@ -102,7 +102,7 @@
 
     {{-- ######################## Cards Start ############################# --}}
     @if (!empty($homecms[2]) && !empty($homecms[3]))
-    <section id="Card-Upayliving" class="bg-white">
+    <section id="Card-Upayliving" class="bg-join-upayliving">
         <div class="container py-lg-4 py-3">
             <div class="row g-lg-3 g-3">
                 <div class="col-md-6 col-12 upayliving-item h-100">
@@ -146,7 +146,7 @@
      @if (!empty($offers))
      @foreach ($offers as $key => $row)
          @if ($key >= 1)
-             <section class="my-3">
+             <section class="">
                      <div class="offer_banner" >
                          <img src="{{ imageexist($row['image']) }}" class="img-fluid img-responsive w-100">
                      </div>

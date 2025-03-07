@@ -89,7 +89,7 @@ body {
 }
 .membership-heading-badge{
   text-decoration: underline;
-  background-color: #1d62cf;
+  background-color: #02246a;
   color: white;
   padding: 6px 0px;
   border-radius: 6px;
@@ -136,7 +136,7 @@ body {
 }
 .btn-custom-navbar {
   color: white !important;
-  background: #1d62cf !important;
+  background: #02246a !important;
   font-size: 16px;
   font-weight: 500;
   box-shadow: 0px 4px 4px 0px #00000040;
@@ -209,7 +209,7 @@ body {
   text-decoration: none;
 }
 .btn-banner {
-  color: #1d62cf !important;
+  color: #02246a !important;
   font-size: 18px !important;
 }
 .btn-banner:hover {
@@ -310,7 +310,7 @@ body {
   filter: invert(1) brightness(2);
 }
 .bg-footer {
-  background-color: #123975;
+  background-color: #041335;
 }
 .footer-heading {
   color: white;
@@ -375,7 +375,7 @@ body {
   font-weight: 500;
 }
 .btn-custom-warning {
-  --bs-btn-color: #1d62cf;
+  --bs-btn-color: #02246a;
   --bs-btn-bg: #ffc107;
   --bs-btn-border-color: #ffc107;
   --bs-btn-hover-color: #ffc720;
@@ -397,15 +397,15 @@ body {
 
 /* ############################# Why UpayLiving ############################## */
 .bg-why-upayliving {
-  background-color: #f2f2f2;
+  background-color: #02246a;
 }
 .upayliving-heading {
-  color: #184b9d;
+  color: #ffffff;
   font-size: 38px;
   font-weight: 600;
 }
 .upayliving-content {
-  color: #404040;
+  color: #ffffff;
   font-size: 16px;
   line-height: 30px;
   font-weight: 400;
@@ -418,7 +418,7 @@ body {
 
 /* ############################# Join UpayLiving ############################## */
 .bg-join-upayliving {
-  background-color: #1d62cf;
+  background-color: #02246a;
 }
 .join-upayliving-heading {
   color: #ffffff;
@@ -462,7 +462,7 @@ body {
   left: 2%;
   width: 96%;
   height: 96%;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
   pointer-events: none;
   z-index: -1;
 }
@@ -492,17 +492,22 @@ body {
   text-align: justify;
 }
 .btn-upaycard:hover {
-  background-color: #1d62cf;
-  border: 1px solid #1d62cf;
+  background-color: #02246a;
+  border: 1px solid #02246a;
 }
 .why-upay-inner-img {
   aspect-ratio: 1.5/1;
+}
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; 
 }
 
 /* ########################### Testimonial ########################## */
 .bg-testimonial {
   /* background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)),
     url("../../images/testimonial-bg.png"); */
+  background-color: #02246a;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -519,7 +524,7 @@ body {
   min-height: 210px;
 }
 .front-image {
-  border: 1px solid #1d62cf;
+  border: 1px solid #02246a;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 50%;
   height: 100px;
@@ -541,7 +546,7 @@ body {
 .testimonial-heading {
   font-weight: 700;
   font-size: 42px;
-  color: #184b9d;
+  color: #ffffff;
 }
 .testimonial-title {
   font-weight: 700;
@@ -613,7 +618,7 @@ body {
 .js-ag-faq_title {
   font-size: 20px;
   padding: 15px 30px;
-  background: linear-gradient(to right, #1d62cf , #184b9d);
+  background: linear-gradient(to right, #02246a , #184b9d);
   cursor: pointer;
   color: #fff;
 }
@@ -643,7 +648,7 @@ body {
 }
 .btn-custom-form {
   color: white !important;
-  background: #1d62cf !important;
+  background: #02246a !important;
   font-size: 16px;
   font-weight: 500;
   box-shadow: 0px 4px 4px 0px #00000040;
@@ -652,7 +657,7 @@ body {
 }
 .btn-password {
   color: white !important;
-  background: #1d62cf !important;
+  background: #02246a !important;
 }
 .modal-link {
   font-weight: 600;
@@ -784,7 +789,7 @@ body {
   font-size: 20px;
   font-weight: 400;
   color: #ffffff !important;
-  background-color: #1d62cf;
+  background-color: #02246a;
   box-shadow: 0px 0px 2.5px 0px #00000040;
   padding: 0px 10px;
   text-decoration: none !important;
@@ -794,7 +799,7 @@ body {
 .blog-page-link {
   font-size: 20px;
   font-weight: 400;
-  color: #1d62cf !important;
+  color: #02246a !important;
   background-color: #ffffff;
   box-shadow: 0px 0px 2.5px 0px #00000040;
   padding: 0px 10px;
@@ -805,12 +810,12 @@ body {
 .blog-page-link:hover
 {
   color: #ffffff !important;
-  background-color: #1d62cf;
+  background-color: #02246a;
 }
 
 /* #################### Contact Us Page ################### */
 .bg-contact-icon {
-  color: #1d62cf ;
+  color: #02246a ;
   background-color: #ffffff;
 }
 
@@ -820,7 +825,7 @@ body {
 }
 
 .bg-contactus {
-  background: linear-gradient(to right, #1d62cf , #184b9d);
+  background: linear-gradient(to right, #02246a , #184b9d);
 }
 
 /* ####################################################################################################### */
@@ -890,16 +895,16 @@ body {
 
 /* #################### Dashboard ##################  */
 .bg-lime {
-  background-color: #1d62cf  !important;
+  background-color: #02246a  !important;
   color: white !important;
   font-weight: 600;
 }
 .card-dash {
-  border: 2px solid #1d62cf52;
+  border: 2px solid #02246a52;
   border-radius: 0px;
 }
 .border-end {
-  border-right: 2px solid #1d62cf52 !important;
+  border-right: 2px solid #02246a52 !important;
 }
 .pro-img-order {
   /* filter: brightness(56%) hue-rotate(230deg); */
@@ -911,7 +916,7 @@ body {
 }
 
 .dash-number {
-  color: #1d62cf ;
+  color: #02246a ;
   font-size: 36px;
   font-weight: 500;
   margin-bottom: 1% !important;
@@ -933,7 +938,7 @@ body {
   top: 20px;
 }
 .dash-timer {
-  color: #1d62cf;
+  color: #02246a;
   font-size: 18px;
   font-weight: 500;
 }
@@ -948,7 +953,7 @@ body {
 
 .bg-dash-out {
   margin-right: 10%;
-  background-color: #1d62cf ;
+  background-color: #02246a ;
   border-top-right-radius: 100px;
   border-bottom-right-radius: 100px;
 }
@@ -1014,7 +1019,7 @@ body {
 }
 
 .timer-element:nth-child(even) {
-  background-color: #1d62cf;
+  background-color: #02246a;
   animation: fadeIn 1s ease-in-out;
 }
 
@@ -1046,7 +1051,7 @@ body {
   left: -10px;
   right: -10px;
   bottom: -10px;
-  background: linear-gradient(45deg, #1d62cf, #1d62cf);
+  background: linear-gradient(45deg, #02246a, #02246a);
   z-index: -1;
   border-radius: 12px;
   animation: gradientShift 5s infinite;
@@ -1476,8 +1481,8 @@ body {
 .btn-order-ship {
   transition: all 0.5s ease;
   color: white !important;
-  background-color: #1d62cf !important;
-  border: 2px solid #1d62cf !important;
+  background-color: #02246a !important;
+  border: 2px solid #02246a !important;
   font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
@@ -1486,9 +1491,9 @@ body {
 }
 
 .btn-order-ship:hover {
-  color: #1d62cf !important;
+  color: #02246a !important;
   background-color: white !important;
-  border: 2px solid #1d62cf !important;
+  border: 2px solid #02246a !important;
   font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
@@ -1498,9 +1503,9 @@ body {
 
 .btn-order-forgot {
   transition: all 0.5s ease;
-  color: #1d62cf !important;
+  color: #02246a !important;
   background-color: white !important;
-  border: 2px solid #1d62cf !important;
+  border: 2px solid #02246a !important;
   font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
@@ -1510,8 +1515,8 @@ body {
 
 .btn-order-forgot:hover {
   color: white !important;
-  background-color: #1d62cf !important;
-  border: 2px solid #1d62cf !important;
+  background-color: #02246a !important;
+  border: 2px solid #02246a !important;
   font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
@@ -1520,13 +1525,13 @@ body {
 }
 
 .card-order-ship {
-  border: 2px solid #1d62cf;
+  border: 2px solid #02246a;
   border-radius: 0px;
   box-shadow: 0px 0px 8px 0px #00000040;
 }
 
 .faa-ship {
-  color: #1d62cf !important;
+  color: #02246a !important;
   background-color: white !important;
   font-size: 22px !important;
   font-weight: 600 !important;
@@ -1606,7 +1611,7 @@ body {
 
 /* ############### MODAL ONE ###############  */
 .card-modal-ship-active {
-  border: 2px solid #1d62cf;
+  border: 2px solid #02246a;
   border-radius: 0px;
   box-shadow: 0px 0px 8px 0px #00000040;
 }
@@ -1636,7 +1641,7 @@ body {
 }
 
 .faa-modal {
-  color: #1d62cf;
+  color: #02246a;
   background-color: white;
   font-size: 22px;
   font-weight: 600;
@@ -1654,7 +1659,7 @@ body {
 }
 
 .faa-dott {
-  color: #1d62cf;
+  color: #02246a;
   background-color: #eeeeee;
   border-radius: 50%;
   height: 40px;
@@ -1666,7 +1671,7 @@ body {
 
 .btn-modal-active {
   color: white;
-  background-color: #1d62cf;
+  background-color: #02246a;
   font-size: 16px;
   font-weight: 500;
   border-radius: 8px;
@@ -1686,7 +1691,7 @@ body {
 }
 .btn-modal-active:hover {
   color: white;
-  background-color: #1d62cf;
+  background-color: #02246a;
   font-size: 16px;
   font-weight: 500;
   border-radius: 8px;
@@ -1837,19 +1842,19 @@ p.pro-order-discount {
 }
 
 .quant-order-btn {
-  border: 2px solid #1d62cf;
+  border: 2px solid #02246a;
   border-radius: 8px;
   padding: 4px 6px;
 }
 
 .quant-order-btn:hover {
-  border: 2.5px solid #1d62cf;
+  border: 2.5px solid #02246a;
   border-radius: 8px;
 }
 
 .bg-order-pm {
   color: white !important;
-  background-color: #1d62cf !important;
+  background-color: #02246a !important;
   border: none;
   border-radius: 50%;
   height: 20px;
@@ -1958,7 +1963,7 @@ p.pro-order-discount {
 
 .btn-order-place {
   color: white;
-  background-color: #1d62cf;
+  background-color: #02246a;
   font-size: 20px;
   font-weight: 500;
   border-radius: 12px;

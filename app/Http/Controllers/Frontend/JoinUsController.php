@@ -37,7 +37,7 @@ class JoinUsController extends Controller
     {
         $title = 'Join Us';
 
-        $terms_cms = Cms::where('cms.name', 'Terms Of Use')
+        $terms_cms = Cms::where('cms.name', 'Terms and Conditions')
             ->where('status', '1')
             ->first();
 

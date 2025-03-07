@@ -10,7 +10,7 @@ class TermsController extends Controller
 {
     public function index(Request $request)
     {
-        $terms_cms = Cms::where('cms.slug', 'terms-conditions')
+        $terms_cms = Cms::where('cms.slug', 'terms-and-conditions')
         ->where('status', '1')->first();
         $title = $terms_cms->name;
         

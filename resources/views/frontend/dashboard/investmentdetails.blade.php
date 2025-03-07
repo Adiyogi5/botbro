@@ -44,7 +44,7 @@
                                 </li>
                             </ul>
 
-                            <div class="tab-content custom-tab-content p-4" id="investmentTabsContent">
+                            <div class="tab-content custom-tab-content p-lg-4 p-2" id="investmentTabsContent">
                                 <!-- Tab One Content -->
                                 <div class="tab-pane fade show active" id="tab-one" role="tabpanel"
                                     aria-labelledby="tab-one-tab">
@@ -60,7 +60,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row gx-5 px-3 py-2">
+                                    <div class="row gx-5 px-lg-3 px-2 py-2">
                                         <div class="col border-end">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <p class="fw-bold">Name : </p>
@@ -111,7 +111,7 @@
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <p class="fw-bold">Invest Amount : </p>
-                                                <p>{{ $investment_data->invest_amount }}</p>
+                                                <p>$ {{ $investment_data->invest_amount }}</p>
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <p class="fw-bold">Rate Of Intrest : </p>
@@ -161,15 +161,16 @@
                                                 </div>
                                             </div>
                                         </div> --}}
-                                        <table class="table table-bordered datatable px-3 py-2">
+                                        <div class="table-responsive">
+                                        <table class="table table-bordered datatable px-lg-3 px-2 py-2">
                                             <thead class="thead-light">
                                                 <tr>
                                                     <th>Date</th>
                                                     <th>Description</th>
                                                     <th>Rate of Interest</th>
-                                                    <th class="text-danger">Debit (₹)</th>
-                                                    <th class="text-success">Credit (₹)</th>
-                                                    <th class="fw-bold text-primary">Balance (₹)</th>
+                                                    <th class="text-danger">Debit ($)</th>
+                                                    <th class="text-success">Credit ($)</th>
+                                                    <th class="fw-bold text-primary">Balance ($)</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -200,6 +201,7 @@
                                                 @endif
                                             </tbody>
                                         </table>
+                                        </div>
                                     </div>
                                     {{-- ###### Tabe Two End ######  --}}
                                 </div>
@@ -208,8 +210,8 @@
                                     aria-labelledby="tab-three-tab">
                                     {{-- Withdrawal Requests --}}
                                     {{-- ###### Tabe Three start ######  --}}
-                                    <div class="col-12 px-3">
-                                        <div class="d-flex justify-content-between">
+                                    <div class="col-12 px-lg-3 px-2">
+                                        <div class="d-lg-flex text-lg-start justify-content-lg-between d-grid text-center justify-content-center gap-2">
                                             <p class="dash-category">Withdrow Request</p>
                                             <div>
                                                 <a id="openFullWithdrawModal" data-bs-toggle="modal"
@@ -233,13 +235,14 @@
                                                 and 5th of
                                                 each month.</small>
                                         </div>
-                                        <div class="col-12 overflow-scroll">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
                                             <table class="table table-bordered">
                                                 <thead class="text-center justify-content-center">
                                                     <tr>
                                                         <th scope="col">S.No</th>
                                                         <th scope="col">Voucher No</th>
-                                                        <th scope="col">Amount</th>
+                                                        <th scope="col">Amount ($)</th>
                                                         <th scope="col">Request Date</th>
                                                         <th scope="col">Status</th>
                                                     </tr>
@@ -288,6 +291,7 @@
                                                     @endif
                                                 </tbody>
                                             </table>
+                                            </div>
                                         </div>
                                     </div>
                                     {{-- ###### Tabe Three End ######  --}}
@@ -309,7 +313,7 @@
                                                                 <p class="modal-category">Full Withdrow Investment Request
                                                                 </p>
                                                                 @if (!empty($my_balance->balance))
-                                                                    <h5>Current Balance: ₹ {!! $my_balance->balance !!}
+                                                                    <h5>Current Balance: $ {!! $my_balance->balance !!}
                                                                     </h5>
                                                                 @endif
                                                             </span>
@@ -331,7 +335,7 @@
                                                                     @csrf
                                                                     <div class="mb-3 col-10 mx-auto">
                                                                         <label for="amount" id="fullamount-label"
-                                                                            class="form-label">Amount</label>
+                                                                            class="form-label">Amount ($)</label>
                                                                         <input type="text"
                                                                             class="form-control rounded-0 mb-2"
                                                                             id="fullamount" name="amount"
@@ -374,7 +378,7 @@
                                                                 <p class="modal-category">Add Withdrow Investment Request
                                                                 </p>
                                                                 @if (!empty($my_balance->balance))
-                                                                    <h5>Current Balance: ₹ {!! $my_balance->balance !!}
+                                                                    <h5>Current Balance: $ {!! $my_balance->balance !!}
                                                                     </h5>
                                                                 @endif
                                                             </span>
@@ -398,7 +402,7 @@
                                                                     <div class="row g-3">
                                                                         <div class="col-md-10 col-12 mx-auto">
                                                                             <label for="amount"
-                                                                                class="form-label">Amount</label>
+                                                                                class="form-label">Amount ($)</label>
                                                                             <input type="text"
                                                                                 class="form-control rounded-0"
                                                                                 value="{{ old('amount') }}"
@@ -475,7 +479,7 @@
                             var calculatedAmount = parseFloat(response.calculated_amount)
                                 .toFixed(2);
                             var formulaText =
-                                `Calculated Amount = ${response.balance} * ${response.percentage}% = ₹${calculatedAmount}`;
+                                `Calculated Amount = ${response.balance} * ${response.percentage}% = ${calculatedAmount}`;
 
                             $('#fullamount').val(calculatedAmount).prop('readonly', true);
                             $('#calculationResult').html(formulaText).removeClass('text-danger')
@@ -511,7 +515,7 @@
 
                 Swal.fire({
                     title: "Are you sure?",
-                    html: "Your withdrawal request amount is ₹" + amount,
+                    html: "Your withdrawal request amount is $" + amount,
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -547,7 +551,7 @@
 
                 Swal.fire({
                     title: "Are you sure?",
-                    html: "Your widthdraw request is ₹" + amount + " ",
+                    html: "Your widthdraw request is $" + amount + " ",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: '#d33',

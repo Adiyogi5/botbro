@@ -51,7 +51,7 @@
                                                 required autocomplete="current-password">
                                             <div class="input-group-append">
                                                 <div class="input-group-text">
-                                                    <span class="fas fa-lock"></span>
+                                                    <span class="fas fa-eye-slash" id="togglePassword" style="cursor: pointer;"></span>
                                                 </div>
                                             </div>
                                             @error('password')
@@ -117,6 +117,21 @@
         $(document).ready(function() {
             fadeOutFlashMessages();
         });
+        
+        document.getElementById('togglePassword').addEventListener('click', function () {
+        let passwordField = document.getElementById('password');
+        let icon = this;
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        }
+    });
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

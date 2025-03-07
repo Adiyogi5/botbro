@@ -115,7 +115,7 @@
                         </div>
 
                         <div class="form-join form-join-border">
-                            <h3 class="mb-3">Choose Your UPay Living Products Refers <span
+                            <h3 class="mb-3">Choose Your ROBOT Trade Refers <span
                                 class="text-danger">*</span></h3>
                             <div class="row g-3">
                                 <div class="col-md-6 col-12">
@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="form-join form-join-border">
-                            <h3 class="">Welcome to the UPay Family!</h3>
+                            <h3 class="">Welcome to the ROBOT Trade Family!</h3>
                             <p>Thank you for Joining.</p>
                             <div class="row g-3">
                                  <div class="col-md-6 col-12">
@@ -150,7 +150,7 @@
                                 <div class="col-12">
                                     <input type="checkbox" aria-label="" name="check_box" value="true"
                                         id="" class="check-box">
-                                    <span> I agree to UPay <a class="modal-link" id="openModalLink">Terms of
+                                    <span> I agree to ROBOT Trade <a class="modal-link" id="openModalLink">Terms of
                                             Use.</a></span>
                                     <br>
                                     <label for="check_box" class="error"></label>

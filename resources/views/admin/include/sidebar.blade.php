@@ -308,7 +308,7 @@
                     </li>
                 @endif
 
-                @if (userCan([112, 113]))
+                {{-- @if (userCan([112, 113]))
                     <li class="nav-item {{ @$active8 }} {{ @$active8 ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ @$active8 }}">
                             <i class="nav-icon fas fa-question"></i>
@@ -335,7 +335,7 @@
                             @endif
                         </ul>
                     </li>
-                @endif
+                @endif --}}
 
                 @if (userCan([114, 115]))
                     {{-- <li class="nav-item {{ @$active4 }} {{ @$active4 ? 'menu-open' : '' }}">

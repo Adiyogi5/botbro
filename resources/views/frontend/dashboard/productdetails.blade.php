@@ -69,7 +69,7 @@
 
                                         <h1 class="product-name">{{ $productval->name }}</h1>
                                         <h3 class="product-model">Model : {{ $productval->model }}</h3>
-                                        <p class="product-price-name">Price : ₹<span
+                                        <p class="product-price-name">Price : $<span
                                                 class="product-page-price">{{ $productval->price }}</span>
                                         </p>
                                         <p class="product-desc mt-2">{{ $productval->description }}</p>
@@ -124,7 +124,7 @@
                                             src="{{ imageexist($products->image) }}" alt="Card image cap">
                                         <div class="card-body p-2">
                                             <h5 class="product-title ">{{ $products->name }}</h5>
-                                            <p class="product-price">Price: ₹{{ $products->price }}</p>
+                                            <p class="product-price">Price: ${{ $products->price }}</p>
                                             <div class="text-center justify-content-center">
                                                 <a href="{{ route('frontend.productdetails', ['slug' => $products->slug]) }}"
                                                     class="btn btn-md btn-warning text-white btn-upaycard">
