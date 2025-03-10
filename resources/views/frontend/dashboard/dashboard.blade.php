@@ -37,7 +37,7 @@
                                     </h4>
 
                                     <div class="row">
-                                        <div class="col-md-6 col-12">
+                                        <div class="col-lg-6 col-12">
                                             <span class="d-flex justify-content-between item-align-self">
                                                 <h6>Account Name : </h6>
                                                 <p>{{ $site_settings['account_holder_name'] }}</p>
@@ -79,9 +79,9 @@
                                             @endif
                                         </div>
                                         @if(!empty($site_settings['qr_code']))
-                                            <div class="col-md-6 col-12 text-center justify-content-center item-align-self">
+                                            <div class="col-lg-6 col-12 text-center justify-content-center item-align-self">
                                                 {{-- <h6>Please scan QR Code for Payment : </h6> --}}
-                                                <img class="img-fluid qr-code-img" src="{{ asset($site_settings['qr_code']) }}"
+                                                <img class="img-fluid qr-code-img mx-auto" src="{{ asset($site_settings['qr_code']) }}"
                                                     alt="">
                                             </div>
                                         @endif
