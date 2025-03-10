@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Frontend\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminNotification;
 use App\Models\Investment;
 use App\Models\Ledger;
 use App\Models\MembershipDetail;
@@ -81,7 +82,8 @@ class DashboardController extends Controller
 
     public function qrcodepayment(Request $request)
     {
-        // dd($request);
+        $user = auth('web')->user();
+        
         $validate = $request->validate([
             'reference_id'   => 'required',
             'transaction_id' => 'required',
@@ -96,6 +98,16 @@ class DashboardController extends Controller
             $data->transaction_id = $request->transaction_id;
             $data->payment_date   = now()->toDateString();
             $data->save();
+
+             /// Send Notification to Admin
+             $adnoti                    = new AdminNotification();
+             $adnoti->title             = "New Customer Payment Approval Request";
+             $adnoti->message           = "Get New Customer Payment Approval Request from " . $user->name . "!!";
+             $adnoti->notification_type = 1;
+             $adnoti->is_read           = 0;
+             $adnoti->created_at        = now()->format('Y-m-d H:i:s');
+             $adnoti->updated_at        = now()->format('Y-m-d H:i:s');
+             $adnoti->save();
 
             $request->session()->flash('success', 'Thanks For Join Our Membership.. Please wait for Approval !');
             return redirect()->back();

@@ -5,17 +5,12 @@
                 <img src="{{ asset($site_settings['logo']) }}" class="img-fluid header-logo" alt="" />
             </a>
             <ul class="d-flex my-auto ms-auto" style="list-style:none;">
-                @if (Auth::guard('web')->check() && $user_approved->is_approved == 1)
-                    <li class="nav-item mx-md-3 mx-2 my-auto d-lg-none d-block">
-                        <a href="{{ url('cart') }}" class="nav-link position-relative">
-                            {{-- <i class="fa-solid fa-bag-shopping faa-bag"></i> --}}
-                            <img src="{{ asset('public/images/cart.png') }}" class="faa-bag" alt="">
-                            <span id="chatNotif"
-                                class="position-absolute cart_counter top-0 start-100 translate-bottom badge rounded-pill bg-danger">{{ $cart_count ? $cart_count : '0' }}
-                            </span></a>
-                        </a>
-                    </li>
-                @endif
+                @if (Auth::check() == null)
+                            <li class="nav-item mx-lg-1 mx-1 text-nowrap my-auto d-lg-none d-block">
+                                <a href="{{ route('frontend.joinus') }}"
+                                    class="nav-link btn btn-upayliving">Investment</a>
+                            </li>
+                        @endif
                 @if (Auth::guard('web')->check())
                     <li class="nav-item mx-lg-3 mx-md-3 mx-2 my-auto d-lg-none d-block">
                         <div class="dropdown user_dropdown">

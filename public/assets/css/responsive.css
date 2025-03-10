@@ -28,7 +28,9 @@
   .faa-bag {
     font-size: 24px;
   }
-
+  .btn-upayliving {
+    font-size: 14px;
+  }
   /* ################# Footer ################## */
   .footer-logo {
     height: 60px;
@@ -475,6 +477,9 @@
     font-size: 16px;
     padding: 4px 8px;
     border-radius: 6px;
+  }
+  .btn-upayliving {
+    font-size: 14px;
   }
   /* ################# Footer ################## */
   .footer-logo {
@@ -1017,7 +1022,10 @@
 @media (min-width: 426px) and (max-width: 767px) {
   /* ############### Header ################ */
   .header-logo {
-    height: 52px;
+    height: 46px;
+  }
+  .navbar-toggler{
+    padding: 2px 5px !important;
   }
   .nav-title {
     font-size: 14px;
@@ -1028,9 +1036,6 @@
   .dropdown-menu {
     border: none;
     box-shadow: none;
-  }
-  .btn-custom-navbar {
-    font-size: 14px;
   }
   .btn-custom-form {
     font-size: 14px;
@@ -1057,6 +1062,14 @@
   }
   .timer-box {
     margin-top: 16px;
+  }
+  .btn-upayliving {
+    font-size: 14px;
+    padding: 4px 10px !important;
+  }
+  .btn-custom-navbar {
+    font-size: 14px;
+    padding: 4px 10px !important;
   }
   /* ################# Footer ################## */
   .footer-logo {
@@ -1101,10 +1114,10 @@
     font-size: 14px !important;
   }
   .carousel-content.absolute-text {
-    left: 4%;
+    left: 6%;
     transform: translate(0%, -50%);
     color: white;
-    width: 40%;
+    width: 88%;
   }
   .carousel-control-prev-icon,
   .carousel-control-next-icon {
@@ -1553,7 +1566,7 @@
 @media (min-width: 320px) and (max-width: 429px) {
   /* ############### Header ################ */
   .header-logo {
-    height: 46px;
+    height: 42px;
   }
   .nav-title {
     font-size: 14px;
@@ -1565,10 +1578,17 @@
     border: none;
     box-shadow: none;
   }
+  .navbar-toggler{
+    padding: 2px 5px !important;
+  }
   .btn-custom-navbar {
     display: inline-block !important;
     font-size: 14px;
-    padding: 4px 14px !important;
+    padding: 4px 10px !important;
+  }
+  .btn-upayliving {
+    font-size: 14px;
+    padding: 4px 10px !important;
   }
   .btn-custom-form {
     display: inline-block !important;
@@ -2194,7 +2214,7 @@
 @media (min-width: 320px) and (max-width: 375px) {
   /* ############### Header ################ */
   .header-logo {
-    height: 43px;
+    height: 38px;
   }
   .nav-title {
     font-size: 14px;
@@ -2206,10 +2226,17 @@
     border: none;
     box-shadow: none;
   }
+  .navbar-toggler{
+    padding: 2px 2px !important;
+  }
   .btn-custom-navbar {
     display: inline-block !important;
     font-size: 12px;
-    padding: 4px 12px !important;
+    padding: 3px 8px !important;
+  }
+  .btn-upayliving {
+    font-size: 12px;
+    padding: 3px 8px !important;
   }
   .btn-custom-form {
     display: inline-block !important;
@@ -2278,7 +2305,7 @@
 @media (max-width: 320px) {
   /* ############### Header ################ */
   .header-logo {
-    height: 38px;
+    height: 34px;
   }
   .nav-title {
     font-size: 14px;
@@ -2290,10 +2317,17 @@
     border: none;
     box-shadow: none;
   }
+  .navbar-toggler{
+    padding: 2px 2px !important;
+  }
   .btn-custom-navbar {
     display: inline-block !important;
     font-size: 12px;
-    padding: 4px 10px !important;
+    padding: 3px 8px !important;
+  }
+  .btn-upayliving {
+    font-size: 12px;
+    padding: 3px 8px !important;
   }
   .btn-custom-form {
     display: inline-block !important;

@@ -213,7 +213,10 @@ class InvestmentController extends Controller
             ->leftJoin('countries', 'countries.id', '=', 'user_addresses.country_id')
             ->leftJoin('states', 'states.id', '=', 'user_addresses.state_id')
             ->leftJoin('cities', 'cities.id', '=', 'user_addresses.city_id')
-            ->Where('user_addresses.default_id', 1)
+            ->where(function ($query) {
+                $query->where('user_addresses.default_id', 1)
+                      ->orWhereNull('user_addresses.user_id'); 
+            })
             ->where(['investments.id' => $id, 'investments.deleted_at' => null])
             ->first();
 

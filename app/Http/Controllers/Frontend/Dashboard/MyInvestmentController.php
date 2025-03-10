@@ -82,6 +82,16 @@ class MyInvestmentController extends Controller
 
             $data->save();
 
+            /// Send Notification to Admin
+            $adnoti                    = new AdminNotification();
+            $adnoti->title             = "New Investment";
+            $adnoti->message           = "Get New Investment from " . $user->name . "!!";
+            $adnoti->notification_type = 1;
+            $adnoti->is_read           = 0;
+            $adnoti->created_at        = now()->format('Y-m-d H:i:s');
+            $adnoti->updated_at        = now()->format('Y-m-d H:i:s');
+            $adnoti->save();
+
             return redirect()->back()->with('success', 'Thanks for investing with us. Please wait for approval!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to save investment details: ' . $e->getMessage());

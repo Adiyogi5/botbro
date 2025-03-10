@@ -38,30 +38,48 @@
 
                                     <div class="row">
                                         <div class="col-lg-6 col-12">
+                                            @if(!empty($site_settings['account_holder_name']))
                                             <span class="d-flex justify-content-between item-align-self">
                                                 <h6>Account Name : </h6>
                                                 <p>{{ $site_settings['account_holder_name'] }}</p>
                                             </span>
+                                            @endif
+
+                                            @if(!empty($site_settings['account_no']))
                                             <span class="d-flex justify-content-between item-align-self">
                                                 <h6>Account Number : </h6>
                                                 <p>{{ $site_settings['account_no'] }}</p>
                                             </span>
+                                            @endif
+
+                                            @if(!empty($site_settings['bank_name']))
                                             <span class="d-flex justify-content-between item-align-self">
                                                 <h6>Bank Name : </h6>
                                                 <p>{{ $site_settings['bank_name'] }}</p>
                                             </span>
+                                            @endif
+
+                                            @if(!empty($site_settings['ifsc_code']))
                                             <span class="d-flex justify-content-between item-align-self">
                                                 <h6>IFSC Code : </h6>
                                                 <p>{{ $site_settings['ifsc_code'] }}</p>
                                             </span>
+                                            @endif
+
+                                            @if(!empty($site_settings['upi_id']))
                                             <span class="d-flex justify-content-between item-align-self">
                                                 <h6>UPI ID : </h6>
                                                 <p>{{ $site_settings['upi_id'] }}</p>
                                             </span>
+                                            @endif
+
+                                            @if(!empty($site_settings['membership_fee']))
                                             <span class="d-flex justify-content-between item-align-self">
                                                 <h6>Membership Fee : </h6>
                                                 <p class="membership-fee-badge">{{ $site_settings['membership_fee'] }}</p>
                                             </span>
+                                            @endif
+                                            
                                             @if (
                                                 !isset($user_membership) ||
                                                     (is_null($user_membership->reference_id ?? null) &&
