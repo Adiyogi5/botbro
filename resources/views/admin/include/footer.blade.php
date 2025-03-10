@@ -1,5 +1,5 @@
 <footer class="main-footer">
-<strong>{{$site_settings['copyright']}}. <a href="https://adiyogitechnosoft.com/" target="_blank">Design and Developed by Adiyogi Technosoft Pvt Ltd.</a></strong> 
+<strong>{{$site_settings['copyright']}}</strong> 
 <div class="float-right d-none d-sm-inline-block">
    
 </div>

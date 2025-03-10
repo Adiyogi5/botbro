@@ -114,10 +114,12 @@
                                                 </p>
                                             </div>
                                         </div>
+                                        @if($order->is_approved)
                                         <div class="col-md-2 col-12 d-flex align-items-center justify-content-center mb-md-0 mb-2">
                                             <a href="{{ route('frontend.investmentdetails', $order->id) }}"
                                                 class="btn btn-md btn-primary py-1">View Details</a>
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
                             @empty
@@ -208,7 +210,7 @@
                     payment_type: "Please select a payment type",
                     transaction_id: "Transaction ID is required for online payment",
                     screenshot: {
-                        required: "Please upload a screenshot",
+                        required: "Please upload a valid screenshot",
                         accept: "Only PNG, JPG, and JPEG formats are allowed",
                     },
                 },

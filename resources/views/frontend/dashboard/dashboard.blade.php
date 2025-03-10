@@ -202,7 +202,7 @@
                                     $remainingTime = $membershipEndDate->diffInSeconds(now()); // In seconds
                                 @endphp
 
-                                <div class="col-12 mb-2 d-flex text-center justify-content-between">
+                                <div class="col-12 mb-2 d-lg-flex text-center justify-content-lg-between d-md-grid justify-content-md-center gap-2 mb-4">
                                     <p class="dash-category my-auto">Membership Validity :</p>
                                     <div class="dash-timer my-auto w-100" id="timer-message"
                                         data-remaining-time="{{ $remainingTime }}">
@@ -412,7 +412,7 @@
                                     </div>
                                 @else
                                     @isset($investmentData)
-                                        <div class="col-xl-6 col-lg-6 col-md-6 col-12 my-auto">
+                                        <div class="col-xl-6 col-lg-6 col-md-12 col-12 my-auto">
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
                                                     <p class="dash-balance">Investment Balance </p>
@@ -422,7 +422,7 @@
                                         </div>
                                         @endisset
                                         @isset($user_refferBalance)
-                                        <div class="col-xl-6 col-lg-6 col-md-6 col-12 my-auto">
+                                        <div class="col-xl-6 col-lg-6 col-md-12 col-12 my-auto">
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
                                                     <p class="dash-balance">Referral & Commission Balance</p>

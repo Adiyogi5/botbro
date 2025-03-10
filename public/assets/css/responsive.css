@@ -466,6 +466,16 @@
   .bread-heading {
     font-size: 24px;
   }
+  .timer-element span {
+    font-size: 16px;
+  }
+  .timer-element {
+    margin: 0 3px;
+    gap: 4px;
+    font-size: 16px;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
   /* ################# Footer ################## */
   .footer-logo {
     height: 60px;
@@ -1035,6 +1045,19 @@
   .bread-heading {
     font-size: 24px;
   }
+  .timer-element span {
+    font-size: 14px;
+  }
+  .timer-element {
+    margin: 0 2px;
+    gap: 3px;
+    font-size: 14px;
+    padding: 4px 6px;
+    border-radius: 6px;
+  }
+  .timer-box {
+    margin-top: 16px;
+  }
   /* ################# Footer ################## */
   .footer-logo {
     height: 60px;
@@ -1530,7 +1553,7 @@
 @media (min-width: 320px) and (max-width: 429px) {
   /* ############### Header ################ */
   .header-logo {
-    height: 52px;
+    height: 46px;
   }
   .nav-title {
     font-size: 14px;
@@ -1575,6 +1598,21 @@
   .btn-banner {
     padding: 1px 6px !important;
     font-size: 13px !important;
+  }
+  .timer-element span {
+    font-size: 14px;
+  }
+  .timer-element {
+    margin: 0 2px;
+    gap: 3px;
+    font-size: 14px;
+    padding: 4px 6px;
+    border-radius: 6px;
+  }
+  .timer-box {
+    margin-top: 16px;
+    border-radius: 4px;
+    padding: 4px;
   }
   /* ############### Why Upayliving ################### */
   .why-upayliving-img {
@@ -2156,7 +2194,7 @@
 @media (min-width: 320px) and (max-width: 375px) {
   /* ############### Header ################ */
   .header-logo {
-    height: 45px;
+    height: 43px;
   }
   .nav-title {
     font-size: 14px;
@@ -2191,6 +2229,24 @@
     margin-left: -10px;
     /* left: 0px !important; */
     font-size: 9px;
+  }
+  .timer-element span {
+    font-size: 13px;
+  }
+  .timer-element p {
+    font-size: 13px;
+  }
+  .timer-element {
+    margin: 0 2px;
+    gap: 3px;
+    font-size: 14px;
+    padding: 4px 6px;
+    border-radius: 6px;
+  }
+  .timer-box {
+    margin-top: 16px;
+    border-radius: 4px;
+    padding: 4px;
   }
   /* ################# Card Upayliving ################# */
   .upayliving-caption {
@@ -2273,6 +2329,24 @@
   .btn-banner {
     padding: 0px 6px !important;
     font-size: 11px !important;
+  }
+  .timer-element span {
+    font-size: 12px;
+  }
+  .timer-element p {
+    font-size: 11px;
+  }
+  .timer-element {
+    margin: 0 2px;
+    gap: 3px;
+    font-size: 12px;
+    padding: 4px 4px;
+    border-radius: 6px;
+  }
+  .timer-box {
+    margin-top: 16px;
+    border-radius: 4px;
+    padding: 4px;
   }
   /* ################# Footer ################## */
   .footer-logo {

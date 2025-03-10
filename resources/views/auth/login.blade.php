@@ -36,7 +36,7 @@
                                                 value="{{ old('mobile') }}" required autocomplete="mobile" autofocus>
                                             <div class="input-group-append">
                                                 <div class="input-group-text">
-                                                    <span class="fas fa-envelope"></span>
+                                                    <span class="fas fa-phone"></span>
                                                 </div>
                                             </div>
                                             @error('mobile')
