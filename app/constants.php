@@ -34,7 +34,7 @@ define('RETURNSTATUS',['1'=>'Pending','3'=>'Completed']);
 
 define('TRANSFER_FEE','2'); 
 
-define('CURRENCY_SYMBOL','$');
+define('CURRENCY_SYMBOL','₹');
 
 define('COMMISSION', [
 	1 => ["label" => "Less Than or Equal to 1Cr", "max" => 10000000, "rate" => 1],

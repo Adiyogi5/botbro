@@ -67,27 +67,27 @@
                                     <hr>
                                     <span class="d-flex justify-content-between">
                                         <p class="text-start order-view-title">Sub Total :</p>
-                                        <p class="text-end order-view-text-right">$
+                                        <p class="text-end order-view-text-right">₹
                                             {!! $my_order_detail->subtotal !!}</p>
                                     </span>
                                     <span class="d-flex justify-content-between">
                                         <p class="text-start order-view-title">Discount :</p>
-                                        <p class="text-end order-view-text-right">$
+                                        <p class="text-end order-view-text-right">₹
                                             {!! $my_order_detail->discount !!}</p>
                                     </span>
                                     <span class="d-flex justify-content-between">
                                         <p class="text-start order-view-title">Tax Amount :</p>
-                                        <p class="text-end order-view-text-right">$
+                                        <p class="text-end order-view-text-right">₹
                                             {!! $my_order_detail->tax_amount !!}</p>
                                     </span>
                                     <span class="d-flex justify-content-between">
                                         <p class="text-start order-view-title">Shipping Amount :</p>
-                                        <p class="text-end order-view-text-right">$
+                                        <p class="text-end order-view-text-right">₹
                                             {!! $my_order_detail->shipping_amount !!}</p>
                                     </span>
                                     <span class="d-flex justify-content-between">
                                         <p class="text-start order-view-title">Total :</p>
-                                        <p class="text-end order-view-text-right">$
+                                        <p class="text-end order-view-text-right">₹
                                             {!! $my_order_detail->total !!}</p>
                                     </span>
                                     <hr>

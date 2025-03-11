@@ -32,7 +32,7 @@
                                 @endif
                                 @isset($my_balance)
                                 <h5 class="ms-auto my-auto py-1 px-2 rounded-1 text-white bg-secondary">Referral Balance :
-                                    $ {!! $my_balance->balance !!}</h5>
+                                    ₹ {!! $my_balance->balance !!}</h5>
                                 @endisset
                             </div>
                             <div class="col-12 card p-0">
@@ -135,9 +135,9 @@
                                                         <th>Date</th>
                                                         <th>Description</th>
                                                         <th>Rate of Interest</th>
-                                                        <th class="text-danger">Debit ($)</th>
-                                                        <th class="text-success">Credit ($)</th>
-                                                        <th class="fw-bold text-primary">Balance ($)
+                                                        <th class="text-danger">Debit (₹)</th>
+                                                        <th class="text-success">Credit (₹)</th>
+                                                        <th class="fw-bold text-primary">Balance (₹)
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -199,7 +199,7 @@
                                                     <tr>
                                                         <th scope="col">S.No</th>
                                                         <th scope="col">Voucher No</th>
-                                                        <th scope="col">Request Amount ($)</th>
+                                                        <th scope="col">Request Amount (₹)</th>
                                                         <th scope="col">Request Date</th>
                                                         <th scope="col">Status</th>
                                                     </tr>
@@ -267,7 +267,7 @@
                                                                     <p class="modal-category">Add Withdrow Referral
                                                                         Request</p>
                                                                         @isset($my_balance)
-                                                                        <h5>Current Balance: $ {!! $my_balance->balance !!}
+                                                                        <h5>Current Balance: ₹ {!! $my_balance->balance !!}
                                                                         </h5>
                                                                         @endisset
                                                                 </span>
@@ -290,7 +290,7 @@
                                                                     <div class="row g-3">
                                                                         <div class="col-md-10 col-12 mx-auto">
                                                                             <label for="amount"
-                                                                                class="form-label">Amount ($)</label>
+                                                                                class="form-label">Amount (₹)</label>
                                                                             <input type="text"
                                                                                 class="form-control rounded-0"
                                                                                 value="{{ old('amount') }}"
@@ -348,7 +348,7 @@
 
                 Swal.fire({
                     title: "Are you sure?",
-                    html: "Your widthdraw request is $" + amount + " ",
+                    html: "Your widthdraw request is ₹" + amount + " ",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: '#d33',

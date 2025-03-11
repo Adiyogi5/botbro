@@ -51,7 +51,7 @@ class UserController extends Controller
             $is_approved    = $request->is_approved ?? null;
 
             $records = User::select(
-                'users.*',
+                'users.*','membership_details.transaction_id',
                 DB::raw("
                         CASE
                             WHEN (SELECT COUNT(*) FROM user_referrals
@@ -67,6 +67,7 @@ class UserController extends Controller
                 'users.created_at as date'
             )
                 ->leftJoin('user_referrals', 'users.id', '=', 'user_referrals.refer_id')
+                ->leftJoin('membership_details', 'users.id', '=', 'membership_details.user_id')
                 ->whereNull('users.deleted_at');
 
             // Filter by membership status
@@ -93,6 +94,13 @@ class UserController extends Controller
                     if ($row->is_agent_allow == 1) {$isagent = '<i class="fa fa-user-circle" style="font-size: 20px; color: #dc3545;"></i>';} else { $isagent = '';}
                     return $isagent . ' <a href="' . route('admin.customer.details', $row->id) . '" title="Details">' . $row->name . '</a> <br>' . $row->email;
                 })
+                ->editColumn('transaction_id', function ($row) {
+                    if ($row->transaction_id) {
+                        return '<span class="text-success">' . $row->transaction_id . '</span>';
+                    } else {
+                        return '<span class="text-danger">Payment Pending</span>';
+                    }
+                })                             
                 ->editColumn('date', function ($row) {
                     return date('d-m-Y h:i a', strtotime($row['date']));
                 })
@@ -139,7 +147,7 @@ class UserController extends Controller
                     <button data-id="' . $row->id . '" class="btn btn-sm btn-danger delete_record" title="Delete"><i class="fa fa-trash"></i></button>';
                 })
                 ->removeColumn('id')
-                ->rawColumns(['status', 'is_approved', 'name', 'action'])->make(true);
+                ->rawColumns(['status', 'is_approved', 'transaction_id', 'name', 'action'])->make(true);
         }
 
         $title  = "Customer";
@@ -152,17 +160,18 @@ class UserController extends Controller
         try {
             $userId = $request->input('user_id');
 
-            // Update the `is_approved` field in `users` table
-            $user              = User::findOrFail($userId);
-            $user->is_approved = 1;
-            $user->save();
-
             // Update the `membership_details` table
             $membership = MembershipDetail::where('user_id', $userId)->first();
             if (! $membership) {
                 return response()->json(['success' => false, 'message' => 'Membership details not found.']);
             }
 
+            // Update the `is_approved` field in `users` table
+            $user              = User::findOrFail($userId);
+            $user->is_approved = 1;
+            $user->save();
+
+            // Update the `membership_details` table
             $currentDate = now()->toDateString();
             $endDate     = now()->addDays(365)->toDateString();
 

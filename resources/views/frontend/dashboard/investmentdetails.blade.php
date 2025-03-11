@@ -111,7 +111,7 @@
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <p class="fw-bold">Invest Amount : </p>
-                                                <p>$ {{ $investment_data->invest_amount }}</p>
+                                                <p>₹ {{ $investment_data->invest_amount }}</p>
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <p class="fw-bold">Rate Of Intrest : </p>
@@ -168,9 +168,9 @@
                                                     <th>Date</th>
                                                     <th>Description</th>
                                                     <th>Rate of Interest</th>
-                                                    <th class="text-danger">Debit ($)</th>
-                                                    <th class="text-success">Credit ($)</th>
-                                                    <th class="fw-bold text-primary">Balance ($)</th>
+                                                    <th class="text-danger">Debit (₹)</th>
+                                                    <th class="text-success">Credit (₹)</th>
+                                                    <th class="fw-bold text-primary">Balance (₹)</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -242,7 +242,7 @@
                                                     <tr>
                                                         <th scope="col">S.No</th>
                                                         <th scope="col">Voucher No</th>
-                                                        <th scope="col">Amount ($)</th>
+                                                        <th scope="col">Amount (₹)</th>
                                                         <th scope="col">Request Date</th>
                                                         <th scope="col">Status</th>
                                                     </tr>
@@ -313,7 +313,7 @@
                                                                 <p class="modal-category">Full Withdrow Investment Request
                                                                 </p>
                                                                 @if (!empty($my_balance->balance))
-                                                                    <h5>Current Balance: $ {!! $my_balance->balance !!}
+                                                                    <h5>Current Balance: ₹ {!! $my_balance->balance !!}
                                                                     </h5>
                                                                 @endif
                                                             </span>
@@ -335,7 +335,7 @@
                                                                     @csrf
                                                                     <div class="mb-3 col-10 mx-auto">
                                                                         <label for="amount" id="fullamount-label"
-                                                                            class="form-label">Amount ($)</label>
+                                                                            class="form-label">Amount (₹)</label>
                                                                         <input type="text"
                                                                             class="form-control rounded-0 mb-2"
                                                                             id="fullamount" name="amount"
@@ -378,7 +378,7 @@
                                                                 <p class="modal-category">Add Withdrow Investment Request
                                                                 </p>
                                                                 @if (!empty($my_balance->balance))
-                                                                    <h5>Current Balance: $ {!! $my_balance->balance !!}
+                                                                    <h5>Current Balance: ₹ {!! $my_balance->balance !!}
                                                                     </h5>
                                                                 @endif
                                                             </span>
@@ -402,7 +402,7 @@
                                                                     <div class="row g-3">
                                                                         <div class="col-md-10 col-12 mx-auto">
                                                                             <label for="amount"
-                                                                                class="form-label">Amount ($)</label>
+                                                                                class="form-label">Amount (₹)</label>
                                                                             <input type="text"
                                                                                 class="form-control rounded-0"
                                                                                 value="{{ old('amount') }}"
@@ -515,7 +515,7 @@
 
                 Swal.fire({
                     title: "Are you sure?",
-                    html: "Your withdrawal request amount is $" + amount,
+                    html: "Your withdrawal request amount is ₹" + amount,
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -551,7 +551,7 @@
 
                 Swal.fire({
                     title: "Are you sure?",
-                    html: "Your widthdraw request is $" + amount + " ",
+                    html: "Your widthdraw request is ₹" + amount + " ",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: '#d33',

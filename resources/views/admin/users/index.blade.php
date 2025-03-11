@@ -41,6 +41,7 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Mobile</th>
+                                        <th>Transaction Id</th>
                                         <th>Badge</th>
                                         <th>Membership Stutus</th>
                                         <th>Registered On</th>
@@ -90,6 +91,9 @@
                     },
                     {
                         data: 'mobile'
+                    },
+                    {
+                        data: 'transaction_id'
                     },
                     {
                         data: 'badge_level'

@@ -179,7 +179,7 @@
                                                     <tr> 
                                                         <th width="65%">Products</th> 
                                                         <th width="15%">Qty</th> 
-                                                        <th width="20%">Price ($)</th>
+                                                        <th width="20%">Price (₹)</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody> 

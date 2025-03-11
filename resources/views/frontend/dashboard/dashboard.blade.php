@@ -434,7 +434,7 @@
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
                                                     <p class="dash-balance">Investment Balance </p>
-                                                    <h5 class="card-title dash-money">$ {!! $investmentData !!}</h5>
+                                                    <h5 class="card-title dash-money">₹ {!! $investmentData !!}</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -444,7 +444,7 @@
                                             <div class="card h-100 mb-3 bg-dash-in overflow-hidden">
                                                 <div class="card-body bg-dash-out card-ship-padd py-3">
                                                     <p class="dash-balance">Referral & Commission Balance</p>
-                                                    <h5 class="card-title dash-money">$ {!! $user_refferBalance->balance ? $user_refferBalance->balance : 0 !!}</h5>
+                                                    <h5 class="card-title dash-money">₹ {!! $user_refferBalance->balance ? $user_refferBalance->balance : 0 !!}</h5>
                                                 </div>
                                             </div>
                                         </div>
