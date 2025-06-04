@@ -54,13 +54,20 @@ class UpdateLedgerStatus extends Command
                     ->whereDate('date', '!=', Carbon::now()->format('Y-m-d'))
                     ->orderBy('created_at', 'desc')
                     ->first();
-            
+           
                 if ($latestLedgerEntry && $latestLedgerEntry->balance > 0) {
                     $rateOfInterest  = $user->rate_of_intrest;
                     $previousBalance = $latestLedgerEntry->balance;
             
                     // Convert the ledger date to Carbon instance
-                    $ledgerDateCarbon = Carbon::parse($latestLedgerEntry->date);
+                    // $ledgerDateCarbon = Carbon::parse($latestLedgerEntry->date);
+                    // Decide which date to use for interest calculation
+                    if ($latestLedgerEntry->credit == 0.00 && $latestLedgerEntry->debit == 0.00 && $latestLedgerEntry->description == 'Welcome') {
+                        $ledgerDateCarbon = Carbon::parse($latestLedgerEntry->date);
+                    } else {
+                        // Use the first date of the month if any credit or debit exists
+                        $ledgerDateCarbon = Carbon::parse($latestLedgerEntry->date)->startOfMonth();
+                    }
                     
                     // Get the total number of days in the month of the ledger date
                     $totalMonthDays = $ledgerDateCarbon->daysInMonth;
@@ -69,7 +76,7 @@ class UpdateLedgerStatus extends Command
                     $ledgerDay = $ledgerDateCarbon->day;
                     
                     // Calculate remaining days in the month
-                    $remainingDays = $totalMonthDays - $ledgerDay;
+                    $remainingDays = ($totalMonthDays - $ledgerDay) + 1;
                    
                     if ($remainingDays > 0) {
                         // Calculate daily interest

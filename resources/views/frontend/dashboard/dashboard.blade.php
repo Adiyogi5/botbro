@@ -221,8 +221,8 @@
                                 @endphp
 
                                 <div class="col-12 mb-2 d-lg-flex text-center justify-content-lg-between d-md-grid justify-content-md-center gap-2 mb-4">
-                                    <p class="dash-category my-auto">Membership Validity :</p>
-                                    <div class="dash-timer my-auto w-100" id="timer-message"
+                                    {{-- <p class="dash-category my-auto">Membership Validity :</p> --}}
+                                    {{-- <div class="dash-timer my-auto w-100" id="timer-message"
                                         data-remaining-time="{{ $remainingTime }}">
                                         <div class="timer-box">
                                             <div class="timer d-flex">
@@ -244,7 +244,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
+                                    <p class="dash-category my-auto">Membership Validity Till - Date : {{$user_membership->membership_end_date}}</p>
                                 </div>
                                 @endif
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 my-auto">

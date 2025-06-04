@@ -192,7 +192,7 @@ class UserController extends Controller
                     ->first();
 
                 $previousBalance = $userLedgerBalance ? $userLedgerBalance->balance : 0;
-                $interestAmount  = 2000; // Consider making this dynamic if needed
+                $interestAmount  = $this->general_settings['agent_reward']; // Consider making this dynamic if needed
 
                 RefferEarnsLedger::create([
                     'user_id'         => $userrefferBonus->referral_id,
@@ -711,9 +711,22 @@ class UserController extends Controller
     public function user_referral_withdraw(Request $request, $id)
     {
         if ($request->ajax()) {
-            $records = UserReferralWithdrawRequest::select('user_referral_withdraw_requests.*', 'users.name as customer_name', 'users.user_reffer_balance')
-                ->where([['user_referral_withdraw_requests.user_id', $id]])
-                ->leftjoin('users', 'users.id', '=', 'user_referral_withdraw_requests.user_id')->get();
+
+            $latestLedger = DB::table('reffer_earns_ledgers as rel1')
+                ->select('rel1.user_id', 'rel1.balance')
+                ->whereRaw('rel1.id = (
+                    SELECT rel2.id FROM reffer_earns_ledgers rel2 
+                    WHERE rel2.user_id = rel1.user_id 
+                    ORDER BY rel2.created_at DESC LIMIT 1
+                )');
+
+            $records = UserReferralWithdrawRequest::select('user_referral_withdraw_requests.*', 'users.name as customer_name', 'latest.balance as user_reffer_balance')
+                ->leftJoinSub($latestLedger, 'latest', function($join) {
+                    $join->on('user_referral_withdraw_requests.user_id', '=', 'latest.user_id');
+                })
+                ->leftJoin('users','users.id','=','user_referral_withdraw_requests.user_id')
+                ->where('user_referral_withdraw_requests.user_id', $id)
+                ->get();
 
             return DataTables::of($records)
                 ->editColumn('reference_id', function ($row) {
@@ -752,17 +765,25 @@ class UserController extends Controller
             }
 
             // Check if the requested balance is available
-            $wallet_data = User::select('user_reffer_balance')
-                ->where('id', $withdraw_request_data->user_id)
+            $wallet_data = RefferEarnsLedger::where('user_id', $withdraw_request_data->user_id)
+                ->latest() // defaults to ordering by created_at
                 ->first();
 
-            if ($wallet_data && $wallet_data->user_reffer_balance >= $withdraw_request_data->request_amount) {
+            if ($wallet_data && $wallet_data->balance >= $withdraw_request_data->request_amount) {
                 // Calculate new balance after withdrawal
-                $newuser_reffer_balance = $wallet_data->user_reffer_balance - $withdraw_request_data->request_amount;
+                $newuser_reffer_balance = $wallet_data->balance - $withdraw_request_data->request_amount;
 
-                // Update user's referral balance
-                User::where('id', $withdraw_request_data->user_id)
-                    ->update(['user_reffer_balance' => $newuser_reffer_balance]);
+               // Create new ledger entry for withdrawal
+                RefferEarnsLedger::create([
+                    'user_id' => $withdraw_request_data->user_id,
+                    'refer_id' => 0,
+                    'date' => now(),
+                    'description' => 'User withdrawal request approved',
+                    'rate_of_intrest' => 0,
+                    'credit' => 0.00,
+                    'debit' => $withdraw_request_data->request_amount,
+                    'balance' => $newuser_reffer_balance,
+                ]);
 
                 // Approve the withdrawal request
                 UserReferralWithdrawRequest::where('id', $id)->update(['status' => 1]);

@@ -100,10 +100,10 @@ class RefferController extends Controller
             if (!now()->between(now()->startOfMonth(), now()->startOfMonth()->addDays(5))) {
                 $errorMessage = "Withdrawal requests are only allowed between the 1st and 5th of each month. Please try again during this period.";
                 return redirect()->back()->with('error', $errorMessage);
-            }
-            if ($approvedMemberships < 5 || $totalMembers < 6) {
-                $errorMessage = "To request a withdrawal, you must have at least 5 approved memberships and 6 On Board. Please try again after meeting this requirement.";
-                return redirect()->back()->with('error', $errorMessage);
+            // }
+            // if ($approvedMemberships < 5 || $totalMembers < 6) {
+            //     $errorMessage = "To request a withdrawal, you must have at least 5 approved memberships and 6 On Board. Please try again after meeting this requirement.";
+            //     return redirect()->back()->with('error', $errorMessage);
             } else if ($request->amount <= ($balanceData->balance - $requestData->sum('request_amount'))) {
                 $wdata                 = new UserReferralWithdrawRequest();
                 $reference_id          = RandcardStr(15);

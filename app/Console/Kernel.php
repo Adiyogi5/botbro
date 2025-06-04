@@ -15,13 +15,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('update:ordercancel')->everyTenMinutes();
-        // $schedule->command('purchase:payment_status')->everyFiveMinutes();
-        // $schedule->command('update:userpurchasestatus')->everyMinute();
-        // $schedule->command('update:useragentstatus')->everyMinute();
-        // $schedule->command('update:badgereward')->everyTwoMinutes();
-        // $schedule->command('update:walletpayment')->everyTwoMinutes();
-
         $schedule->command('update:ledgerstatus')->monthlyOn(1, '00:00');
         $schedule->command('update:referandcommissionledgerstatus')->monthlyOn(1, '00:00');
         $schedule->command('update:membershipvalidity')->dailyAt('00:00');

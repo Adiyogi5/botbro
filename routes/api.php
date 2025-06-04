@@ -40,17 +40,16 @@ Route::get('/schedule-run', function() {
 }); 
 
 
-/*Route::get('/paystatus', function () {
-    Artisan::call('purchase:payment_status');   
-    return '<h1>update paystatus</h1>';
+// New One Crones 
+Route::get('/ledgerstatus', function () {
+    Artisan::call('update:ledgerstatus');   
+    return '<h1>update ledgerstatus</h1>';
 });
-
-Route::get('/badgereward', function () {
-    Artisan::call('update:badgereward');   
-    return '<h1>update badgereward</h1>';
+Route::get('/referandcommissionledgerstatus', function () {
+    Artisan::call('update:referandcommissionledgerstatus');   
+    return '<h1>update referandcommissionledgerstatus</h1>';
 });
-
-Route::get('/walletpayment', function () {
-    Artisan::call('update:walletpayment');   
-    return '<h1>update walletpayment</h1>';
-});*/
+Route::get('/membershipvalidity', function () {
+    Artisan::call('update:membershipvalidity');   
+    return '<h1>update membershipvalidity</h1>';
+});

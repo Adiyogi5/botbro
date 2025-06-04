@@ -123,7 +123,7 @@ class UpdateReferCommissionLedgerStatus extends Command
                     $ledgerDateCarbon = Carbon::parse($averageDate);
                     $totalMonthDays   = $ledgerDateCarbon->daysInMonth;
                     $ledgerDay        = $ledgerDateCarbon->day;
-                    $remainingDays    = $totalMonthDays - $ledgerDay;
+                    $remainingDays    = ($totalMonthDays - $ledgerDay) + 1;
 
                     if ($remainingDays > 0) {
                         // Calculate daily interest and total interest amount
